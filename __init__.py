@@ -39,17 +39,60 @@ if not current_path in sys.path:
     sys.path.append(current_path)
     print("\n> Loading Flow.")
 
+# storage
 imported_modules = []
-core_modules = []
-root_modules = ["node_tree", "data_structure", "'flow_nodes_menu"]
-ui_modules = ["nodeview_space_menu"]
-utils_modules = []
 node_list = []
+root_modules = ["node_tree", "flow_nodes_enum"]
+core_modules = []
+utils_modules = []
+ui_modules = ["nodeview_space_menu"]
+
+# alias alias alias alias
+take = importlib.import_module
+store = imported_modules.append
+
+# get root
+for m in root_modules:
+    im = take(m, __name__)
+    store(im)
+
+# get settings
+settings = take('.settings', __name__)
+store(settings)
+
+# get (core, utils, ui)
+from collections import OrderedDict
+flow_modules = OrderedDict()
+flow_modules['core'] = core_modules
+flow_modules['utils'] = utils_modules
+flow_modules['ui'] = ui_modules
+
+for module_name, module_content in flow_modules.items():
+    x = take(module_name)
+    store(x)
+    for m in module_content:
+        im = take('.' + m, module_name)
+        store(im)
+
+# get nodes!
+nodes = take('nodes')
+store(nodes)
+
+
+def make_node_list():
+    node_list = []
+    for category, names in nodes.nodes_dict.items():
+        take('.' + category, 'nodes')
+        for name in names:
+            node = take('.' + name, 'nodes.' + category)
+            node_list.append(node)
+    return node_list
+
+node_list = make_node_list()
 
 
 def all_registerables():
-    # imported_modules + node_list
-    return []
+    return imported_modules + node_list
 
 
 def FLOW_nodecats(perform):
@@ -79,7 +122,6 @@ import bpy
 
 def register():
     import nodeitems_utils._node_categories as current_categories
-
     categories = make_categories()
     for m in all_registerables():
         if hasattr(m, "register"):
