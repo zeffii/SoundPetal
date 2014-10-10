@@ -39,12 +39,19 @@ if not current_path in sys.path:
     sys.path.append(current_path)
     print("\n> Loading Flow.")
 
+imported_modules = []
+core_modules = []
+root_modules = []
+ui_modules = []
+utils_modules = []
+node_list = []
+
 
 def all_registerables():
     return []
 
 
-def FLOW_nodecats(perform='register'):
+def FLOW_nodecats(perform):
     import nodeitems_utils
 
     if perform == 'unregister':
