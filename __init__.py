@@ -41,13 +41,14 @@ if not current_path in sys.path:
 
 imported_modules = []
 core_modules = []
-root_modules = []
-ui_modules = []
+root_modules = ["node_tree", "data_structure", "'flow_nodes_menu"]
+ui_modules = ["nodeview_space_menu"]
 utils_modules = []
 node_list = []
 
 
 def all_registerables():
+    # imported_modules + node_list
     return []
 
 
