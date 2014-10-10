@@ -32,21 +32,59 @@ import os
 import sys
 import importlib
 
+FLOW = 'FLOW'
+
 current_path = os.path.dirname(__file__)
 if not current_path in sys.path:
     sys.path.append(current_path)
     print("\n> Loading Flow.")
 
 
-if "bpy" in locals():
+def all_registerables():
+    return []
+
+
+def FLOW_nodecats(perform='register'):
     import nodeitems_utils
+
+    if perform == 'unregister':
+        if FLOW in nodeitems_utils._node_categories:
+            nodeitems_utils.unregister_node_categories(FLOW)
+
+    if perform == 'register':
+        from flow_nodes_menu import make_categories
+        nodeitems_utils.register_node_categories(FLOW, make_categories())
+
+
+if "bpy" in locals():
+    importlib.reload(nodes)
+
+    for im in all_registerables():
+        importlib.reload(im)
+
+    FLOW_nodecats('unregister')
+    FLOW_nodecats('register')
+
 
 import bpy
 
 
 def register():
-    import nodeitems_utils
+    import nodeitems_utils._node_categories as current_categories
+
+    categories = make_categories()
+    for m in all_registerables():
+        if hasattr(m, "register"):
+            m.register()
+
+    if not (FLOW in current_categories):
+        FLOW_nodecats('register')
 
 
 def unregister():
     import nodeitems_utils
+    for m in reversed(all_registerables()):
+        if hasattr(m, "unregister"):
+            m.unregister()
+
+    FLOW_nodecats('unregister')
