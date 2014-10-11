@@ -31,6 +31,7 @@ bl_info = {
 import os
 import sys
 import importlib
+from collections import OrderedDict
 
 FLOW = 'FLOW'
 
@@ -43,52 +44,52 @@ if not current_path in sys.path:
 imported_modules = []
 node_list = []
 root_modules = ["node_tree", "flow_nodes_enum"]
-core_modules = []
-utils_modules = []
-ui_modules = ["nodeview_space_menu"]
+#core_modules = []
+#utils_modules = []
+ui_modules = []
 
 # alias alias alias alias
 take = importlib.import_module
 store = imported_modules.append
 
-# get root
-for m in root_modules:
-    im = take(m, __name__)
-    store(im)
 
-# get settings
-settings = take('.settings', __name__)
-store(settings)
-
-# get (core, utils, ui)
-from collections import OrderedDict
-flow_modules = OrderedDict()
-flow_modules['core'] = core_modules
-flow_modules['utils'] = utils_modules
-flow_modules['ui'] = ui_modules
-
-for module_name, module_content in flow_modules.items():
-    x = take(module_name)
-    store(x)
-    for m in module_content:
-        im = take('.' + m, module_name)
-        store(im)
-
-# get nodes!
-nodes = take('nodes')
-store(nodes)
-
-
-def make_node_list():
+def make_node_list(nodes):
     node_list = []
     for category, names in nodes.nodes_dict.items():
-        take('.' + category, 'nodes')
+        node_cats = importlib.import_module('.{}'.format(category), 'nodes')
         for name in names:
-            node = take('.' + name, 'nodes.' + category)
+            node = importlib.import_module('.{}'.format(name), 'nodes.{}'.format(category))
             node_list.append(node)
     return node_list
 
-node_list = make_node_list()
+
+# get root
+for m in root_modules:
+    im = importlib.import_module(m, __name__)
+    store(im)
+
+# get settings
+#settings = take('.settings', __name__)
+#store(settings)
+
+# get (core, utils, ui)
+flow_modules = OrderedDict()
+#flow_modules['core'] = core_modules
+#flow_modules['utils'] = utils_modules
+flow_modules['ui'] = ui_modules
+
+for module_name, module_content in flow_modules.items():
+    x = importlib.import_module(module_name)
+    store(x)
+    for m in module_content:
+        im = importlib.import_module('.' + m, module_name)
+        store(im)
+
+# get nodes!
+nodes = importlib.import_module('nodes')
+store(nodes)
+
+node_list = make_node_list(nodes)
 
 
 def all_registerables():
@@ -103,7 +104,7 @@ def FLOW_nodecats(perform):
             nodeitems_utils.unregister_node_categories(FLOW)
 
     if perform == 'register':
-        from flow_nodes_menu import make_categories
+        from flow_nodes_enum import make_categories
         nodeitems_utils.register_node_categories(FLOW, make_categories())
 
 
@@ -121,13 +122,15 @@ import bpy
 
 
 def register():
-    import nodeitems_utils._node_categories as current_categories
+    import nodeitems_utils
+    from flow_nodes_enum import make_categories
+
     categories = make_categories()
     for m in all_registerables():
         if hasattr(m, "register"):
             m.register()
 
-    if not (FLOW in current_categories):
+    if not (FLOW in nodeitems_utils._node_categories):
         FLOW_nodecats('register')
 
 

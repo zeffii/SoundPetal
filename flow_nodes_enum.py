@@ -28,18 +28,18 @@ def make_node_cats():
     node_cats = OrderedDict()
     '''  bl_idname, shortname, <icon> (optional) '''
 
-    node_cats["Make"] = [
-        ["LineNode",            "Line",                  "GRIP"],
-        ["PlaneNode",           "Plane",           "MESH_PLANE"],
+    node_cats["creators"] = [
+        ["FlowLinesNode",        "Line",                  "GRIP"],
+        ["FlowPlanesNode",       "Plane",           "MESH_PLANE"],
     ]
 
-    node_cats["Operate"] = [
-        ["SvFrameInfoNode",     "Frame info"],
-        ["NoteNode",            "Note"],
+    node_cats["behaviours"] = [
+        # ["SvFrameInfoNode",     "Frame info"],
+        # ["NoteNode",            "Note"],
     ]
 
-    node_cats["Show"] = [
-        ["SvWafelNode",         "Wafel"],
+    node_cats["represent"] = [
+        ["FlowStdOutNode",       "std out"],
     ]
 
     return node_cats

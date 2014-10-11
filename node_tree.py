@@ -35,12 +35,13 @@ from bpy.types import (
 from nodeitems_utils import NodeCategory, NodeItem
 
 
-class GenericSocket(NodeSocket):
-    '''Flow sockets inherit from this class'''
-    bl_idname = ""
-    bl_label = ""
+class MatrixSocket(NodeSocket):
+    '''n x n matrix Socket_type'''
+    bl_idname = "MatrixSocket"
+    bl_label = "Matrix Socket"
     prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4)
+    socket_col = FloatVectorProperty(
+        size=4, default=(.2, .8, .8, 1.0))
 
     def fget(self):
         pass
@@ -60,37 +61,62 @@ class GenericSocket(NodeSocket):
         return ""
 
 
-class MatrixSocket(GenericSocket):
-    '''n x n matrix Socket_type'''
-    bl_idname = "MatrixSocket"
-    bl_label = "Matrix Socket"
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(
-        size=4, value=(.2, .8, .8, 1.0))
-
-
 class ArraySocket(NodeSocketStandard):
     '''n x n array Socket_type'''
     bl_idname = "ArraySocket"
     bl_label = "Array Socket"
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(
-        size=4, value=(.2, .3, .3, 1.0))
+        size=4, default=(.2, .3, .3, 1.0))
+
+    def fget(self):
+        pass
+
+    def fset(self, data):
+        pass
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info(self))
+        layout.label(text)
+
+    def draw_color(self, context, node):
+        return self.socket_col
+
+    def get_info(self):
+        return ""
 
 
-class VectorSocket(GenericSocket):
+class VectorSocket(NodeSocket):
     '''Vector Socket Type'''
     bl_idname = "VectorSocket"
     bl_label = "Vector Socket"
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(
-        size=4, value=(0.9, 0.6, 0.2, 1.0))
+        size=4, default=(0.9, 0.6, 0.2, 1.0))
+
+    def fget(self):
+        pass
+
+    def fset(self, data):
+        pass
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info(self))
+        layout.label(text)
+
+    def draw_color(self, context, node):
+        return self.socket_col
+
+    def get_info(self):
+        return ""
 
 
 class TextSocket(NodeSocketStandard):
     '''Text, human readable characters'''
-    bl_idname = "StringsSocket"
-    bl_label = "Strings Socket"
+    bl_idname = "TextSocket"
+    bl_label = "Text Socket"
 
     prop_name = StringProperty(default='')
     prop_type = StringProperty(default='')
@@ -111,50 +137,75 @@ class TextSocket(NodeSocketStandard):
         return(0.6, 1.0, 0.6, 1.0)
 
 
-class FlowNodeTree(NodeTree):
+class SinkHoleSocket(NodeSocket):
+    '''Sink Hole Socket Type'''
+    bl_idname = "SinkHoleSocket"
+    bl_label = "SinkHole Socket"
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(
+        size=4, default=(0.0, 0.0, 0.0, 1.0))
+    # this socket can take anything.
+
+    def fget(self):
+        pass
+
+    def fset(self, data):
+        pass
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info(self))
+        layout.label(text)
+
+    def draw_color(self, context, node):
+        return self.socket_col
+
+    def get_info(self):
+        return ""
+
+
+class FlowCustomTree(NodeTree):
     ''' FLow nodes, pragma '''
-    bl_idname = 'FlowNodeTreeType'
-    bl_label = 'Flow NodeTree'
-    bl_icon = 'RNA'
+    bl_idname = 'FlowCustomTreeType'
+    bl_label = 'Flow Custom Tree'
+    bl_icon = 'SEQ_CHROMA_SCOPE'
 
     def update(self):
         try:
             is_ready = bpy.data.node_groups[self.id_data.name]
         except:
             return
-        finally:
-            self.process()
-
-    def process(self):
-        pass
 
 
 class FlowCustomTreeNode:
     @classmethod
     def poll(cls, ntree):
-        return ntree.bl_idname == 'FlowNodeTreeType'
+        return ntree.bl_idname == 'FlowCustomTreeType'
 
 
 class FlowNodeCategory(NodeCategory):
     @classmethod
     def poll(cls, context):
-        return context.space_data.tree_type == 'FlowNodeTreeType'
+        return context.space_data.tree_type == 'FlowCustomTreeType'
 
 
 tree_classes = [
-    FlowNodeTree,
+    FlowCustomTree,
     MatrixSocket,
     ArraySocket,
     VectorSocket,
-    TextSocket
+    TextSocket,
+    SinkHoleSocket
 ]
 
 
 def register():
     for c in tree_classes:
+        print(c.bl_idname)
         bpy.utils.register_class(c)
 
 
 def unregister():
     for c in tree_classes:
+        print(c.bl_idname)
         bpy.utils.unregister_class(c)

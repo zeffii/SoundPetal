@@ -1,22 +1,20 @@
 nodes_dict = {
-    'behaviours': [
-        'aaaaa',
-        'bbbbb',
-    ],
+    # 'behaviours': [
+    #     'stdout',
+    # ],
 
     'creators': [
-        'aaaaa',
-        'bbbbb',
+        'lines',
+        'planes',
     ],
 
-    'operations': [
-        'aaaaa',
-        'bbbbb',
-    ],
+    # 'operations': [
+    #     'aaaaa',
+    #     'bbbbb',
+    # ],
 
     'represent': [
-        'aaaaa',
-        'bbbbb',
+        'stdout',
     ],
 
 
