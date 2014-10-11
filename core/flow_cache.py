@@ -38,7 +38,6 @@ def cache_wipe():
 def cache_set(socket, data):
     global flowcache
     flowcache[ident(socket)] = data
-    print('setting:', flowcache)
 
 
 def cache_get(socket):
