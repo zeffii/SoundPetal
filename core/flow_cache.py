@@ -30,7 +30,7 @@ def cache_wipe():
     flowcache = {}
 
 
-def cache_put(socket, data):
+def cache_set(socket, data):
     global flowcache
     flowcache[ident(socket)] = data
 

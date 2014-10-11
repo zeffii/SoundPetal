@@ -32,6 +32,7 @@ from bpy.types import (
     NodeSocketStandard
 )
 
+from core.flow_cache import cache_set, cache_get
 from nodeitems_utils import NodeCategory, NodeItem
 
 
@@ -147,10 +148,10 @@ class SinkHoleSocket(NodeSocket):
     # this socket can take anything.
 
     def fget(self):
-        pass
+        return cache_get(self)
 
     def fset(self, data):
-        pass
+        cache_set(self, data)
 
     def draw(self, context, layout, node, text):
         if self.is_linked:

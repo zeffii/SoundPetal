@@ -43,8 +43,8 @@ if not current_path in sys.path:
 # storage
 imported_modules = []
 node_list = []
+core_modules = ["flow_cache"]
 root_modules = ["node_tree", "flow_nodes_enum"]
-#core_modules = []
 #utils_modules = []
 ui_modules = []
 
@@ -74,7 +74,7 @@ for m in root_modules:
 
 # get (core, utils, ui)
 flow_modules = OrderedDict()
-#flow_modules['core'] = core_modules
+flow_modules['core'] = core_modules
 #flow_modules['utils'] = utils_modules
 flow_modules['ui'] = ui_modules
 
@@ -97,15 +97,15 @@ def all_registerables():
 
 
 def FLOW_nodecats(perform):
-    import nodeitems_utils
+    import nodeitems_utils as nu
 
     if perform == 'unregister':
         if FLOW in nodeitems_utils._node_categories:
-            nodeitems_utils.unregister_node_categories(FLOW)
+            nu.unregister_node_categories(FLOW)
 
     if perform == 'register':
         from flow_nodes_enum import make_categories
-        nodeitems_utils.register_node_categories(FLOW, make_categories())
+        nu.register_node_categories(FLOW, make_categories())
 
 
 if "bpy" in locals():
@@ -123,7 +123,6 @@ import bpy
 
 def register():
     import nodeitems_utils
-
     for m in all_registerables():
         if hasattr(m, "register"):
             m.register()
