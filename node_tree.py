@@ -151,7 +151,6 @@ class SinkHoleSocket(NodeSocket):
         return cache_get(self)
 
     def fset(self, data):
-        print(self, data)
         cache_set(self, data)
 
     def draw(self, context, layout, node, text):

@@ -20,7 +20,14 @@ flowcache = {}
 
 
 def ident(socket):
-    return socket.node.name, socket.name
+    return (hash(socket.node.name), hash(socket.name))
+
+
+def from_ident(socket):
+    link = socket.links[0]
+    from_name = link.from_node.name
+    from_socket = link.from_socket.name
+    return (hash(from_name), hash(from_socket))
 
 
 def cache_wipe():
@@ -31,7 +38,8 @@ def cache_wipe():
 def cache_set(socket, data):
     global flowcache
     flowcache[ident(socket)] = data
+    print('setting:', flowcache)
 
 
 def cache_get(socket):
-    return flowcache.get(ident(socket), [])
+    return flowcache.get(from_ident(socket), [])
