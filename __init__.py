@@ -123,9 +123,7 @@ import bpy
 
 def register():
     import nodeitems_utils
-    from flow_nodes_enum import make_categories
 
-    categories = make_categories()
     for m in all_registerables():
         if hasattr(m, "register"):
             m.register()

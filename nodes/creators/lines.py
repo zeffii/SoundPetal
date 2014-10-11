@@ -32,7 +32,7 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('SinkHoleSocket', "send")
 
     def update(self):
-        if not (len(self.ouputs) == 1):
+        if not (len(self.ouTputs) == 1):
             return
         if not self.outputs[0].links:
             return
