@@ -132,7 +132,6 @@ def register():
 
 
 def unregister():
-    import nodeitems_utils
     for m in reversed(all_registerables()):
         if hasattr(m, "unregister"):
             m.unregister()

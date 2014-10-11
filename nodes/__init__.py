@@ -6,6 +6,7 @@ nodes_dict = {
     'creators': [
         'lines',
         'planes',
+        'seq_16tick',
     ],
 
     # 'operations': [
