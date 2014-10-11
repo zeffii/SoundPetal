@@ -20,9 +20,7 @@ flowcache = {}
 
 
 def ident(socket):
-    node_name = socket.from_node.name
-    socket_name = socket.from_socket.name
-    return node_name, socket_name
+    return socket.node.name, socket.name
 
 
 def cache_wipe():

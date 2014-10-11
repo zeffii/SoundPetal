@@ -40,7 +40,9 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
         self.process()
 
     def process(self):
-        print('rawwwww')
+        print('rawww---')
+        print(self.inputs[0].fget())
+        print('----rawwwww')
 
 
 def register():

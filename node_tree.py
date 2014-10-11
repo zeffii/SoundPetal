@@ -151,6 +151,7 @@ class SinkHoleSocket(NodeSocket):
         return cache_get(self)
 
     def fset(self, data):
+        print(self, data)
         cache_set(self, data)
 
     def draw(self, context, layout, node, text):
@@ -202,11 +203,9 @@ tree_classes = [
 
 def register():
     for c in tree_classes:
-        print(c.bl_idname)
         bpy.utils.register_class(c)
 
 
 def unregister():
     for c in tree_classes:
-        print(c.bl_idname)
         bpy.utils.unregister_class(c)

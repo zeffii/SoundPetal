@@ -97,15 +97,15 @@ def all_registerables():
 
 
 def FLOW_nodecats(perform):
-    import nodeitems_utils as nu
+    import nodeitems_utils
 
     if perform == 'unregister':
         if FLOW in nodeitems_utils._node_categories:
-            nu.unregister_node_categories(FLOW)
+            nodeitems_utils.unregister_node_categories(FLOW)
 
     if perform == 'register':
         from flow_nodes_enum import make_categories
-        nu.register_node_categories(FLOW, make_categories())
+        nodeitems_utils.register_node_categories(FLOW, make_categories())
 
 
 if "bpy" in locals():
