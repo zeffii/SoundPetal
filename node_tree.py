@@ -51,7 +51,7 @@ class MatrixSocket(NodeSocket):
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
-            text += (self.get_info(self))
+            text += (self.get_info())
         layout.label(text)
 
     def draw_color(self, context, node):
@@ -77,7 +77,7 @@ class ArraySocket(NodeSocketStandard):
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
-            text += (self.get_info(self))
+            text += (self.get_info())
         layout.label(text)
 
     def draw_color(self, context, node):
@@ -103,7 +103,7 @@ class VectorSocket(NodeSocket):
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
-            text += (self.get_info(self))
+            text += (self.get_info())
         layout.label(text)
 
     def draw_color(self, context, node):
@@ -130,7 +130,7 @@ class TextSocket(NodeSocketStandard):
 
     def draw(self, context, layout, node, text):
             if self.is_linked:
-                text += (self.get_info(self))
+                text += (self.get_info())
             layout.label(text)
 
     def draw_color(self, context, node):
@@ -154,7 +154,7 @@ class SinkHoleSocket(NodeSocket):
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
-            text += (self.get_info(self))
+            text += (self.get_info())
         layout.label(text)
 
     def draw_color(self, context, node):
