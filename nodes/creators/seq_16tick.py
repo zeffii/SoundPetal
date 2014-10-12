@@ -35,7 +35,7 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=True)
-        row.prop(self, 'seq_row_1', toggle=True)
+        row.prop(self, 'seq_row_1', toggle=True, text='')
 
     def update(self):
         if not (len(self.outputs) == 1):
