@@ -16,37 +16,34 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-import bpy
-from bpy.props import BoolProperty, BoolVectorProperty
-
-from node_tree import FlowCustomTreeNode
+import bmesh
 
 
-class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
-    ''' FlowLinesNode '''
-    bl_idname = 'FlowLinesNode'
-    bl_label = 'Lines'
-    bl_icon = 'OUTLINER_OB_EMPTY'
+def bmesh_from_pydata(verts=[], edges=[], faces=[]):
+    ''' verts is necessary, edges/faces are optional '''
 
-    def init(self, context):
-        self.inputs.new('VectorSocket', "vec in")
-        self.outputs.new('SinkHoleSocket', "send")
+    bm = bmesh.new()
+    add_vert = bm.verts.new
+    for co in verts:
+        add_vert(co)
+    bm.verts.index_update()
 
-    def update(self):
-        if not (len(self.outputs) == 1):
-            return
-        if not self.outputs[0].links:
-            return
+    if faces:
+        add_face = bm.faces.new
+        for face in faces:
+            add_face(tuple(bm.verts[i] for i in face))
+        bm.faces.index_update()
 
-        self.process()
+    if edges:
+        add_edge = bm.edges.new
+        for edge in edges:
+            edge_seq = tuple(bm.verts[i] for i in edge)
+            try:
+                add_edge(edge_seq)
+            except ValueError:
+                # edge exists!
+                pass
 
-    def process(self):
-        self.outputs[0].fset([20, 34, 6, 35])
+        bm.edges.index_update()
 
-
-def register():
-    bpy.utils.register_class(FlowLinesNode)
-
-
-def unregister():
-    bpy.utils.unregister_class(FlowLinesNode)
+    return bm

@@ -31,6 +31,7 @@ bl_info = {
 import os
 import sys
 import importlib
+# import numpy
 from collections import OrderedDict
 
 FLOW = 'FLOW'
@@ -124,6 +125,9 @@ def FLOW_modules(perform):
 
 
 if "bpy" in locals():
+    # this handles only existing nodes,
+    # new nodes are not yet detected
+
     importlib.reload(nodes)
 
     for im in all_registerables():

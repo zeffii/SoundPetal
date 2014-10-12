@@ -35,20 +35,19 @@ from bpy.types import (
 from core.flow_cache import cache_set, cache_get
 from nodeitems_utils import NodeCategory, NodeItem
 
+fl_matrix_col = (.2, .8, .8, 1.0)
+fl_arrays_col = (.2, .3, .3, 1.0)
+fl_vector_col = (.9, .6, .2, 1.0)
+fl_text_col = (.2, .6, .5, 1.0)
+fl_sink_col = (.0, .0, .0, 1.0)
+
 
 class MatrixSocket(NodeSocket):
     '''n x n matrix Socket_type'''
     bl_idname = "MatrixSocket"
     bl_label = "Matrix Socket"
     prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(
-        size=4, default=(.2, .8, .8, 1.0))
-
-    def fget(self):
-        pass
-
-    def fset(self, data):
-        pass
+    socket_col = FloatVectorProperty(size=4, default=fl_matrix_col)
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -60,6 +59,12 @@ class MatrixSocket(NodeSocket):
 
     def get_info(self):
         return ""
+
+    def fget(self):
+        return cache_get(self)
+
+    def fset(self, data):
+        cache_set(self, data)
 
 
 class ArraySocket(NodeSocketStandard):
@@ -67,14 +72,7 @@ class ArraySocket(NodeSocketStandard):
     bl_idname = "ArraySocket"
     bl_label = "Array Socket"
     prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(
-        size=4, default=(.2, .3, .3, 1.0))
-
-    def fget(self):
-        pass
-
-    def fset(self, data):
-        pass
+    socket_col = FloatVectorProperty(size=4, default=fl_arrays_col)
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -86,6 +84,12 @@ class ArraySocket(NodeSocketStandard):
 
     def get_info(self):
         return ""
+
+    def fget(self):
+        return cache_get(self)
+
+    def fset(self, data):
+        cache_set(self, data)
 
 
 class VectorSocket(NodeSocket):
@@ -93,14 +97,7 @@ class VectorSocket(NodeSocket):
     bl_idname = "VectorSocket"
     bl_label = "Vector Socket"
     prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(
-        size=4, default=(0.9, 0.6, 0.2, 1.0))
-
-    def fget(self):
-        pass
-
-    def fset(self, data):
-        pass
+    socket_col = FloatVectorProperty(size=4, default=fl_vector_col)
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -112,6 +109,12 @@ class VectorSocket(NodeSocket):
 
     def get_info(self):
         return ""
+
+    def fget(self):
+        return cache_get(self)
+
+    def fset(self, data):
+        cache_set(self, data)
 
 
 class TextSocket(NodeSocketStandard):
@@ -122,36 +125,7 @@ class TextSocket(NodeSocketStandard):
     prop_name = StringProperty(default='')
     prop_type = StringProperty(default='')
     prop_index = IntProperty()
-
-    def fget(self):
-        pass
-
-    def fset(self, data):
-        pass
-
-    def draw(self, context, layout, node, text):
-            if self.is_linked:
-                text += (self.get_info())
-            layout.label(text)
-
-    def draw_color(self, context, node):
-        return(0.6, 1.0, 0.6, 1.0)
-
-
-class SinkHoleSocket(NodeSocket):
-    '''Sink Hole Socket Type'''
-    bl_idname = "SinkHoleSocket"
-    bl_label = "SinkHole Socket"
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(
-        size=4, default=(0.0, 0.0, 0.0, 1.0))
-    # this socket can take anything.
-
-    def fget(self):
-        return cache_get(self)
-
-    def fset(self, data):
-        cache_set(self, data)
+    socket_col = FloatVectorProperty(size=4, default=fl_text_col)
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -163,6 +137,38 @@ class SinkHoleSocket(NodeSocket):
 
     def get_info(self):
         return ""
+
+    def fget(self):
+        return cache_get(self)
+
+    def fset(self, data):
+        cache_set(self, data)
+
+
+class SinkHoleSocket(NodeSocket):
+    '''Sink Hole Socket Type'''
+    bl_idname = "SinkHoleSocket"
+    bl_label = "SinkHole Socket"
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(size=4, default=fl_sink_col)
+    # this socket can take anything.
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info())
+        layout.label(text)
+
+    def draw_color(self, context, node):
+        return self.socket_col
+
+    def get_info(self):
+        return ""
+
+    def fget(self):
+        return cache_get(self)
+
+    def fset(self, data):
+        cache_set(self, data)
 
 
 class FlowCustomTree(NodeTree):
