@@ -35,7 +35,7 @@ def make_node_cats():
     ]
 
     node_cats["behaviours"] = [
-        # ["SvFrameInfoNode",     "Frame info"],
+        ["Fl3DviewPropsNode",     "3dview props"],
         # ["NoteNode",            "Note"],
     ]
 

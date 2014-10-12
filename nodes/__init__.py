@@ -1,7 +1,7 @@
 nodes_dict = {
-    # 'behaviours': [
-    #     'stdout',
-    # ],
+    'behaviours': [
+        '3dview_props',
+    ],
 
     'creators': [
         'lines',
