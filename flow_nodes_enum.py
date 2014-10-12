@@ -26,21 +26,27 @@ from node_tree import FlowNodeCategory
 def make_node_cats():
 
     node_cats = OrderedDict()
-    '''  bl_idname, shortname, <icon> (optional) '''
+    '''  bl_idname,             shortname,     <icon> (optional)
+
+    |   |                       |                              |
+    '''
+
+    node_cats["vector"] = [
+        ["FlowVecMakeNode",     "Vector"]
+    ]
 
     node_cats["creators"] = [
-        ["FlowLinesNode",        "Line",                  "GRIP"],
-        ["FlowPlanesNode",       "Plane",           "MESH_PLANE"],
-        ["FlowSeq16Node",        "16tick seq"],
+        ["FlowLinesNode",       "Line",                  "GRIP"],
+        ["FlowPlanesNode",      "Plane",           "MESH_PLANE"],
+        ["FlowSeq16Node",       "16tick seq"],
     ]
 
     node_cats["behaviours"] = [
-        ["Fl3DviewPropsNode",     "3dview props"],
-        # ["NoteNode",            "Note"],
+        ["Fl3DviewPropsNode",   "3dview props"],
     ]
 
     node_cats["represent"] = [
-        ["FlowStdOutNode",       "std out"],
+        ["FlowStdOutNode",      "std out"],
     ]
 
     return node_cats

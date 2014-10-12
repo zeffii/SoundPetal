@@ -14,6 +14,10 @@ nodes_dict = {
     #     'bbbbb',
     # ],
 
+    'vector': [
+        'vector_make'
+    ],
+
     'represent': [
         'stdout',
     ],
