@@ -42,12 +42,12 @@ fl_text_col = (.2, .6, .5, 1.0)
 fl_sink_col = (.0, .0, .0, 1.0)
 
 
-class MatrixSocket(NodeSocket):
-    '''n x n matrix Socket_type'''
+class FSocket(NodeSocket):
+    """ Socket type to inherit several useful class functions """
     bl_idname = "MatrixSocket"
     bl_label = "Matrix Socket"
     prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_matrix_col)
+    socket_col = FloatVectorProperty(size=4, default=(1, 1, 1, 1))
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -67,57 +67,37 @@ class MatrixSocket(NodeSocket):
         cache_set(self, data)
 
 
-class ArraySocket(NodeSocketStandard):
+class MatrixSocket(FSocket):
+    '''n x n matrix Socket_type'''
+    bl_idname = "MatrixSocket"
+    bl_label = "Matrix Socket"
+
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(size=4, default=fl_matrix_col)
+    pass
+
+
+class ArraySocket(FSocket):
     '''n x n array Socket_type'''
     bl_idname = "ArraySocket"
     bl_label = "Array Socket"
+
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_arrays_col)
-
-    def draw(self, context, layout, node, text):
-        if self.is_linked:
-            text += (self.get_info())
-        layout.label(text)
-
-    def draw_color(self, context, node):
-        return self.socket_col
-
-    def get_info(self):
-        return ""
-
-    def fget(self):
-        return cache_get(self)
-
-    def fset(self, data):
-        cache_set(self, data)
+    pass
 
 
-class VectorSocket(NodeSocket):
+class VectorSocket(FSocket):
     '''Vector Socket Type'''
     bl_idname = "VectorSocket"
     bl_label = "Vector Socket"
+
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_vector_col)
-
-    def draw(self, context, layout, node, text):
-        if self.is_linked:
-            text += (self.get_info())
-        layout.label(text)
-
-    def draw_color(self, context, node):
-        return self.socket_col
-
-    def get_info(self):
-        return ""
-
-    def fget(self):
-        return cache_get(self)
-
-    def fset(self, data):
-        cache_set(self, data)
+    pass
 
 
-class TextSocket(NodeSocketStandard):
+class TextSocket(FSocket):
     '''Text, human readable characters'''
     bl_idname = "TextSocket"
     bl_label = "Text Socket"
@@ -126,49 +106,17 @@ class TextSocket(NodeSocketStandard):
     prop_type = StringProperty(default='')
     prop_index = IntProperty()
     socket_col = FloatVectorProperty(size=4, default=fl_text_col)
-
-    def draw(self, context, layout, node, text):
-        if self.is_linked:
-            text += (self.get_info())
-        layout.label(text)
-
-    def draw_color(self, context, node):
-        return self.socket_col
-
-    def get_info(self):
-        return ""
-
-    def fget(self):
-        return cache_get(self)
-
-    def fset(self, data):
-        cache_set(self, data)
+    pass
 
 
-class SinkHoleSocket(NodeSocket):
+class SinkHoleSocket(FSocket):
     '''Sink Hole Socket Type'''
     bl_idname = "SinkHoleSocket"
     bl_label = "SinkHole Socket"
+
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_sink_col)
-    # this socket can take anything.
-
-    def draw(self, context, layout, node, text):
-        if self.is_linked:
-            text += (self.get_info())
-        layout.label(text)
-
-    def draw_color(self, context, node):
-        return self.socket_col
-
-    def get_info(self):
-        return ""
-
-    def fget(self):
-        return cache_get(self)
-
-    def fset(self, data):
-        cache_set(self, data)
+    pass
 
 
 class FlowCustomTree(NodeTree):
@@ -197,6 +145,7 @@ class FlowNodeCategory(NodeCategory):
 
 
 tree_classes = [
+    FSocket,
     FlowCustomTree,
     MatrixSocket,
     ArraySocket,
