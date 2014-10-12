@@ -16,10 +16,21 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+import numpy as np
+
 import bpy
-from bpy.props import BoolProperty, BoolVectorProperty
+from bpy.props import EnumProperty, IntProperty, FloatProperty
 
 from node_tree import FlowCustomTreeNode
+
+
+def make_geometry(node):
+    print(node.num_verts, node.distance)
+    return {
+        0: {
+            'verts': np.array([])
+        },
+    }
 
 
 class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
@@ -28,20 +39,30 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Lines'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
+    num_verts = IntProperty(min=2, step=1, name='num_verts, ', default=2)
+    distance = FloatProperty(step=0.2, name="distance", default=0.4)
+    axis = EnumProperty
+
     def init(self, context):
-        self.inputs.new('VectorSocket', "vec in")
-        self.outputs.new('SinkHoleSocket', "send")
+        self.inputs.new("ScalarSocket", "num_verts").prop_name = "num_verts"
+        self.inputs.new("ScalarSocket", "distance").prop_name = "distance"
+        self.outputs.new('GeometrySocket', "send")
+
+    def draw_buttons(self, context, layout):
+        row = layout.row()
+        # row.prop(self, 'num_verts')
+        pass
 
     def update(self):
         if not (len(self.outputs) == 1):
             return
         if not self.outputs[0].links:
             return
-
         self.process()
 
     def process(self):
-        self.outputs[0].fset([20, 34, 6, 35])
+        gref = dict(objects=make_geometry(self))
+        self.outputs[0].fset(gref)
 
 
 def register():

@@ -38,8 +38,10 @@ from nodeitems_utils import NodeCategory, NodeItem
 fl_matrix_col = (.2, .8, .8, 1.0)
 fl_arrays_col = (.2, .3, .3, 1.0)
 fl_vector_col = (.9, .6, .2, 1.0)
+fl_scalar_col = (.29, .3, .3, 1.0)
 fl_text_col = (.2, .6, .5, 1.0)
 fl_sink_col = (.0, .0, .0, 1.0)
+fl_geom_col = (.99, .3, .3, 1.0)
 
 
 class FSocket(NodeSocket):
@@ -119,6 +121,41 @@ class SinkHoleSocket(FSocket):
     pass
 
 
+class GeometrySocket(FSocket):
+    '''Geometry Socket Type'''
+    bl_idname = "GeometrySocket"
+    bl_label = "Geometry Socket"
+
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(size=4, default=fl_geom_col)
+    pass
+
+
+class ScalarSocket(FSocket):
+    '''Scalar Socket Type'''
+    bl_idname = "ScalarSocket"
+    bl_label = "Scalar Socket"
+
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info())
+
+        label_text = ""
+        if self.is_output or self.is_linked:
+            layout.label(text)
+            return
+        if not self.prop_name:
+            layout.label(text)
+            return
+
+        layout.prop(node, self.prop_name)
+
+''' T r e e '''
+
+
 class FlowCustomTree(NodeTree):
     ''' FLow nodes, pragma '''
     bl_idname = 'FlowCustomTreeType'
@@ -151,7 +188,9 @@ tree_classes = [
     ArraySocket,
     VectorSocket,
     TextSocket,
-    SinkHoleSocket
+    SinkHoleSocket,
+    GeometrySocket,
+    ScalarSocket
 ]
 
 
