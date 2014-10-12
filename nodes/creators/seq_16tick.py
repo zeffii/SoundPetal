@@ -31,7 +31,6 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
     seq_row_1 = BoolVectorProperty(size=16)
 
     def init(self, context):
-        self.width = 400
         self.outputs.new('SinkHoleSocket', "send")
 
     def draw_buttons(self, context, layout):

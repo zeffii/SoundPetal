@@ -40,7 +40,7 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
         self.process()
 
     def process(self):
-        self.outputs[0].fset([20, 34, 0, 35])
+        self.outputs[0].fset([20, 34, 6, 35])
 
 
 def register():

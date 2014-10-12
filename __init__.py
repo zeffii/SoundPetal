@@ -56,16 +56,18 @@ store = imported_modules.append
 def make_node_list(nodes):
     node_list = []
     for category, names in nodes.nodes_dict.items():
-        node_cats = importlib.import_module('.{}'.format(category), 'nodes')
+        node_cats = take('.{}'.format(category), 'nodes')
         for name in names:
-            node = importlib.import_module('.{}'.format(name), 'nodes.{}'.format(category))
+            node = take('.{}'.format(name), 'nodes.{}'.format(category))
             node_list.append(node)
+    print('> node categories: {}'.format(len(nodes.nodes_dict)))
+    print('> node count     : {}'.format(len(node_list)))
     return node_list
 
 
 # get root
 for m in root_modules:
-    im = importlib.import_module(m, __name__)
+    im = take(m, __name__)
     store(im)
 
 # get settings
@@ -79,14 +81,14 @@ flow_modules['core'] = core_modules
 flow_modules['ui'] = ui_modules
 
 for module_name, module_content in flow_modules.items():
-    x = importlib.import_module(module_name)
+    x = take(module_name)
     store(x)
     for m in module_content:
-        im = importlib.import_module('.' + m, module_name)
+        im = take('.' + m, module_name)
         store(im)
 
 # get nodes!
-nodes = importlib.import_module('nodes')
+nodes = take('nodes')
 store(nodes)
 
 node_list = make_node_list(nodes)
@@ -103,9 +105,22 @@ def FLOW_nodecats(perform):
         if FLOW in nodeitems_utils._node_categories:
             nodeitems_utils.unregister_node_categories(FLOW)
 
-    if perform == 'register':
+    elif perform == 'register':
         from flow_nodes_enum import make_categories
-        nodeitems_utils.register_node_categories(FLOW, make_categories())
+        if not (FLOW in nodeitems_utils._node_categories):
+            nodeitems_utils.register_node_categories(FLOW, make_categories())
+
+
+def FLOW_modules(perform):
+    if perform == "register":
+        for m in all_registerables():
+            if hasattr(m, "register"):
+                m.register()
+
+    elif perform == "unregister":
+        for m in reversed(all_registerables()):
+            if hasattr(m, "unregister"):
+                m.unregister()
 
 
 if "bpy" in locals():
@@ -122,18 +137,10 @@ import bpy
 
 
 def register():
-    import nodeitems_utils
-    for m in all_registerables():
-        if hasattr(m, "register"):
-            m.register()
-
-    if not (FLOW in nodeitems_utils._node_categories):
-        FLOW_nodecats('register')
+    FLOW_modules("register")
+    FLOW_nodecats('register')
 
 
 def unregister():
-    for m in reversed(all_registerables()):
-        if hasattr(m, "unregister"):
-            m.unregister()
-
     FLOW_nodecats('unregister')
+    FLOW_modules("unregister")
