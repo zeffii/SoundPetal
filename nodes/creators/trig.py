@@ -47,8 +47,8 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     radius = FloatProperty(
-        step=0.2, default=0.4,
         name="distance",
+        step=0.2, default=0.4,
         update=updateSD)
 
     # axis = EnumProperty()
