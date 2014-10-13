@@ -21,6 +21,7 @@ nodes_dict = {
 
     'represent': [
         'stdout',
+        'viewer_bmesh'
     ],
 
 

@@ -47,7 +47,7 @@ if FLOW:
     node_list = []
     core_modules = ["flow_cache", "mechanisms"]
     root_modules = ["node_tree", "flow_nodes_enum"]
-    utils_modules = []
+    utils_modules = ['fl_bmesh_utils']
     ui_modules = []
 
     # alias alias alias alias

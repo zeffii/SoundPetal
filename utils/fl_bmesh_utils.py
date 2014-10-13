@@ -25,7 +25,7 @@ def bmesh_from_pydata(verts=[], edges=[], faces=[]):
     bm = bmesh.new()
     add_vert = bm.verts.new
     for co in verts:
-        add_vert(co)
+        add_vert(co[:3])
     bm.verts.index_update()
 
     if faces:

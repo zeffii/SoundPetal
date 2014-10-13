@@ -48,6 +48,7 @@ def make_node_cats():
 
     node_cats["represent"] = [
         ["FlowStdOutNode",      "std out"],
+        ["FlowBmeshUgen",       "bmesh"],
     ]
 
     return node_cats
