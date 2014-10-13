@@ -63,7 +63,8 @@ def updateSD(self, context):
 
                 if link.from_node == trigger_node:
                     if DEBUG_MODE:
-                        print('calling {}\'s .process()'.format(link.to_node.name))
+                        msg = 'calling {}\'s .process()'
+                        print(msg.format(link.to_node.name))
 
                     link.to_node.process()
                     downstream_nodes.add(link.to_node)
