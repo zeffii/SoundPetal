@@ -47,6 +47,7 @@ def updateSD(self, context):
 
     # assume a-cyclic
     major_counter = 0
+    last_node = None
     while(True):
         if major_counter >= len(ng.links):
             break
@@ -62,9 +63,11 @@ def updateSD(self, context):
 
                 if link.from_node == trigger_node:
                     if DEBUG_MODE:
-                        print('calling {}\'s .process()'.format(link.from_node.name))
+                        print('calling {}\'s .process()'.format(link.to_node.name))
+
                     link.to_node.process()
                     downstream_nodes.add(link.to_node)
+
                 elif link.to_node == trigger_node:
                     pass
                 else:
