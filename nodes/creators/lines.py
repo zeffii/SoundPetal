@@ -59,7 +59,6 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         gref = dict(objects=make_geometry(self))
         self.outputs[0].fset(gref)
-        print(self.name, 'did something')
 
 
 def register():

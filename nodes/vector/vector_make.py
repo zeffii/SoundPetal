@@ -45,7 +45,6 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
         x, y, z = self.tvec[:]
         ftvec = np.array([x, y, z, 0])
         self.outputs[0].fset(ftvec)
-        print(self.name, 'did something')
 
 
 def register():

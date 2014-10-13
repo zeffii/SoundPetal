@@ -34,7 +34,6 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         print('---input---', self.inputs[0].fget())
-        print(self.name, 'did something')
 
 
 def register():

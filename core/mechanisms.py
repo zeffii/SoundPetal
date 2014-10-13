@@ -31,7 +31,6 @@ def updateSD(self, context):
     '''
     trigger_node = self
     ng = context.space_data.node_tree
-    # print('-----------from:', trigger_node.name)
 
     # if trigger_node has no socket connecting from it, end early
     links_first_pass = [i.from_node for i in ng.links]
@@ -41,6 +40,10 @@ def updateSD(self, context):
     touched_links = []
     touched = touched_links.append
     downstream_nodes = set([trigger_node])
+
+    DEBUG_MODE = True  # from settings
+    if DEBUG_MODE:
+        print('-----------from:', trigger_node.name)
 
     # assume a-cyclic
     major_counter = 0
@@ -58,7 +61,8 @@ def updateSD(self, context):
                     continue
 
                 if link.from_node == trigger_node:
-                    # link.to_node.select = True
+                    if DEBUG_MODE:
+                        print('calling {}\'s .process()'.format(link.from_node.name))
                     link.to_node.process()
                     downstream_nodes.add(link.to_node)
                 elif link.to_node == trigger_node:

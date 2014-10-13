@@ -40,7 +40,6 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         self.outputs[0].fset(self.seq_row_1[:])
-        print(self.name, 'did something')
 
 
 def register():

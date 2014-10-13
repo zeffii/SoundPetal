@@ -33,7 +33,7 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('SinkHoleSocket', "send")
 
     def process(self):
-        print(self.name, 'did something')
+        pass
 
 
 def register():
