@@ -19,6 +19,7 @@
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty
 
+from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
 
 
@@ -31,16 +32,8 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.outputs.new('SinkHoleSocket', "send")
 
-    # def update(self):
-    #     if not (len(self.outputs) == 1):
-    #         return
-    #     if not self.outputs[0].links:
-    #         return
-
-    #     self.process()
-
     def process(self):
-        print('rawwwww')
+        print(self.name, 'did something')
 
 
 def register():

@@ -21,8 +21,8 @@ import numpy as np
 import bpy
 from bpy.props import EnumProperty, IntProperty, FloatProperty
 
-from node_tree import FlowCustomTreeNode
 from core.mechanisms import updateSD
+from node_tree import FlowCustomTreeNode
 
 
 def make_geometry(node):
@@ -54,20 +54,12 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('GeometrySocket', "send")
 
     def draw_buttons(self, context, layout):
-        row = layout.row()
-        # row.prop(self, 'num_verts')
         pass
-
-    # def update(self):
-    #     if not (len(self.outputs) == 1):
-    #         return
-    #     if not self.outputs[0].links:
-    #         return
-    #     self.process()
 
     def process(self):
         gref = dict(objects=make_geometry(self))
         self.outputs[0].fset(gref)
+        print(self.name, 'did something')
 
 
 def register():

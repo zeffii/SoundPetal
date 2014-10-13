@@ -19,6 +19,7 @@
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty
 
+from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
 
 
@@ -28,7 +29,7 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Seq16'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    seq_row_1 = BoolVectorProperty(size=16)
+    seq_row_1 = BoolVectorProperty(size=16, update=updateSD)
 
     def init(self, context):
         self.outputs.new('SinkHoleSocket', "send")
@@ -37,16 +38,9 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
         row = layout.row(align=True)
         row.prop(self, 'seq_row_1', toggle=True, text='')
 
-    # def update(self):
-    #     if not (len(self.outputs) == 1):
-    #         return
-    #     if not self.outputs[0].links:
-    #         return
-
-    #     self.process()
-
     def process(self):
         self.outputs[0].fset(self.seq_row_1[:])
+        print(self.name, 'did something')
 
 
 def register():

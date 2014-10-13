@@ -21,6 +21,7 @@ import numpy as np
 import bpy
 from bpy.props import FloatVectorProperty
 
+from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
 
 
@@ -30,7 +31,7 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'VectorMake'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    tvec = FloatVectorProperty(size=3)
+    tvec = FloatVectorProperty(size=3, update=updateSD)
 
     def init(self, context):
         self.width = 220
@@ -40,18 +41,11 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
         row = layout.row()
         row.prop(self, 'tvec', text="")
 
-    # def update(self):
-    #     if not (len(self.outputs) == 1):
-    #         return
-    #     if not self.outputs[0].links:
-    #         return
-
-    #     self.process()
-
     def process(self):
         x, y, z = self.tvec[:]
         ftvec = np.array([x, y, z, 0])
         self.outputs[0].fset(ftvec)
+        print(self.name, 'did something')
 
 
 def register():
