@@ -7,6 +7,7 @@ nodes_dict = {
         'lines',
         'planes',
         'seq_16tick',
+        'trig'
     ],
 
     # 'operations': [

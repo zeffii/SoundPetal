@@ -39,6 +39,7 @@ def make_node_cats():
         ["FlowLinesNode",       "Line",                  "GRIP"],
         ["FlowPlanesNode",      "Plane",           "MESH_PLANE"],
         ["FlowSeq16Node",       "16tick seq"],
+        ["TrigUgen",            "basic trig"],
     ]
 
     node_cats["behaviours"] = [

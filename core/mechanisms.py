@@ -29,7 +29,9 @@ def updateSD(self, context):
     TLDR;
     This propagates changes into the dependency graph.
     '''
+    self.process()
     trigger_node = self
+
     ng = context.space_data.node_tree
 
     # if trigger_node has no socket connecting from it, end early
