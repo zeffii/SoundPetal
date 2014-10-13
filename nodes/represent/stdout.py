@@ -31,13 +31,13 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.inputs.new('SinkHoleSocket', "see me")
 
-    def update(self):
-        if not (len(self.inputs) == 1):
-            return
-        if not self.inputs[0].links:
-            return
+    # def update(self):
+    #     if not (len(self.inputs) == 1):
+    #         return
+    #     if not self.inputs[0].links:
+    #         return
 
-        self.process()
+    #     self.process()
 
     def process(self):
         print('---input---', self.inputs[0].fget())

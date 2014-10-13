@@ -22,6 +22,7 @@ import bpy
 from bpy.props import EnumProperty, IntProperty, FloatProperty
 
 from node_tree import FlowCustomTreeNode
+from core.mechanisms import updateSD
 
 
 def make_geometry(node):
@@ -39,7 +40,11 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Lines'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    num_verts = IntProperty(min=2, step=1, name='num_verts, ', default=2)
+    num_verts = IntProperty(
+        name='num_verts',
+        min=2, step=1, default=2,
+        update=updateSD)
+
     distance = FloatProperty(step=0.2, name="distance", default=0.4)
     axis = EnumProperty
 
@@ -53,12 +58,12 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
         # row.prop(self, 'num_verts')
         pass
 
-    def update(self):
-        if not (len(self.outputs) == 1):
-            return
-        if not self.outputs[0].links:
-            return
-        self.process()
+    # def update(self):
+    #     if not (len(self.outputs) == 1):
+    #         return
+    #     if not self.outputs[0].links:
+    #         return
+    #     self.process()
 
     def process(self):
         gref = dict(objects=make_geometry(self))

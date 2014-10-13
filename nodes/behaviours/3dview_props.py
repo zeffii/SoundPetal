@@ -83,12 +83,6 @@ class Fl3DviewPropsNode(bpy.types.Node, FlowCustomTreeNode):
         row = layout.row(align=True)
         row.prop(prefs.inputs, 'view_rotate_method', text='orbit', expand=True)
 
-    def update(self):
-        pass
-
-    def update_socket(self, context):
-        self.update()
-
 
 def register():
     bpy.utils.register_class(Fl3DviewPropsNode)

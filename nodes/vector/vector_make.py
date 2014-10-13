@@ -40,13 +40,13 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
         row = layout.row()
         row.prop(self, 'tvec', text="")
 
-    def update(self):
-        if not (len(self.outputs) == 1):
-            return
-        if not self.outputs[0].links:
-            return
+    # def update(self):
+    #     if not (len(self.outputs) == 1):
+    #         return
+    #     if not self.outputs[0].links:
+    #         return
 
-        self.process()
+    #     self.process()
 
     def process(self):
         x, y, z = self.tvec[:]

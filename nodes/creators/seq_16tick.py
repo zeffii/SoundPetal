@@ -37,13 +37,13 @@ class FlowSeq16Node(bpy.types.Node, FlowCustomTreeNode):
         row = layout.row(align=True)
         row.prop(self, 'seq_row_1', toggle=True, text='')
 
-    def update(self):
-        if not (len(self.outputs) == 1):
-            return
-        if not self.outputs[0].links:
-            return
+    # def update(self):
+    #     if not (len(self.outputs) == 1):
+    #         return
+    #     if not self.outputs[0].links:
+    #         return
 
-        self.process()
+    #     self.process()
 
     def process(self):
         self.outputs[0].fset(self.seq_row_1[:])

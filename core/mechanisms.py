@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ##### BEGIN GPL LICENSE BLOCK #####
 #
 #  This program is free software; you can redistribute it and/or
@@ -16,36 +17,19 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-import bpy
-from bpy.props import BoolProperty, BoolVectorProperty
 
-from node_tree import FlowCustomTreeNode
+def updateSD(self, context):
+    '''
+    Update Self and Downstream. Whenever a property has this function
+    attached, it passes update requests to the node it came from and
+    the nodes that are downstream from it.
 
+    TLDR;
+    This propagates changes into the dependency graph.
+    '''
+    trigger_node = self
+    print(trigger_node.name)
+    ng = context.space_data.node_tree
 
-class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
-    ''' FlowPlanesNode '''
-    bl_idname = 'FlowPlanesNode'
-    bl_label = 'Planes'
-    bl_icon = 'OUTLINER_OB_EMPTY'
-
-    def init(self, context):
-        self.outputs.new('SinkHoleSocket', "send")
-
-    # def update(self):
-    #     if not (len(self.outputs) == 1):
-    #         return
-    #     if not self.outputs[0].links:
-    #         return
-
-    #     self.process()
-
-    def process(self):
-        print('rawwwww')
-
-
-def register():
-    bpy.utils.register_class(FlowPlanesNode)
-
-
-def unregister():
-    bpy.utils.unregister_class(FlowPlanesNode)
+    for i in ng.links:
+        print(i.from_node.name, i.to_node.name)

@@ -44,7 +44,7 @@ if not current_path in sys.path:
 # storage
 imported_modules = []
 node_list = []
-core_modules = ["flow_cache"]
+core_modules = ["flow_cache", "mechanisms"]
 root_modules = ["node_tree", "flow_nodes_enum"]
 #utils_modules = []
 ui_modules = []
