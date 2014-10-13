@@ -31,27 +31,28 @@ bl_info = {
 import os
 import sys
 import importlib
-# import numpy
+import numpy
 from collections import OrderedDict
 
 FLOW = 'FLOW'
 
-current_path = os.path.dirname(__file__)
-if not current_path in sys.path:
-    sys.path.append(current_path)
-    print("\n> Loading Flow.")
+if FLOW:
+    current_path = os.path.dirname(__file__)
+    if not current_path in sys.path:
+        sys.path.append(current_path)
+        print("\n> Loading Flow.")
 
-# storage
-imported_modules = []
-node_list = []
-core_modules = ["flow_cache", "mechanisms"]
-root_modules = ["node_tree", "flow_nodes_enum"]
-#utils_modules = []
-ui_modules = []
+    # storage
+    imported_modules = []
+    node_list = []
+    core_modules = ["flow_cache", "mechanisms"]
+    root_modules = ["node_tree", "flow_nodes_enum"]
+    utils_modules = []
+    ui_modules = []
 
-# alias alias alias alias
-take = importlib.import_module
-store = imported_modules.append
+    # alias alias alias alias
+    take = importlib.import_module
+    store = imported_modules.append
 
 
 def make_node_list(nodes):
@@ -65,34 +66,31 @@ def make_node_list(nodes):
     print('> node count     : {}'.format(len(node_list)))
     return node_list
 
+if FLOW:
 
-# get root
-for m in root_modules:
-    im = take(m, __name__)
-    store(im)
-
-# get settings
-#settings = take('.settings', __name__)
-#store(settings)
-
-# get (core, utils, ui)
-flow_modules = OrderedDict()
-flow_modules['core'] = core_modules
-#flow_modules['utils'] = utils_modules
-flow_modules['ui'] = ui_modules
-
-for module_name, module_content in flow_modules.items():
-    x = take(module_name)
-    store(x)
-    for m in module_content:
-        im = take('.' + m, module_name)
+    for m in root_modules:
+        im = take(m, __name__)
         store(im)
 
-# get nodes!
-nodes = take('nodes')
-store(nodes)
+    #settings = take('.settings', __name__)
+    #store(settings)
 
-node_list = make_node_list(nodes)
+    # get (core, utils, ui)
+    flow_modules = OrderedDict()
+    flow_modules['core'] = core_modules
+    flow_modules['utils'] = utils_modules
+    flow_modules['ui'] = ui_modules
+
+    for module_name, module_content in flow_modules.items():
+        x = take(module_name)
+        store(x)
+        for m in module_content:
+            im = take('.' + m, module_name)
+            store(im)
+
+    nodes = take('nodes')
+    store(nodes)
+    node_list = make_node_list(nodes)
 
 
 def all_registerables():
