@@ -17,6 +17,8 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+from collections import OrderedDict
+
 
 def updateSD(self, context):
     '''
@@ -28,8 +30,41 @@ def updateSD(self, context):
     This propagates changes into the dependency graph.
     '''
     trigger_node = self
-    print(trigger_node.name)
     ng = context.space_data.node_tree
+    print('from:', trigger_node.name)
 
-    for i in ng.links:
-        print(i.from_node.name, i.to_node.name)
+    # if trigger_node has no socket connecting from it, end early
+    links_first_pass = [i.from_node for i in ng.links]
+    if not trigger_node in links_first_pass:
+        return
+
+    touched_links = []
+    touched = touched_links.append
+    downstream_nodes = set([trigger_node])
+
+    # assume a-cyclic
+    major_counter = 0
+    while(True):
+        if major_counter >= len(ng.links):
+            break
+
+        current_downstream = set(downstream_nodes)
+        downstream_nodes = set()
+        for trigger_node in current_downstream:
+            for link in ng.links:
+                if not link.is_valid:
+                    break
+                if link in touched_links:
+                    continue
+
+                if link.from_node == trigger_node:
+                    link.to_node.select = True
+                    downstream_nodes.add(link.to_node)
+                elif link.to_node == trigger_node:
+                    pass
+                else:
+                    continue
+
+                touched(link)
+
+        major_counter += 1
