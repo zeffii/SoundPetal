@@ -31,7 +31,13 @@ TWO_PI = 2*pi
 
 def make_geometry(node):
     m = np.arange(0, TWO_PI, TWO_PI/node.num_verts)
-    g = np.array([[sin(x)*node.radius, cos(x)*node.radius, 0, 0] for x in m])
+    if node.axis == 'X':
+        g = np.array([[0, sin(x)*node.radius, cos(x)*node.radius, 0] for x in m])
+    elif node.axis == 'Y':
+        g = np.array([[sin(x)*node.radius, 0, cos(x)*node.radius, 0] for x in m])
+    elif node.axis == 'Z':
+        g = np.array([[sin(x)*node.radius, cos(x)*node.radius, 0, 0] for x in m])
+
     return {0: {'verts': g}, }
 
 
@@ -51,7 +57,18 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         step=0.2, default=0.4,
         update=updateSD)
 
-    # axis = EnumProperty()
+    axis_options = [
+        ("X", "X", "", 0),
+        ("Y", "Y", "", 1),
+        ("Z", "Z", "", 2)
+    ]
+
+    axis = EnumProperty(
+        items=axis_options,
+        name="Type of axis",
+        description="offers plane to base trig on X|Y|Z",
+        default="Z",
+        update=updateSD)
 
     def init(self, context):
         self.inputs.new("ScalarSocket", "num_verts").prop_name = "num_verts"
@@ -59,7 +76,8 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('GeometrySocket', "send")
 
     def draw_buttons(self, context, layout):
-        pass
+        row = layout.row()
+        row.prop(self, 'axis', expand=True)
 
     def process(self):
         gref = dict(objects=make_geometry(self))
