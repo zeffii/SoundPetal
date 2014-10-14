@@ -36,9 +36,9 @@ from core.flow_cache import cache_set, cache_get
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
-fl_arrays_col = (.2, .3, .3, 1.0)
+fl_arrays_col = (.99, .99, .99, 1.0)
 fl_vector_col = (.9, .6, .2, 1.0)
-fl_scalar_col = (.29, .3, .3, 1.0)
+fl_scalar_col = (.69, .9, .69, 1.0)
 fl_text_col = (.2, .6, .5, 1.0)
 fl_sink_col = (.0, .0, .0, 1.0)
 fl_geom_col = (.99, .3, .3, 1.0)
@@ -63,7 +63,10 @@ class FSocket(NodeSocket):
         return ""
 
     def fget(self):
-        return cache_get(self)
+        if self.links and self.links[0]:
+            return cache_get(self)
+        else:
+            return []
 
     def fset(self, data):
         cache_set(self, data)
@@ -86,7 +89,20 @@ class ArraySocket(FSocket):
 
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_arrays_col)
-    pass
+
+    def draw(self, context, layout, node, text):
+        if self.is_linked:
+            text += (self.get_info())
+
+        label_text = ""
+        if self.is_output or self.is_linked:
+            layout.label(text)
+            return
+        if not self.prop_name:
+            layout.label(text)
+            return
+
+        layout.prop(node, self.prop_name)
 
 
 class VectorSocket(FSocket):

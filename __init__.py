@@ -46,7 +46,7 @@ if FLOW:
     imported_modules = []
     node_list = []
     core_modules = ["flow_cache", "mechanisms"]
-    root_modules = ["node_tree", "flow_nodes_enum"]
+    root_modules = ["node_tree", "flow_nodes_index"]
     utils_modules = ['fl_bmesh_utils']
     ui_modules = []
 
@@ -105,7 +105,7 @@ def FLOW_nodecats(perform):
             nodeitems_utils.unregister_node_categories(FLOW)
 
     elif perform == 'register':
-        from flow_nodes_enum import make_categories
+        from flow_nodes_index import make_categories
         if not (FLOW in nodeitems_utils._node_categories):
             nodeitems_utils.register_node_categories(FLOW, make_categories())
 
