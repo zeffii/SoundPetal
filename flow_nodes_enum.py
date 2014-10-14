@@ -51,6 +51,10 @@ def make_node_cats():
         ["FlowBmeshUgen",       "bmesh"],
     ]
 
+    node_cats["operations"] = [
+        ["FlowMeshFilterUgen",  "filter mesh"],
+    ]
+
     return node_cats
 
 

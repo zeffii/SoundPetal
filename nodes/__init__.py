@@ -10,10 +10,11 @@ nodes_dict = {
         'trig'
     ],
 
-    # 'operations': [
+    'operations': [
     #     'aaaaa',
     #     'bbbbb',
-    # ],
+        'filter_mesh'
+    ],
 
     'vector': [
         'vector_make'

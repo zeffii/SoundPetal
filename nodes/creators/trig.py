@@ -38,7 +38,7 @@ def make_geometry(node):
     elif node.axis == 'Z':
         g = np.array([[sin(x)*node.radius, cos(x)*node.radius, 0, 0] for x in m])
 
-    return {0: {'verts': g}, }
+    return {0: {'verts': g}, 1: {'verts': g/2.0}, }
 
 
 class TrigUgen(bpy.types.Node, FlowCustomTreeNode):

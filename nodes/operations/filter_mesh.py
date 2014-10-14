@@ -16,30 +16,32 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-flowcache = {}
+import bpy
+from bpy.props import BoolProperty, BoolVectorProperty
+
+from core.mechanisms import updateSD
+from node_tree import FlowCustomTreeNode
 
 
-def ident(socket):
-    return (hash(socket.node.name), hash(socket.name))
+class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
+    ''' FlowMeshFilterUgen '''
+    bl_idname = 'FlowMeshFilterUgen'
+    bl_label = 'Mesh Filter'
+    bl_icon = 'OUTLINER_OB_EMPTY'
+
+    def init(self, context):
+        self.inputs.new('SinkHoleSocket', "mesh in")
+        self.outputs.new('SinkHoleSocket', "filtered out")
+
+    def process(self):
+        data = self.inputs[0].fget()
+        self.outputs[0].fset(data)
+        print('-Filter output--')
 
 
-def from_ident(socket):
-    link = socket.links[0]
-    from_name = link.from_node.name
-    from_socket = link.from_socket.name
-    return (hash(from_name), hash(from_socket))
+def register():
+    bpy.utils.register_class(FlowMeshFilterUgen)
 
 
-def cache_wipe():
-    global flowcache
-    flowcache = {}
-
-
-def cache_set(socket, data):
-    global flowcache
-    # print('current cache:', flowcache)
-    flowcache[ident(socket)] = data
-
-
-def cache_get(socket):
-    return flowcache.get(from_ident(socket), [])
+def unregister():
+    bpy.utils.unregister_class(FlowMeshFilterUgen)
