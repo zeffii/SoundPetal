@@ -66,7 +66,7 @@ class FSocket(NodeSocket):
         if self.links and self.links[0]:
             return cache_get(self)
         else:
-            return []
+            return
 
     def fset(self, data):
         cache_set(self, data)
