@@ -49,21 +49,37 @@ class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
             self.input_names = "|".join([str(i) for i in data['objects'].keys()])
             parts = []
             for idx, content in data['objects'].items():
-                part = ('v ' if 'verts' in content else '- ')
-                part += ('e ' if 'edges' in content else '- ')
-                part += ('f ' if 'faces' in content else '- ')
+                part = ('v' if 'verts' in content else '-')
+                part += ('e' if 'edges' in content else '-')
+                part += ('f' if 'faces' in content else '-')
                 parts.append(part)
             self.objects_content = '|'.join(parts)
 
         self.outputs[0].fset(data)
 
     def draw_buttons(self, context, layout):
+
+        icons = {
+            '-': 'SNAP_VOLUME',
+            'v': 'SNAP_VERTEX',  # 'VERTEXSEL',
+            'e': 'SNAP_EDGE',  # 'EDGESEL',
+            'f': 'SNAP_FACE',  # 'FACESEL'
+        }
+
         if self.has_objects:
             col = layout.column()
             idxs = self.input_names.split('|')
             geometry = self.objects_content.split("|")
             for i, j in zip(idxs, geometry):
-                col.label('{idx} | {geom}'.format(idx=i, geom=j))
+                # col.label('{idx} | {geom}'.format(idx=i, geom=j))
+                row = col.row()
+                left = row.split()
+                left.label(i)
+
+                right = row.split()
+                for letter in j:
+                    icon = icons.get(letter)
+                    right.label(icon=icon, text=' ')
 
 
 def register():
