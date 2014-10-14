@@ -29,7 +29,8 @@ class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Mesh Filter'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    input_names = StringProperty(default="")
+    input_names = StringProperty(default='')
+    objects_content = StringProperty(default='')
     has_objects = BoolProperty()
 
     def init(self, context):
@@ -38,22 +39,31 @@ class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         # assume no state saving.
-        self.input_names = ""
+        self.input_names = ''
+        self.objects_content = ''
         self.has_objects = False
 
         data = self.inputs[0].fget()
         if data and len(data) > 0:
             self.has_objects = True
             self.input_names = "|".join([str(i) for i in data['objects'].keys()])
+            parts = []
+            for idx, content in data['objects'].items():
+                part = ('v ' if 'verts' in content else '- ')
+                part += ('e ' if 'edges' in content else '- ')
+                part += ('f ' if 'faces' in content else '- ')
+                parts.append(part)
+            self.objects_content = '|'.join(parts)
 
         self.outputs[0].fset(data)
-        print('-Filter output--')
 
     def draw_buttons(self, context, layout):
         if self.has_objects:
             col = layout.column()
-            for i in self.input_names.split('|'):
-                col.label(i)
+            idxs = self.input_names.split('|')
+            geometry = self.objects_content.split("|")
+            for i, j in zip(idxs, geometry):
+                col.label('{idx} | {geom}'.format(idx=i, geom=j))
 
 
 def register():
