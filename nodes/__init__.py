@@ -7,12 +7,11 @@ nodes_dict = {
         'lines',
         'planes',
         'seq_16tick',
-        'trig'
+        'trig',
+        'np_arange'
     ],
 
     'operations': [
-    #     'aaaaa',
-    #     'bbbbb',
         'filter_mesh'
     ],
 
