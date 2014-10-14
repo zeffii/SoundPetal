@@ -28,13 +28,13 @@ def bmesh_from_pydata(verts=[], edges=[], faces=[]):
         add_vert(co[:3])
     bm.verts.index_update()
 
-    if faces:
+    if len(faces) > 0:
         add_face = bm.faces.new
         for face in faces:
             add_face(tuple(bm.verts[i] for i in face))
         bm.faces.index_update()
 
-    if edges:
+    if len(edges) > 0:
         add_edge = bm.edges.new
         for edge in edges:
             edge_seq = tuple(bm.verts[i] for i in edge)

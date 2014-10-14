@@ -96,7 +96,7 @@ def make_bmesh_geometry(node, context, name, mesh):
     objects = bpy.data.objects
     verts = mesh.get('verts', [])
     edges = mesh.get('edges', [])
-    faces = mesh.get('edges', [])
+    faces = mesh.get('faces', [])
 
     if name in objects:
         fl_object = objects[name]

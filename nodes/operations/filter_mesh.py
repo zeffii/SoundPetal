@@ -17,7 +17,7 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import bpy
-from bpy.props import BoolProperty, BoolVectorProperty
+from bpy.props import BoolProperty, BoolVectorProperty, StringProperty
 
 from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
@@ -29,14 +29,31 @@ class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Mesh Filter'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
+    input_names = StringProperty(default="")
+    has_objects = BoolProperty()
+
     def init(self, context):
         self.inputs.new('SinkHoleSocket', "mesh in")
         self.outputs.new('SinkHoleSocket', "filtered out")
 
     def process(self):
+        # assume no state saving.
+        self.input_names = ""
+        self.has_objects = False
+
         data = self.inputs[0].fget()
+        if data and len(data) > 0:
+            self.has_objects = True
+            self.input_names = "|".join([str(i) for i in data['objects'].keys()])
+
         self.outputs[0].fset(data)
         print('-Filter output--')
+
+    def draw_buttons(self, context, layout):
+        if self.has_objects:
+            col = layout.column()
+            for i in self.input_names.split('|'):
+                col.label(i)
 
 
 def register():
