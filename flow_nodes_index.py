@@ -57,6 +57,7 @@ def make_node_cats():
         ["FlowScalarMathUgen",  "scalar math"],
         ["FlowPackVertsUgen",   "pack verts"],
         ["FlowPackMeshUgen",    "pack mesh"],
+        ["FlowVertsTransformUgen", "verts transform"],
     ]
 
     return node_cats

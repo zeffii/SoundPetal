@@ -274,7 +274,10 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
             box.prop(self, 'autosmooth', text='smooth shade')
 
     def set_dormant_color(self):
-        self.color = (.5, .5, .5)
+        self.color = (.6, .6, .6)
+
+    def set_active_color(self):
+        self.color = (1., 1., 1.)
 
     def process(self):
 
@@ -291,7 +294,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
             self.set_dormant_color()
             return
 
-        self.color = (.8, .8, .8)
+        self.set_active_color()
 
         socket_dict = self.inputs[0].fget()
         cached_mesh = None

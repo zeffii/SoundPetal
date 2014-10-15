@@ -15,7 +15,8 @@ nodes_dict = {
         'filter_mesh',
         'np_math',
         'pack_mesh',
-        'pack_verts'
+        'pack_verts',
+        'verts_transform'
     ],
 
     'vector': [
