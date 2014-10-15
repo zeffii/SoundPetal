@@ -33,38 +33,46 @@ math_functors = {
     'INTDIV': lambda a, b: a // b,
     'SIN': lambda a, b: np.sin(a),
     'COS': lambda a, b: np.cos(a),
+    'SINB': lambda a, b: np.sin(a)*b,
+    'COSB': lambda a, b: np.cos(a)*b,
 }
 
 
 def do_math(a, b, op):
     functor = math_functors.get(op)
-    if len(a) == 1 and len(b) == 1:
-        return functor(a[0], b[0])
 
-    elif len(a) > 1 and len(b) == 1:
-        return functor(a, b[0])
+    print('a b --->', a, b)
 
-    elif (len(a) == len(b)) and (len(a) > 1):
-        return functor(a, b)
+    if a.any() and b.any():
+        if len(a) == 1 and len(b) == 1:
+            return functor(a[0], b[0])
 
-    elif len(a) > 1 and len(b) > 1:
-        if len(a) > len(b):
-            diffsize = len(a) - len(b)
-            b2 = np.array([b[-1]]).repeat(diffsize)
-            b = np.concatenate((b, b2), 0)
-        else:
-            diffsize = len(b) - len(a)
-            a2 = np.array([a[-1]]).repeat(diffsize)
-            a = np.concatenate((a, a2), 0)
-        
-        return functor(a, b)
+        elif len(a) > 1 and len(b) == 1:
+            return functor(a, b[0])
 
-    return []
+        elif (len(a) == len(b)) and (len(a) > 1):
+            return functor(a, b)
+
+        elif len(a) > 1 and len(b) > 1:
+            if len(a) > len(b):
+                diffsize = len(a) - len(b)
+                b2 = np.array([b[-1]]).repeat(diffsize)
+                b = np.concatenate((b, b2), 0)
+            else:
+                diffsize = len(b) - len(a)
+                a2 = np.array([a[-1]]).repeat(diffsize)
+                a = np.concatenate((a, a2), 0)
+
+            return functor(a, b)
+    elif a.any() and not b.any():
+        return functor(a, None)
+
+    return np.array([])
 
 
 class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
-
     ''' FlowScalarMathUgen '''
+
     bl_idname = 'FlowScalarMathUgen'
     bl_label = 'Scalar Math'
     bl_icon = 'OUTLINER_OB_EMPTY'
@@ -81,6 +89,8 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         ("INTDIV", "a//b", "", 4),
         ("SIN", "sin(a)", "", 5),
         ("COS", "cos(a)", "", 6),
+        ("SINB", "sin(a)*b", "", 7),
+        ("COSB", "cos(a)*b", "", 8),
     ]
 
     operation = EnumProperty(

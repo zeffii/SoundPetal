@@ -17,6 +17,8 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+import numpy as np
+
 import bpy
 
 from bpy.props import (
@@ -65,8 +67,11 @@ class FSocket(NodeSocket):
     def fget(self):
         if self.links and self.links[0]:
             return cache_get(self)
+        elif self.prop_name:
+            val = getattr(self.node, self.prop_name)
+            return np.array([val])
         else:
-            return
+            return np.array([])
 
     def fset(self, data):
         cache_set(self, data)
