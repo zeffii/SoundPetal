@@ -31,10 +31,8 @@ def do_transform(A, b, ops):
     #     tmat = np.ident.tolist()
 
     if ops == "TRANSLATE":
-        tmat = [[1,    0,    0,  b[0]],
-                [0,    1,    0,  b[1]],
-                [0,    0,    1,  b[2]],
-                [0,    0,    0,    1]]
+        # why so complicated? :)
+        return A + b
 
     elif ops == "SCALE":
         tmat = [[b[0], 0,    0,    0],
