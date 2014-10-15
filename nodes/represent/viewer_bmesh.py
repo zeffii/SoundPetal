@@ -215,7 +215,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def init(self, context):
         self.use_custom_color = True
-        self.inputs.new('SinkHoleSocket', 'fullmesh')
+        self.inputs.new('GeometrySocket', 'geometry')
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=True)

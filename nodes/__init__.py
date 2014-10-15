@@ -13,7 +13,9 @@ nodes_dict = {
 
     'operations': [
         'filter_mesh',
-        'np_math'
+        'np_math',
+        'pack_mesh',
+        'pack_verts'
     ],
 
     'vector': [

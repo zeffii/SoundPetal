@@ -64,14 +64,14 @@ class FSocket(NodeSocket):
     def get_info(self):
         return ""
 
-    def fget(self):
+    def fget(self, fallback=np.array([])):
         if self.links and self.links[0]:
             return cache_get(self)
         elif self.prop_name:
             val = getattr(self.node, self.prop_name)
             return np.array([val])
         else:
-            return np.array([])
+            return fallback
 
     def fset(self, data):
         cache_set(self, data)

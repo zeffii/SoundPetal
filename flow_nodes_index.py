@@ -55,6 +55,8 @@ def make_node_cats():
     node_cats["operations"] = [
         ["FlowMeshFilterUgen",  "filter mesh"],
         ["FlowScalarMathUgen",  "scalar math"],
+        ["FlowPackVertsUgen",   "pack verts"],
+        ["FlowPackMeshUgen",    "pack mesh"],
     ]
 
     return node_cats
