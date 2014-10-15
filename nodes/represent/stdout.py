@@ -33,7 +33,7 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
         self.inputs.new('SinkHoleSocket', "see me")
 
     def process(self):
-        print('---input---', self.inputs[0].fget())
+        print('---input---\n', self.inputs[0].fget())
 
 
 def register():
