@@ -46,6 +46,7 @@ def combine(x, y, z, w):
         if not (z_len == longest):
             z = add_repeat_last(z, (longest - z_len))
         if not (w_len == longest):
+            # should all be 1 ?
             w = add_repeat_last(w, (longest - w_len))
 
         return np.vstack((x, y, z, w)).T
