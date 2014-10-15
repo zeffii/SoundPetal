@@ -26,34 +26,37 @@ from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
 
 
-def do_transform(A, b, ops):
+def do_transform(A, b, node):
+    ops = node.operation
+    axis = node.axis
 
     if ops == "ROTATE":
-    #     tmat = np.ident.tolist()
         t1, t2, t3 = b[0], b[1], b[2]
 
-        x = [
-            [1,        0,       0, 0],
-            [0,  cos(t1), sin(t1), 0],
-            [0, -sin(t1), cos(t1), 0],
-            [0,        0,       0, 1]]
+        if axis == 'X':
+            x = [
+                [1,        0,       0, 0],
+                [0,  cos(t1), sin(t1), 0],
+                [0, -sin(t1), cos(t1), 0],
+                [0,        0,       0, 1]]
+            T = np.array(x)
 
-        y = [
-            [cos(t2), 0, -sin(t2), 0],
-            [0,       1,        0, 0],
-            [sin(t2), 0,  cos(t2), 0],
-            [0,       0,        0, 1]]
+        elif axis == 'Y':
+            y = [
+                [cos(t2), 0, -sin(t2), 0],
+                [0,       1,        0, 0],
+                [sin(t2), 0,  cos(t2), 0],
+                [0,       0,        0, 1]]
+            T = np.array(y)
 
-        z = [
-            [cos(t3),  sin(t3), 0, 0],
-            [-sin(t3), cos(t3), 0, 0],
-            [0,        0,       1, 0],
-            [0,        0,       0, 1]]
+        elif axis == 'Z':
+            z = [
+                [cos(t3),  sin(t3), 0, 0],
+                [-sin(t3), cos(t3), 0, 0],
+                [0,        0,       1, 0],
+                [0,        0,       0, 1]]
+            T = np.array(z)
 
-        X = np.array(x)
-        Y = np.array(y)
-        Z = np.array(z)
-        T = Z + Y + X
         return A.dot(T)
 
     if ops == "TRANSLATE":
@@ -102,20 +105,36 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
         default="TRANSLATE",
         update=updateSD)
 
+    axis_options = [
+        ("X", "X", "", 0),
+        ("Y", "Y", "", 1),
+        ("Z", "Z", "", 2)
+    ]
+
+    axis = EnumProperty(
+        items=axis_options,
+        name="Type of axis",
+        description="offers plane to base transform on X|Y|Z",
+        default="Z",
+        update=updateSD)
+
     def init(self, context):
         self.inputs.new('ArraySocket', '4*n verts')
         self.inputs.new('VectorSocket', 'vector')
         self.outputs.new('ArraySocket', 'result')
 
     def draw_buttons(self, context, layout):
-        row = layout.row()
-        row.prop(self, 'operation', text='')
+        col = layout.column()
+        col.prop(self, 'operation', text='')
+        if self.operation == 'ROTATE':
+            row = col.row()
+            row.prop(self, 'axis', expand=True)
 
     def process(self):
         A = self.inputs[0].fget()
         b = self.inputs[1].fget()
         if A.any and b.any:
-            self.outputs[0].fset(do_transform(A, b, self.operation))
+            self.outputs[0].fset(do_transform(A, b, self))
         else:
             self.outputs[0].fset(A)
 
