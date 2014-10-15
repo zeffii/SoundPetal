@@ -28,7 +28,7 @@ from node_tree import FlowCustomTreeNode
 
 def add_repeat_last(c, diffsize):
     if len(c) == 0:
-        return np.zeros((diffsize))
+        return np.zeros(diffsize)
     c2 = np.array([c[-1]]).repeat(diffsize)
     return np.concatenate((c, c2), 0)
 
@@ -46,8 +46,11 @@ def combine(x, y, z, w):
         if not (z_len == longest):
             z = add_repeat_last(z, (longest - z_len))
         if not (w_len == longest):
-            # should all be 1 ?
-            w = add_repeat_last(w, (longest - w_len))
+
+            if w_len == 0:
+                w = np.ones(longest)
+            else:
+                w = add_repeat_last(w, (longest - w_len))
 
         return np.vstack((x, y, z, w)).T
     else:

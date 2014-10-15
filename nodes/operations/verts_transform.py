@@ -31,7 +31,6 @@ def do_transform(A, b, ops):
     #     tmat = np.ident.tolist()
 
     if ops == "TRANSLATE":
-        # why so complicated? :)
         return A + b
 
     elif ops == "SCALE":
