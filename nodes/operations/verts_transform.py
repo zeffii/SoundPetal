@@ -17,6 +17,7 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import numpy as np
+from numpy import sin, cos
 
 import bpy
 from bpy.props import FloatProperty, EnumProperty
@@ -27,8 +28,33 @@ from node_tree import FlowCustomTreeNode
 
 def do_transform(A, b, ops):
 
-    # if ops == "ROTATE":
+    if ops == "ROTATE":
     #     tmat = np.ident.tolist()
+        t1, t2, t3 = b[0], b[1], b[2]
+
+        x = [
+            [1,        0,       0, 0],
+            [0,  cos(t1), sin(t1), 0],
+            [0, -sin(t1), cos(t1), 0],
+            [0,        0,       0, 1]]
+
+        y = [
+            [cos(t2), 0, -sin(t2), 0],
+            [0,       1,        0, 0],
+            [sin(t2), 0,  cos(t2), 0],
+            [0,       0,        0, 1]]
+
+        z = [
+            [cos(t3),  sin(t3), 0, 0],
+            [-sin(t3), cos(t3), 0, 0],
+            [0,        0,       1, 0],
+            [0,        0,       0, 1]]
+
+        X = np.array(x)
+        Y = np.array(y)
+        Z = np.array(z)
+        T = Z + Y + X
+        return A.dot(T)
 
     if ops == "TRANSLATE":
         return A + b
@@ -62,7 +88,7 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
 
     operation_types = [
         # internal,     ui,             "", enumidx
-        # ("ROTATE",      "Rotate",       "", 0),
+        ("ROTATE",      "Rotate",       "", 0),
         ("TRANSLATE",   "Translate",    "", 1),
         ("SCALE",       "Scale",        "", 2),
         # ("REFLECT",     "Reflect",      "", 3),
