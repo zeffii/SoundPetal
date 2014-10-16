@@ -68,9 +68,9 @@ class FSocket(NodeSocket):
         '''
         fallback:   node supplies sane or desired value if no links.
         direct:     means use the fallbback if no links+links[0]
-                    direct -- is useful if you don't want to 
+                    direct -- is useful if you don't want to
                     implicitely wrap values in an array. I need to
-                    see how more nodes interact with eachother 
+                    see how more nodes interact with eachother
                     before comitting to this kind of scheme. Something
                     tells me it is not clear now and won't be clear when
                     I returns to it. self = warned.
@@ -127,7 +127,16 @@ class VectorSocket(FSocket):
 
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_vector_col)
-    pass
+
+    def draw(self, context, layout, node, text):
+        if self.is_output:
+            row = layout.row()
+            row.prop(node, self.prop_name)
+
+        if self.is_input:
+            if self.is_linked:
+                text += (self.get_info())
+            layout.label(text)
 
 
 class TextSocket(FSocket):

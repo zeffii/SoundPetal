@@ -31,20 +31,21 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'VectorMake'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    tvec = FloatVectorProperty(size=3, update=updateSD)
+    tvec = FloatVectorProperty(size=3, update=updateSD, name='tvec')
 
     def init(self, context):
         self.width = 220
-        self.outputs.new('VectorSocket', "v out")
-
-    def draw_buttons(self, context, layout):
-        row = layout.row()
-        row.prop(self, 'tvec', text="")
+        v = self.outputs.new('VectorSocket', "v out").prop_name = 'tvec'
 
     def process(self):
         x, y, z = self.tvec[:]
         ftvec = np.array([x, y, z, 0])
         self.outputs[0].fset(ftvec)
+
+    def draw_buttons(self, context, layout):
+        # without this line, we get artefacts
+        pass
+
 
 
 def register():
