@@ -8,7 +8,8 @@ nodes_dict = {
         'planes',
         'seq_16tick',
         'trig',
-        'np_arange'
+        'np_arange',
+        'scalar_make'
     ],
 
     'operations': [
@@ -27,6 +28,8 @@ nodes_dict = {
         'stdout',
         'viewer_bmesh'
     ],
+
+
 
 
 }

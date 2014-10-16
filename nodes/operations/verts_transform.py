@@ -121,6 +121,7 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.inputs.new('ArraySocket', '4*n verts')
         self.inputs.new('VectorSocket', 'vector')
+        # self.inputs.new('ScalarSocket', 'vector')
         self.outputs.new('ArraySocket', 'result')
 
     def draw_buttons(self, context, layout):

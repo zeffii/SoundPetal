@@ -41,6 +41,7 @@ def make_node_cats():
         ["FlowSeq16Node",       "16tick seq"],
         ["TrigUgen",            "basic trig"],
         ['FlowArangeUgen',      'np A-range'],
+        ['FlowScalarMakeUgen',  'int or float'],
     ]
 
     node_cats["behaviours"] = [
