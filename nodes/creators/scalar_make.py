@@ -53,15 +53,21 @@ class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.outputs.new('ScalarSocket', "val")
+        self.outputs.new('ScalarSocket', "val").prop_name = self.scalar_type
 
     def draw_buttons(self, context, layout):
         col = layout.column()
         col.prop(self, 'scalar_type', text="")
-        col.prop(self, self.scalar_type, text='')
+        # col.prop(self, self.scalar_type, text='')
 
     def process(self):
         val = getattr(self, self.scalar_type)
+
+        # only reset of it is different, perhaps it would be clearer
+        # to just set anyway.
+        if not (self.scalar_type == self.outputs[0].prop_name):
+            self.outputs[0].prop_name = self.scalar_type
+
         self.outputs[0].fset(val)
 
 
