@@ -41,7 +41,7 @@ math_functors = {
 def do_math(a, b, op):
     functor = math_functors.get(op)
 
-    print('a b --->', a, b)
+    # print('a b --->', a, b)
 
     ''' only interested in one socket, a '''
     if op in {'SIN', 'COS'}:
