@@ -128,6 +128,8 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         b = self.inputs[1].fget()
         self.outputs[0].fset(do_math(a, b, self.operation))
 
+        self.inputs[1].enabled = not (self.operation in {'SIN', 'COS'})
+
 
 def register():
     bpy.utils.register_class(FlowScalarMathUgen)
