@@ -31,7 +31,8 @@ def do_transform(A, b, node):
     axis = node.axis
 
     if ops == "ROTATE":
-        t1, t2, t3 = b[0], b[1], b[2]
+        #t1, t2, t3 = b[0], b[1], b[2]
+        t1, t2, t3 = b, b, b
 
         if axis == 'X':
             x = [
@@ -121,23 +122,40 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.inputs.new('ArraySocket', '4*n verts')
         self.inputs.new('VectorSocket', 'vector')
-        # self.inputs.new('ScalarSocket', 'vector')
+        s = self.inputs.new('ScalarSocket', 'scalar')
+        s.enabled = False
+
         self.outputs.new('ArraySocket', 'result')
 
     def draw_buttons(self, context, layout):
         col = layout.column()
         col.prop(self, 'operation', text='')
-        if self.operation == 'ROTATE':
+        if (self.operation == 'ROTATE'):
             row = col.row()
             row.prop(self, 'axis', expand=True)
 
     def process(self):
         A = self.inputs[0].fget()
-        b = self.inputs[1].fget()
-        if A.any and b.any:
-            self.outputs[0].fset(do_transform(A, b, self))
-        else:
-            self.outputs[0].fset(A)
+
+        is_rotation = (self.operation == 'ROTATE')
+        self.inputs['scalar'].enabled = is_rotation
+        self.inputs['vector'].enabled = not is_rotation
+
+        if hasattr(A, 'any') and A.any():
+            if is_rotation:
+                r = self.inputs['scalar'].fget()
+                if isinstance(r, (float, int)):
+                    self.outputs[0].fset(do_transform(A, r, self))
+                    return
+
+            else:
+                b = self.inputs['vector'].fget()
+                if b.any():
+                    self.outputs[0].fset(do_transform(A, b, self))
+                    return
+
+        # undefined operation, output A        
+        self.outputs[0].fset(A)
 
 
 def register():
