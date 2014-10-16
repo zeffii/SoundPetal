@@ -47,7 +47,6 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
         pass
 
 
-
 def register():
     bpy.utils.register_class(FlowVecMakeNode)
 

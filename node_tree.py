@@ -133,7 +133,7 @@ class VectorSocket(FSocket):
             row = layout.row()
             row.prop(node, self.prop_name)
 
-        if self.is_input:
+        else:
             if self.is_linked:
                 text += (self.get_info())
             layout.label(text)
