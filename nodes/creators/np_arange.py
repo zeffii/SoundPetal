@@ -42,7 +42,11 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('ArraySocket', 'range')
 
     def process(self):
-        self.outputs[0].fset(np.arange(self.start, self.end, self.step))
+        a = self.inputs[0].fget(fallback=self.start, direct=True)
+        b = self.inputs[1].fget(fallback=self.end, direct=True)
+        c = self.inputs[2].fget(fallback=self.step, direct=True)
+        print('a b c :: ', a, b, c)
+        self.outputs[0].fset(np.arange(a, b, c))
 
 
 def register():

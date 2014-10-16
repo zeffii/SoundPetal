@@ -64,10 +64,20 @@ class FSocket(NodeSocket):
     def get_info(self):
         return ""
 
-    def fget(self, fallback=np.array([])):
+    def fget(self, fallback=np.array([]), direct=False):
+        '''
+        fallback:   node supplies sane or desired value if no links.
+        direct:     means use the fallbback if no links+links[0]
+                    direct -- is useful if you don't want to 
+                    implicitely wrap values in an array. I need to
+                    see how more nodes interact with eachother 
+                    before comitting to this kind of scheme. Something
+                    tells me it is not clear now and won't be clear when
+                    I returns to it. self = warned.
+        '''
         if self.links and self.links[0]:
             return cache_get(self)
-        elif self.prop_name:
+        elif self.prop_name and not direct:
             val = getattr(self.node, self.prop_name)
             return np.array([val])
         else:

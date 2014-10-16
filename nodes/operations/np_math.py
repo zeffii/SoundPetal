@@ -31,8 +31,8 @@ math_functors = {
     'DIV': lambda a, b: a / b,
     'TIMES': lambda a, b: a * b,
     'INTDIV': lambda a, b: a // b,
-    'SIN': lambda a, b: np.sin(a),
-    'COS': lambda a, b: np.cos(a),
+    'SIN': lambda a, b: np.sin(a),      #
+    'COS': lambda a, b: np.cos(a),      #
     'SINB': lambda a, b: np.sin(a)*b,
     'COSB': lambda a, b: np.cos(a)*b,
 }
@@ -43,7 +43,23 @@ def do_math(a, b, op):
 
     print('a b --->', a, b)
 
-    if a.any() and b.any():
+    ''' only interested in one socket, a '''
+    if op in {'SIN', 'COS'}:
+        return functor(a, None)
+
+    a_is_array = hasattr(a, 'any')
+    b_is_array = hasattr(b, 'any')
+
+    ''' in the case of scalar a and b '''
+    if not a_is_array and not b_is_array:
+        return functor(a, b)
+
+    ''' reaches here if one side is not scalar '''
+    if a_is_array and not b_is_array:
+        return functor(a, b)
+
+    ''' both are arrays but do they sync? ''' 
+    if a_is_array and b_is_array:
         if len(a) == 1 and len(b) == 1:
             return functor(a[0], b[0])
 
@@ -64,8 +80,6 @@ def do_math(a, b, op):
                 a = np.concatenate((a, a2), 0)
 
             return functor(a, b)
-    elif a.any() and not b.any():
-        return functor(a, None)
 
     return np.array([])
 
