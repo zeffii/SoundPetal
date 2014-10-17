@@ -211,7 +211,7 @@ class FlowCustomTree(NodeTree):
             return
 
 
-class FlowCustomTreeNode:
+class FlowCustomTreeNode(object):
     @classmethod
     def poll(cls, ntree):
         return ntree.bl_idname == 'FlowCustomTreeType'

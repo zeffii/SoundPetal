@@ -17,7 +17,9 @@ nodes_dict = {
         'np_math',
         'pack_mesh',
         'pack_verts',
-        'verts_transform'
+        'verts_transform',
+        'uv_edge_surf',
+        'array_concatenate'
     ],
 
     'vector': [

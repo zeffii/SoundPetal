@@ -59,6 +59,8 @@ def make_node_cats():
         ["FlowPackVertsUgen",   "pack verts"],
         ["FlowPackMeshUgen",    "pack mesh"],
         ["FlowVertsTransformUgen", "verts transform"],
+        ['FlowUVEdgeSurf',      'UV EdgeSurf'],
+        ['FlowArrayConcatenate', 'Array Concatenate']
     ]
 
     return node_cats
