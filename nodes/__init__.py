@@ -1,7 +1,4 @@
 nodes_dict = {
-    'behaviours': [
-        '3dview_props',
-    ],
 
     'creators': [
         'lines',
@@ -9,27 +6,35 @@ nodes_dict = {
         'seq_16tick',
         'trig',
         'np_arange',
-        'scalar_make'
+        'scalar_make',
     ],
 
     'operations': [
-        'filter_mesh',
         'np_math',
-        'pack_mesh',
-        'pack_verts',
-        'verts_transform',
         'uv_edge_surf',
-        'array_concatenate'
+        'verts_transform',
     ],
+
+    'array': [
+        'array_concatenate',
+        'array_shape',
+        ],
 
     'vector': [
         'vector_make'
     ],
 
     'represent': [
+        'filter_mesh',
         'stdout',
-        'viewer_bmesh'
+        'viewer_bmesh',
+        '3dview_props',
     ],
+
+    'pack': [
+        'pack_verts',
+        'pack_mesh',
+    ]
 
 
 

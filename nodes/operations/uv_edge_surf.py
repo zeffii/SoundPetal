@@ -46,8 +46,7 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'UV EdgeSurf'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    count_u = IntProperty(name='count_u', min=0, step=1, update=updateSD)
-    count_v = IntProperty(name='count_v', min=0, step=1, update=updateSD)
+    modulo_verts = IntProperty(name='modulo_verts', min=0, step=1, update=updateSD)
     cycle_u = IntProperty(name='cycle_u', min=0, max=1, update=updateSD)
     cycle_v = IntProperty(name='cycle_v', min=0, max=1, update=updateSD)
 
@@ -64,8 +63,8 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new('ScalarSocket', "count u").prop_name = 'count_u'
-        self.inputs.new('ScalarSocket', "count v").prop_name = 'count_v'
+        self.inputs.new('ArraySocket', "verts")
+        self.inputs.new('ScalarSocket', "modulo_verts").prop_name = 'modulo_verts'
         self.inputs.new('ScalarSocket', "cycle u").prop_name = 'cycle_u'
         self.inputs.new('ScalarSocket', "cycle v").prop_name = 'cycle_v'
         self.outputs.new('ArraySocket', 'topology')
@@ -75,17 +74,26 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'edgesurf', expand=True)
 
     def process(self):
-        skip = 0
-        nv = self.count_u
-        nr = self.count_v
+        v = self.inputs['verts'].fget()
+        modulo_verts = self.inputs['modulo_verts'].fget()
+
+        if not v.any():
+            return
+
+        if not (len(v.shape) == 2):
+            return
+
+        x, _ = v.shape
+        y = x % modulo_verts
 
         dv = 0 if self.cycle_u == 1 else 1
         dr = 0 if self.cycle_v == 1 else 1
-        num_poly = (nv-dv) * (nr-dr)
+        num_poly = (6)
 
-        p = [(i, i+1, i+nv, i+nv-1) for i in range(num_poly) if (i-skip) % (skip+1)]
-        p += [[(i*(nv-1)), ((i+1)*(nv-1)), ((i+2)*(nv-1)-1), ((i+1)*(nv-1))-1] for i in range(nr)]
+        p = [(i, i+1, i+y, i+y-1) for i in range(num_poly)]
+        p += [[(i*(y-1)), ((i+1)*(y-1)), ((i+2)*(y-1)-1), ((i+1)*(y-1))-1] for i in range(y-dr)]
         val = np.array(p)
+        print(val)
         self.outputs[0].fset(val)
 
 

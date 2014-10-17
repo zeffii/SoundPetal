@@ -44,23 +44,27 @@ def make_node_cats():
         ['FlowScalarMakeUgen',  'int or float'],
     ]
 
-    node_cats["behaviours"] = [
+    node_cats["represent"] = [
+        ["FlowStdOutNode",      "std out"],
+        ["FlowMeshFilterUgen",  "filter mesh"],
+        ["FlowBmeshUgen",       "bmesh"],
         ["Fl3DviewPropsNode",   "3dview props"],
     ]
 
-    node_cats["represent"] = [
-        ["FlowStdOutNode",      "std out"],
-        ["FlowBmeshUgen",       "bmesh"],
+    node_cats['pack'] = [
+        ["FlowPackVertsUgen",   "pack verts"],
+        ["FlowPackMeshUgen",    "pack mesh"],
+    ]
+
+    node_cats['array'] = [
+        ['FlowArrayConcatenate', 'Array Concatenate'],
+        ['FlowArrayShape',      'Array Shape']
     ]
 
     node_cats["operations"] = [
-        ["FlowMeshFilterUgen",  "filter mesh"],
         ["FlowScalarMathUgen",  "scalar math"],
-        ["FlowPackVertsUgen",   "pack verts"],
-        ["FlowPackMeshUgen",    "pack mesh"],
         ["FlowVertsTransformUgen", "verts transform"],
         ['FlowUVEdgeSurf',      'UV EdgeSurf'],
-        ['FlowArrayConcatenate', 'Array Concatenate']
     ]
 
     return node_cats
