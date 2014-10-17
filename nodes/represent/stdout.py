@@ -35,6 +35,10 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         print('---input---\n', self.inputs[0].fget())
 
+    def draw_buttons(self, context, layout):
+        col = layout.column()
+        col.operator("wm.console_toggle", icon='CONSOLE')
+
 
 def register():
     bpy.utils.register_class(FlowStdOutNode)
