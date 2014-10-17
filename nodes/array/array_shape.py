@@ -70,8 +70,7 @@ class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
                 itms.enabled = 0
                 rows.fset(r)
                 cols.fset(c)
-
-            if len(shape) == 1:
+            elif len(shape) == 1:
                 rows.enabled = 0
                 cols.enabled = 0
                 itms.enabled = 1
