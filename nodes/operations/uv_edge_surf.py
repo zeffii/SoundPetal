@@ -46,6 +46,7 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'UV EdgeSurf'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
+    num_poly = IntProperty(default=6, min=1, update=updateSD)
     modulo_verts = IntProperty(name='modulo_verts', min=0, step=1, update=updateSD)
     cycle_u = IntProperty(name='cycle_u', min=0, max=1, update=updateSD)
     cycle_v = IntProperty(name='cycle_v', min=0, max=1, update=updateSD)
@@ -67,6 +68,7 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
         self.inputs.new('ScalarSocket', "modulo_verts").prop_name = 'modulo_verts'
         self.inputs.new('ScalarSocket', "cycle u").prop_name = 'cycle_u'
         self.inputs.new('ScalarSocket', "cycle v").prop_name = 'cycle_v'
+        self.inputs.new('ScalarSocket', "num_poly").prop_name = 'num_poly'
         self.outputs.new('ArraySocket', 'topology')
 
     def draw_buttons(self, context, layout):
@@ -75,7 +77,12 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         v = self.inputs['verts'].fget()
-        modulo_verts = self.inputs['modulo_verts'].fget()
+        modulo_verts = self.inputs['modulo_verts'].fget(fallback=self.modulo_verts, direct=True)
+
+        ## fix this soon.
+        if isinstance(modulo_verts, (list,)):
+            if len(modulo_verts) == 1:
+                modulo_verts = modulo_verts[0]
 
         if not v.any():
             return
@@ -84,17 +91,18 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
             return
 
         x, _ = v.shape
-        y = x % modulo_verts
+        y = x // modulo_verts
 
-        dv = 0 if self.cycle_u == 1 else 1
-        dr = 0 if self.cycle_v == 1 else 1
-        num_poly = (6)
+        # dv = 0 if self.cycle_u == 1 else 1
+        # dr = 0 if self.cycle_v == 1 else 1
+        
 
-        p = [(i, i+1, i+y, i+y-1) for i in range(num_poly)]
-        p += [[(i*(y-1)), ((i+1)*(y-1)), ((i+2)*(y-1)-1), ((i+1)*(y-1))-1] for i in range(y-dr)]
-        val = np.array(p)
-        print(val)
-        self.outputs[0].fset(val)
+        # p = [(i, i+1, i+y, i+y-1) for i in range(self.num_poly)]
+        # p += [[(i*(y-1)), ((i+1)*(y-1)), ((i+2)*(y-1)-1), ((i+1)*(y-1))-1] for i in range(y-dr)]
+        # val = np.array(p)
+        # print(val)
+        # self.outputs[0].fset(val)
+        print('xy: {x},{y}:'.format(x=x, y=y))
 
 
 def register():

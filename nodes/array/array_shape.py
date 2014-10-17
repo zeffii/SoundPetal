@@ -62,6 +62,7 @@ class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
 
         if a.any():
             shape = a.shape
+            print("shape:{}".format(shape))
             self.shape_str = str(shape)
             if len(shape) == 2:
                 r, c = shape
