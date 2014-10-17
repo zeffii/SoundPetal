@@ -180,10 +180,9 @@ class ScalarSocket(FSocket):
     socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
 
     def draw(self, context, layout, node, text):
-        if self.is_output:
+        if self.is_output and self.prop_name:
             row = layout.row()
             row.prop(node, self.prop_name)
-
         else:
             if self.is_linked:
                 layout.label(text)

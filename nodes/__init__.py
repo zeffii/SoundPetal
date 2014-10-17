@@ -18,7 +18,7 @@ nodes_dict = {
     'array': [
         'array_concatenate',
         'array_shape',
-        ],
+    ],
 
     'vector': [
         'vector_make'

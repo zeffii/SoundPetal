@@ -20,24 +20,26 @@ import numpy as np
 from math import pi, sqrt, e
 
 import bpy
-from bpy.props import IntProperty, BoolProperty, EnumProperty
+from bpy.props import (
+    IntProperty, BoolProperty, EnumProperty, StringProperty)
 
 from core.mechanisms import updateSD
 from node_tree import FlowCustomTreeNode
 
 
-class FlowArrayDimensions(bpy.types.Node, FlowCustomTreeNode):
+class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
     '''
-    FlowArrayDimensions
-    ==================
+    FlowArrayShape
+    ==============
 
     Use to get information about dimensions
-    - col / row, 
+    - col / row,
     - items
 
     '''
-    bl_idname = 'FlowArrayDimensions'
-    bl_label = 'Array Dimensions'
+    bl_idname = 'FlowArrayShape'
+    bl_label = 'Array Shape'
+    shape_str = StringProperty(description="repr of array.shape")
 
     def init(self, context):
         self.inputs.new('ArraySocket', "Array A")
@@ -47,10 +49,12 @@ class FlowArrayDimensions(bpy.types.Node, FlowCustomTreeNode):
         m.enabled = False
 
     def draw_buttons(self, context, layout):
-        pass
+        l = layout.column()
+        l.label(self.shape_str)
 
     def process(self):
         a = self.inputs[0].fget()
+        outputs = self.outputs
 
         rows = outputs['Rows']
         cols = outputs['Columns']
@@ -58,7 +62,7 @@ class FlowArrayDimensions(bpy.types.Node, FlowCustomTreeNode):
 
         if a.any():
             shape = a.shape
-            outputs = self.outputs
+            self.shape_str = str(shape)
             if len(shape) == 2:
                 r, c = shape
                 rows.enabled = 1
@@ -74,12 +78,14 @@ class FlowArrayDimensions(bpy.types.Node, FlowCustomTreeNode):
                 itms.fset(shape[0])
             else:
                 msg = 'arrays of dims {shape} not handled yet'
-                print(msg.format(str(shape)))
+                print(msg.format(shape=self.shape_str))
+        else:
+            self.shape_str = "(no shape)"
 
 
 def register():
-    bpy.utils.register_class(FlowArrayDimensions)
+    bpy.utils.register_class(FlowArrayShape)
 
 
 def unregister():
-    bpy.utils.unregister_class(FlowArrayDimensions)
+    bpy.utils.unregister_class(FlowArrayShape)
