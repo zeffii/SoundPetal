@@ -58,7 +58,7 @@ def do_math(a, b, op):
     if a_is_array and not b_is_array:
         return functor(a, b)
 
-    ''' both are arrays but do they sync? ''' 
+    ''' both are arrays but do they sync? '''
     if a_is_array and b_is_array:
         if len(a) == 1 and len(b) == 1:
             return functor(a[0], b[0])
@@ -115,9 +115,9 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new('ArraySocket', 'A').prop_name = 'A'
-        self.inputs.new('ArraySocket', 'B').prop_name = 'B'
-        self.outputs.new('ArraySocket', 'result')
+        self.inputs.new('FlowArraySocket', 'A').prop_name = 'A'
+        self.inputs.new('FlowArraySocket', 'B').prop_name = 'B'
+        self.outputs.new('FlowArraySocket', 'result')
 
     def draw_buttons(self, context, layout):
         row = layout.row()

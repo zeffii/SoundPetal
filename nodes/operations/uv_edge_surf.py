@@ -58,12 +58,12 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new('ArraySocket', "verts")
-        self.inputs.new('ScalarSocket', "modulo_verts").prop_name = 'modulo_verts'
-        self.inputs.new('ScalarSocket', "cycle u").prop_name = 'cycle_u'
-        self.inputs.new('ScalarSocket', "cycle v").prop_name = 'cycle_v'
-        self.inputs.new('ScalarSocket', "num_poly").prop_name = 'num_poly'
-        self.outputs.new('ArraySocket', 'topology')
+        self.inputs.new('FlowArraySocket', "verts")
+        self.inputs.new('FlowScalarSocket', "modulo_verts").prop_name = 'modulo_verts'
+        self.inputs.new('FlowScalarSocket', "cycle u").prop_name = 'cycle_u'
+        self.inputs.new('FlowScalarSocket', "cycle v").prop_name = 'cycle_v'
+        self.inputs.new('FlowScalarSocket', "num_poly").prop_name = 'num_poly'
+        self.outputs.new('FlowArraySocket', 'topology')
 
     def draw_buttons(self, context, layout):
         row = layout.row()
@@ -89,7 +89,6 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
 
         # dv = 0 if self.cycle_u == 1 else 1
         # dr = 0 if self.cycle_v == 1 else 1
-        
 
         # p = [(i, i+1, i+y, i+y-1) for i in range(self.num_poly)]
         # p += [[(i*(y-1)), ((i+1)*(y-1)), ((i+2)*(y-1)-1), ((i+1)*(y-1))-1] for i in range(y-dr)]

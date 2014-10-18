@@ -30,7 +30,7 @@ class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):
     bl_icon = 'OUTLINER_OB_EMPTY'
 
     def init(self, context):
-        self.inputs.new('SinkHoleSocket', "see me")
+        self.inputs.new('FlowSinkHoleSocket', "see me")
 
     def process(self):
         print('---input---\n{}'.format(self.inputs[0].fget()))

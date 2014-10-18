@@ -69,11 +69,11 @@ class FlowPackVertsUgen(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Pack Verts'
 
     def init(self, context):
-        self.inputs.new('ArraySocket', "x")
-        self.inputs.new('ArraySocket', "y")
-        self.inputs.new('ArraySocket', "z")
-        self.inputs.new('ArraySocket', "w")
-        self.outputs.new('ArraySocket', "4*n")
+        self.inputs.new('FlowArraySocket', "x")
+        self.inputs.new('FlowArraySocket', "y")
+        self.inputs.new('FlowArraySocket', "z")
+        self.inputs.new('FlowArraySocket', "w")
+        self.outputs.new('FlowArraySocket', "4*n")
 
     def process(self):
         x = self.inputs[0].fget()

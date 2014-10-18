@@ -31,7 +31,7 @@ class FlowArrayConcatenate(bpy.types.Node, FlowCustomTreeNode):
     FlowArrayConcatenate
     ==================
 
-    Allows combination of 2 arrays into one. 
+    Allows combination of 2 arrays into one.
     uses np.concatenate((a,b), 0)
 
     '''
@@ -40,9 +40,9 @@ class FlowArrayConcatenate(bpy.types.Node, FlowCustomTreeNode):
     bl_icon = 'OUTLINER_OB_EMPTY'
 
     def init(self, context):
-        self.inputs.new('ArraySocket', "Array A")
-        self.inputs.new('ArraySocket', "Array B")
-        self.outputs.new('ArraySocket', "conc(A, B)")
+        self.inputs.new('FlowArraySocket', "Array A")
+        self.inputs.new('FlowArraySocket', "Array B")
+        self.outputs.new('FlowArraySocket', "conc(A, B)")
 
     def draw_buttons(self, context, layout):
         pass

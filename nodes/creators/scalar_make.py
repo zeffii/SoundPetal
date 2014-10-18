@@ -66,7 +66,7 @@ class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.outputs.new('ScalarSocket', "val").prop_name = self.scalar_type
+        self.outputs.new('FlowScalarSocket', "val").prop_name = self.scalar_type
 
     def draw_buttons(self, context, layout):
         col = layout.column()

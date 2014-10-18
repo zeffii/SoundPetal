@@ -46,10 +46,10 @@ fl_sink_col = (.0, .0, .0, 1.0)
 fl_geom_col = (.99, .3, .3, 1.0)
 
 
-class FSocket(NodeSocket):
+class FlowSocket(NodeSocket):
     """ Socket type to inherit several useful class functions """
-    bl_idname = "MatrixSocket"
-    bl_label = "Matrix Socket"
+    bl_idname = "FlowGenericFSocket"
+    bl_label = "generic fsocket"
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=(1, 1, 1, 1))
 
@@ -87,9 +87,9 @@ class FSocket(NodeSocket):
         cache_set(self, data)
 
 
-class MatrixSocket(FSocket):
+class FlowMatrixSocket(FlowSocket):
     '''n x n matrix Socket_type'''
-    bl_idname = "MatrixSocket"
+    bl_idname = "FlowMatrixSocket"
     bl_label = "Matrix Socket"
 
     prop_name = StringProperty(default='')
@@ -97,9 +97,9 @@ class MatrixSocket(FSocket):
     pass
 
 
-class ArraySocket(FSocket):
+class FlowArraySocket(FlowSocket):
     '''n x n array Socket_type'''
-    bl_idname = "ArraySocket"
+    bl_idname = "FlowArraySocket"
     bl_label = "Array Socket"
 
     prop_name = StringProperty(default='')
@@ -120,9 +120,9 @@ class ArraySocket(FSocket):
         layout.prop(node, self.prop_name)
 
 
-class VectorSocket(FSocket):
+class FlowVectorSocket(FlowSocket):
     '''Vector Socket Type'''
-    bl_idname = "VectorSocket"
+    bl_idname = "FlowVectorSocket"
     bl_label = "Vector Socket"
 
     prop_name = StringProperty(default='')
@@ -139,9 +139,9 @@ class VectorSocket(FSocket):
             layout.label(text)
 
 
-class TextSocket(FSocket):
+class FlowTextSocket(FlowSocket):
     '''Text, human readable characters'''
-    bl_idname = "TextSocket"
+    bl_idname = "FlowTextSocket"
     bl_label = "Text Socket"
 
     prop_name = StringProperty(default='')
@@ -151,9 +151,9 @@ class TextSocket(FSocket):
     pass
 
 
-class SinkHoleSocket(FSocket):
+class FlowSinkHoleSocket(FlowSocket):
     '''Sink Hole Socket Type'''
-    bl_idname = "SinkHoleSocket"
+    bl_idname = "FlowSinkHoleSocket"
     bl_label = "SinkHole Socket"
 
     prop_name = StringProperty(default='')
@@ -161,9 +161,9 @@ class SinkHoleSocket(FSocket):
     pass
 
 
-class GeometrySocket(FSocket):
+class FlowGeometrySocket(FlowSocket):
     '''Geometry Socket Type'''
-    bl_idname = "GeometrySocket"
+    bl_idname = "FlowGeometrySocket"
     bl_label = "Geometry Socket"
 
     prop_name = StringProperty(default='')
@@ -171,9 +171,9 @@ class GeometrySocket(FSocket):
     pass
 
 
-class ScalarSocket(FSocket):
+class FlowScalarSocket(FlowSocket):
     '''Scalar Socket Type'''
-    bl_idname = "ScalarSocket"
+    bl_idname = "FlowScalarSocket"
     bl_label = "Scalar Socket"
 
     prop_name = StringProperty(default='')
@@ -223,15 +223,15 @@ class FlowNodeCategory(NodeCategory):
 
 
 tree_classes = [
-    FSocket,
+    FlowSocket,
     FlowCustomTree,
-    MatrixSocket,
-    ArraySocket,
-    VectorSocket,
-    TextSocket,
-    SinkHoleSocket,
-    GeometrySocket,
-    ScalarSocket
+    FlowMatrixSocket,
+    FlowArraySocket,
+    FlowVectorSocket,
+    FlowTextSocket,
+    FlowSinkHoleSocket,
+    FlowGeometrySocket,
+    FlowScalarSocket
 ]
 
 

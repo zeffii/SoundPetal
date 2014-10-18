@@ -42,10 +42,10 @@ class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
     shape_str = StringProperty(description="repr of array.shape")
 
     def init(self, context):
-        self.inputs.new('ArraySocket', "Array A")
-        self.outputs.new('ScalarSocket', "Rows")
-        self.outputs.new('ScalarSocket', "Columns")
-        m = self.outputs.new('ScalarSocket', "items")
+        self.inputs.new('FlowArraySocket', "Array A")
+        self.outputs.new('FlowScalarSocket', "Rows")
+        self.outputs.new('FlowScalarSocket', "Columns")
+        m = self.outputs.new('FlowScalarSocket', "items")
         m.enabled = False
 
     def draw_buttons(self, context, layout):

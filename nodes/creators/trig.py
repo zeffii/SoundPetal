@@ -79,9 +79,9 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new("ScalarSocket", "num_verts").prop_name = "num_verts"
-        self.inputs.new("ScalarSocket", "radius").prop_name = "radius"
-        self.outputs.new('GeometrySocket', "send")
+        self.inputs.new("FlowScalarSocket", "num_verts").prop_name = "num_verts"
+        self.inputs.new("FlowScalarSocket", "radius").prop_name = "radius"
+        self.outputs.new('FlowGeometrySocket', "send")
 
     def draw_buttons(self, context, layout):
         row = layout.row()

@@ -215,7 +215,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def init(self, context):
         self.use_custom_color = True
-        self.inputs.new('GeometrySocket', 'geometry')
+        self.inputs.new('FlowGeometrySocket', 'geometry')
 
     def draw_buttons(self, context, layout):
         row = layout.row(align=True)

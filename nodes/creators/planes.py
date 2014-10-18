@@ -30,7 +30,7 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
     bl_icon = 'OUTLINER_OB_EMPTY'
 
     def init(self, context):
-        self.outputs.new('SinkHoleSocket', "send")
+        self.outputs.new('FlowSinkHoleSocket', "send")
 
     def process(self):
         pass

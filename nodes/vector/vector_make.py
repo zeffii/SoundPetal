@@ -35,7 +35,7 @@ class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):
 
     def init(self, context):
         self.width = 220
-        v = self.outputs.new('VectorSocket', "v out").prop_name = 'tvec'
+        v = self.outputs.new('FlowVectorSocket', "v out").prop_name = 'tvec'
 
     def process(self):
         x, y, z = self.tvec[:]

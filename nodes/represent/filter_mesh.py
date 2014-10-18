@@ -34,8 +34,8 @@ class FlowMeshFilterUgen(bpy.types.Node, FlowCustomTreeNode):
     has_objects = BoolProperty()
 
     def init(self, context):
-        self.inputs.new('SinkHoleSocket', "mesh in")
-        self.outputs.new('SinkHoleSocket', "filtered out")
+        self.inputs.new('FlowSinkHoleSocket', "mesh in")
+        self.outputs.new('FlowSinkHoleSocket', "filtered out")
 
     def process(self):
         # assume no state saving.

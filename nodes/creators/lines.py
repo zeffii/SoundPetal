@@ -49,9 +49,9 @@ class FlowLinesNode(bpy.types.Node, FlowCustomTreeNode):
     axis = EnumProperty
 
     def init(self, context):
-        self.inputs.new("ScalarSocket", "num_verts").prop_name = "num_verts"
-        self.inputs.new("ScalarSocket", "distance").prop_name = "distance"
-        self.outputs.new('GeometrySocket', "send")
+        self.inputs.new("FlowScalarSocket", "num_verts").prop_name = "num_verts"
+        self.inputs.new("FlowScalarSocket", "distance").prop_name = "distance"
+        self.outputs.new('FlowGeometrySocket', "send")
 
     def draw_buttons(self, context, layout):
         pass

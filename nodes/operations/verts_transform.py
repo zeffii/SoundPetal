@@ -118,12 +118,12 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new('ArraySocket', '4*n verts')
-        self.inputs.new('VectorSocket', 'vector')
-        s = self.inputs.new('ScalarSocket', 'scalar')
+        self.inputs.new('FlowArraySocket', '4*n verts')
+        self.inputs.new('FlowVectorSocket', 'vector')
+        s = self.inputs.new('FlowScalarSocket', 'scalar')
         s.enabled = False
 
-        self.outputs.new('ArraySocket', 'result')
+        self.outputs.new('FlowArraySocket', 'result')
 
     def draw_buttons(self, context, layout):
         col = layout.column()
@@ -152,7 +152,7 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
                     self.outputs[0].fset(do_transform(A, b, self))
                     return
 
-        # undefined operation, output A        
+        # undefined operation, output A
         self.outputs[0].fset(A)
 
 

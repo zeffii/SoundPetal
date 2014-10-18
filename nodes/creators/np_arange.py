@@ -36,10 +36,10 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
     step = FloatProperty(name='step', default=0.0, step=0.01, update=updateSD)
 
     def init(self, context):
-        self.inputs.new('ScalarSocket', 'start').prop_name = 'start'
-        self.inputs.new('ScalarSocket', 'end').prop_name = 'end'
-        self.inputs.new('ScalarSocket', 'step').prop_name = 'step'
-        self.outputs.new('ArraySocket', 'range')
+        self.inputs.new('FlowScalarSocket', 'start').prop_name = 'start'
+        self.inputs.new('FlowScalarSocket', 'end').prop_name = 'end'
+        self.inputs.new('FlowScalarSocket', 'step').prop_name = 'step'
+        self.outputs.new('FlowArraySocket', 'range')
 
     def process(self):
         a = self.inputs[0].fget(fallback=self.start, direct=True)

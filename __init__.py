@@ -103,7 +103,7 @@ def FLOW_nodecats(perform):
             nu.unregister_node_categories(FLOW)
 
     elif perform == 'register':
-        from flow_nodes_index import make_categories
+        from FLOW.flow_nodes_index import make_categories
         if not (FLOW in node_categories):
             nu.register_node_categories(FLOW, make_categories())
 
