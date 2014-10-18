@@ -21,8 +21,8 @@ import numpy as np
 import bpy
 from bpy.props import FloatVectorProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 class FlowVecMakeNode(bpy.types.Node, FlowCustomTreeNode):

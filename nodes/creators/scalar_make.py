@@ -22,8 +22,8 @@ from math import pi, sqrt, e
 import bpy
 from bpy.props import FloatProperty, IntProperty, EnumProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 _phi = (1 + sqrt(5))/2
 constants = lambda: None

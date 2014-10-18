@@ -37,10 +37,7 @@ from collections import OrderedDict
 FLOW = 'FLOW'
 
 if FLOW:
-    current_path = os.path.dirname(__file__)
-    if not current_path in sys.path:
-        sys.path.append(current_path)
-        print("\n> Loading Flow.")
+    print("\n> Loading", __name__)
 
     # storage
     imported_modules = []
@@ -58,9 +55,9 @@ if FLOW:
 def make_node_list(nodes):
     node_list = []
     for category, names in nodes.nodes_dict.items():
-        node_cats = take('nodes.{c}'.format(c=category))
+        node_cats = take('FLOW.nodes.{c}'.format(c=category))
         for name in names:
-            node = take('nodes.{c}.{n}'.format(n=name, c=category))
+            node = take('FLOW.nodes.{c}.{n}'.format(n=name, c=category))
             node_list.append(node)
     print('> node categories: {}'.format(len(nodes.nodes_dict)))
     print('> node count     : {}'.format(len(node_list)))
@@ -69,7 +66,7 @@ def make_node_list(nodes):
 if FLOW:
 
     for m in root_modules:
-        im = take(m, __name__)
+        im = take('FLOW.{root_module}'.format(root_module=m))
         store(im)
 
     #settings = take('.settings', __name__)
@@ -82,13 +79,13 @@ if FLOW:
     flow_modules['ui'] = ui_modules
 
     for module_name, module_content in flow_modules.items():
-        x = take(module_name)
+        x = take('FLOW.{}'.format(module_name))
         store(x)
         for m in module_content:
-            im = take('.' + m, module_name)
+            im = take("FLOW.{m}.{f}".format(m=module_name, f=m))
             store(im)
 
-    nodes = take('nodes')
+    nodes = take('FLOW.nodes')
     store(nodes)
     node_list = make_node_list(nodes)
 

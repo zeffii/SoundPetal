@@ -34,7 +34,7 @@ from bpy.types import (
     NodeSocketStandard
 )
 
-from core.flow_cache import cache_set, cache_get
+from FLOW.core.flow_cache import cache_set, cache_get
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)

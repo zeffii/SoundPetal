@@ -23,8 +23,8 @@ import bpy
 from bpy.props import (
     IntProperty, BoolProperty, EnumProperty, StringProperty)
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):

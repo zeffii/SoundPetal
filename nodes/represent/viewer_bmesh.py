@@ -23,10 +23,10 @@ import re
 import bpy
 from bpy.props import BoolProperty, StringProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
-from utils.fl_bmesh_utils import bmesh_from_pydata
+from FLOW.utils.fl_bmesh_utils import bmesh_from_pydata
 
 
 def natural_plus_one(object_names):

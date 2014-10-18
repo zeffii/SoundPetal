@@ -20,7 +20,7 @@
 from collections import OrderedDict
 
 from nodeitems_utils import NodeItem
-from node_tree import FlowNodeCategory
+from FLOW.node_tree import FlowNodeCategory
 
 
 def make_node_cats():

@@ -22,14 +22,8 @@ from math import pi, sqrt, e
 import bpy
 from bpy.props import IntProperty, BoolProperty, EnumProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
-
-_phi = (1 + sqrt(5))/2
-constants = lambda: None
-constants.PI_TIMES = pi
-constants.PHI_TIMES = _phi
-constants.E_TIMES = e
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):

@@ -22,8 +22,8 @@ import numpy as np
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty, StringProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 def combine(xyzw, edges, faces):

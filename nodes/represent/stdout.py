@@ -19,8 +19,8 @@
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 class FlowStdOutNode(bpy.types.Node, FlowCustomTreeNode):

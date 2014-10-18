@@ -22,8 +22,8 @@ from math import pi, sin, cos
 import bpy
 from bpy.props import EnumProperty, IntProperty, FloatProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 TWO_PI = 2*pi

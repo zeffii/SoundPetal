@@ -21,8 +21,8 @@ import numpy as np
 import bpy
 from bpy.props import EnumProperty, IntProperty, FloatProperty
 
-from core.mechanisms import updateSD
-from node_tree import FlowCustomTreeNode
+from FLOW.core.mechanisms import updateSD
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 def make_geometry(node):

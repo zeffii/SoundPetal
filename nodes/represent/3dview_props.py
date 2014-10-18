@@ -18,7 +18,7 @@
 
 import bpy
 
-from node_tree import FlowCustomTreeNode
+from FLOW.node_tree import FlowCustomTreeNode
 
 
 class Fl3DviewPropsNode(bpy.types.Node, FlowCustomTreeNode):
