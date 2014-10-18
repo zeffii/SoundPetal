@@ -58,9 +58,9 @@ if FLOW:
 def make_node_list(nodes):
     node_list = []
     for category, names in nodes.nodes_dict.items():
-        node_cats = take('.{}'.format(category), 'nodes')
+        node_cats = take('nodes.{c}'.format(c=category))
         for name in names:
-            node = take('.{}'.format(name), 'nodes.{}'.format(category))
+            node = take('nodes.{c}.{n}'.format(n=name, c=category))
             node_list.append(node)
     print('> node categories: {}'.format(len(nodes.nodes_dict)))
     print('> node count     : {}'.format(len(node_list)))
@@ -98,16 +98,17 @@ def all_registerables():
 
 
 def FLOW_nodecats(perform):
-    import nodeitems_utils
+    import nodeitems_utils as nu
+    node_categories = nu._node_categories
 
     if perform == 'unregister':
-        if FLOW in nodeitems_utils._node_categories:
-            nodeitems_utils.unregister_node_categories(FLOW)
+        if FLOW in node_categories:
+            nu.unregister_node_categories(FLOW)
 
     elif perform == 'register':
         from flow_nodes_index import make_categories
-        if not (FLOW in nodeitems_utils._node_categories):
-            nodeitems_utils.register_node_categories(FLOW, make_categories())
+        if not (FLOW in node_categories):
+            nu.register_node_categories(FLOW, make_categories())
 
 
 def FLOW_modules(perform):
