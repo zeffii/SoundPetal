@@ -96,15 +96,15 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
 
     operation_types = [
         # internal, ui, "", enumidx
-        ("ADD", "a+b", "", 0),
-        ("SUB", "a-b", "", 1),
-        ("DIV", "a/b", "", 2),
-        ("TIMES", "a*b", "", 3),
-        ("INTDIV", "a//b", "", 4),
+        ("ADD", "a + b", "", 0),
+        ("SUB", "a - b", "", 1),
+        ("DIV", "a / b", "", 2),
+        ("TIMES", "a * b", "", 3),
+        ("INTDIV", "a / / b", "", 4),
         ("SIN", "sin(a)", "", 5),
         ("COS", "cos(a)", "", 6),
-        ("SINB", "sin(a)*b", "", 7),
-        ("COSB", "cos(a)*b", "", 8),
+        ("SINB", "sin(a) * b", "", 7),
+        ("COSB", "cos(a) * b", "", 8),
     ]
 
     operation = EnumProperty(
@@ -124,8 +124,8 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'operation', text='', icon='DRIVER')
 
     def process(self):
-        a = self.inputs[0].fget()
-        b = self.inputs[1].fget()
+        a = self.inputs[0].fget(fallback=self.A, direct=True)
+        b = self.inputs[1].fget(fallback=self.B, direct=True)
         self.outputs[0].fset(do_math(a, b, self.operation))
 
         self.inputs[1].enabled = not (self.operation in {'SIN', 'COS'})
