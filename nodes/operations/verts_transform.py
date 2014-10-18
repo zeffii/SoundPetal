@@ -31,31 +31,29 @@ def do_transform(A, b, node):
     axis = node.axis
 
     if ops == "ROTATE":
-        #t1, t2, t3 = b[0], b[1], b[2]
-        t1, t2, t3 = b, b, b
 
         if axis == 'X':
             x = [
-                [1,        0,       0, 0],
-                [0,  cos(t1), sin(t1), 0],
-                [0, -sin(t1), cos(t1), 0],
-                [0,        0,       0, 1]]
+                [1,       0,      0, 0],
+                [0,  cos(b), sin(b), 0],
+                [0, -sin(b), cos(b), 0],
+                [0,       0,      0, 1]]
             T = np.array(x)
 
         elif axis == 'Y':
             y = [
-                [cos(t2), 0, -sin(t2), 0],
-                [0,       1,        0, 0],
-                [sin(t2), 0,  cos(t2), 0],
-                [0,       0,        0, 1]]
+                [cos(b), 0, -sin(b), 0],
+                [0,      1,       0, 0],
+                [sin(b), 0,  cos(b), 0],
+                [0,      0,       0, 1]]
             T = np.array(y)
 
         elif axis == 'Z':
             z = [
-                [cos(t3),  sin(t3), 0, 0],
-                [-sin(t3), cos(t3), 0, 0],
-                [0,        0,       1, 0],
-                [0,        0,       0, 1]]
+                [cos(b),  sin(b), 0, 0],
+                [-sin(b), cos(b), 0, 0],
+                [0,            0, 1, 0],
+                [0,            0, 0, 1]]
             T = np.array(z)
 
         return A.dot(T)

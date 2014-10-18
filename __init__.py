@@ -55,7 +55,7 @@ if FLOW:
 def make_node_list(nodes):
     node_list = []
     for category, names in nodes.nodes_dict.items():
-        node_cats = take('FLOW.nodes.{c}'.format(c=category))
+        take('FLOW.nodes.{c}'.format(c=category))
         for name in names:
             node = take('FLOW.nodes.{c}.{n}'.format(n=name, c=category))
             node_list.append(node)
@@ -82,7 +82,7 @@ if FLOW:
         x = take('FLOW.{}'.format(module_name))
         store(x)
         for m in module_content:
-            im = take("FLOW.{m}.{f}".format(m=module_name, f=m))
+            im = take("FLOW.{mod}.{m}".format(mod=module_name, m=m))
             store(im)
 
     nodes = take('FLOW.nodes')
