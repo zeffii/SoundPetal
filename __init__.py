@@ -47,7 +47,7 @@ if FLOW:
     node_list = []
     core_modules = ["flow_cache", "mechanisms"]
     root_modules = ["node_tree", "flow_nodes_index"]
-    utils_modules = ['fl_bmesh_utils']
+    util_modules = ['fl_bmesh_utils']
     ui_modules = []
 
     # alias alias alias alias
@@ -78,7 +78,7 @@ if FLOW:
     # get (core, utils, ui)
     flow_modules = OrderedDict()
     flow_modules['core'] = core_modules
-    flow_modules['utils'] = utils_modules
+    flow_modules['utils'] = util_modules
     flow_modules['ui'] = ui_modules
 
     for module_name, module_content in flow_modules.items():
