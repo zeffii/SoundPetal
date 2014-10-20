@@ -131,6 +131,14 @@ if "bpy" in locals():
     FLOW_nodecats('unregister')
     FLOW_nodecats('register')
 
+    #from FLOW.core import mechanisms
+    #
+    #    node = 
+    #    find apex and nearest siblings.
+    #    get node_tree context.
+    #    for node in (above):
+    #        updateSD(node, context)
+
 
 import bpy
 

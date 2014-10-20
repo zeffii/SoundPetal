@@ -38,15 +38,7 @@ def make_geometry(node):
     elif node.axis == 'Z':
         g = np.array([[sin(x)*node.radius, cos(x)*node.radius, 0, 0] for x in m])
 
-    return {
-        0: {
-            'verts': g
-        },
-        1: {
-            'verts': g*2.0,
-            'edges': np.array([[i, i+1] for i in range(-1, len(g)-1)])
-        },
-    }
+    return g
 
 
 class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
@@ -81,14 +73,14 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.inputs.new("FlowScalarSocket", "num_verts").prop_name = "num_verts"
         self.inputs.new("FlowScalarSocket", "radius").prop_name = "radius"
-        self.outputs.new('FlowGeometrySocket', "send")
+        self.outputs.new('FlowArraySocket', "send")
 
     def draw_buttons(self, context, layout):
         row = layout.row()
         row.prop(self, 'axis', expand=True)
 
     def process(self):
-        gref = dict(objects=make_geometry(self))
+        gref = make_geometry(self)
         self.outputs[0].fset(gref)
 
 

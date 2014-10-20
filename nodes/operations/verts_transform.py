@@ -76,6 +76,29 @@ def do_transform(A, b, node):
     return A.dot(T)
 
 
+def make_multiple_transforms(A, r, self):
+    # for row in r:
+    #     geom = do_transform(A, row, self)
+    #     k = np.concatenate((k, geom), 0)
+
+    def make_iterable(k):
+        for row_geom in A:
+            for co in row_geom:
+                yield co
+
+        for row in r:
+            geom = do_transform(A, row, self)
+            for row_geom in geom:
+                for co in row_geom:
+                    yield co
+
+    num_verts = len(A)
+    iterable = make_iterable(A)
+    j = np.fromiter(iterable, float)
+    total_flat = len(j)
+    return j.reshape(total_flat // 4, 4)
+
+
 class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
     '''
     FlowVertsTransformUgen
@@ -146,6 +169,14 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
                     self.outputs[0].fset(do_transform(A, r, self))
                     return
 
+                print(type(r))
+                if isinstance(r, (np.ndarray,)):
+                    shape = r.shape
+                    items = len(shape)
+                    if items == 1:
+                        kt = make_multiple_transforms(A, r, self)
+                        self.outputs[0].fset(kt)
+                        return
             else:
                 b = self.inputs['vector'].fget()
                 if b.any():
