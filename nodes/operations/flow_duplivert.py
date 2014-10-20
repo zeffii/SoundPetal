@@ -16,6 +16,7 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+from random import random
 import numpy as np
 
 import bpy
@@ -88,23 +89,28 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
                     verts = obj_parent.data.vertices
                     if not (len(val) == len(verts)):
                         # no fullrepeat atm.
+                        print('sizes don\'t match')
+                        print(len(val), len(verts))
                         return
                 else:
                     return
 
                 iterot = (v[:3] for v in val)
 
-                ''' maybe use foreach.set here?.. 
+                ''' maybe use foreach.set here?..
                     temporary implementation
                 '''
 
-                for v in verts:
+                for idx, v in enumerate(verts):
                     new_val = next(iterot, None)
-                    if new_val:
+                    if isinstance(new_val, np.ndarray):
                         v.normal = new_val
                     else:
                         break
 
+                # race condition with bmesh node, this should be done last..
+                # update is pointless I think..
+                # obj_parent.data.update()
 
 
 def register():
