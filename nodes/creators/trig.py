@@ -29,14 +29,15 @@ from FLOW.node_tree import FlowCustomTreeNode
 TWO_PI = 2*pi
 
 
-def make_geometry(node):
-    m = np.arange(0, TWO_PI, TWO_PI/node.num_verts)
+def make_geometry(node, n, r):
+
+    m = np.arange(0, TWO_PI, TWO_PI/n)
     if node.axis == 'X':
-        g = np.array([[0, sin(x)*node.radius, cos(x)*node.radius, 0] for x in m])
+        g = np.array([[0, sin(x)*r, cos(x)*r, 0] for x in m])
     elif node.axis == 'Y':
-        g = np.array([[sin(x)*node.radius, 0, cos(x)*node.radius, 0] for x in m])
+        g = np.array([[sin(x)*r, 0, cos(x)*r, 0] for x in m])
     elif node.axis == 'Z':
-        g = np.array([[sin(x)*node.radius, cos(x)*node.radius, 0, 0] for x in m])
+        g = np.array([[sin(x)*r, cos(x)*r, 0, 0] for x in m])
 
     return g
 
@@ -80,7 +81,9 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'axis', expand=True)
 
     def process(self):
-        gref = make_geometry(self)
+        n = self.inputs['num_verts'].fget(fallback=self.num_verts, direct=True)
+        r = self.inputs['radius'].fget(fallback=self.radius, direct=True)
+        gref = make_geometry(self, n, r)
         self.outputs[0].fset(gref)
 
 

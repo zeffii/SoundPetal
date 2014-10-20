@@ -255,7 +255,6 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
         row = col.row(align=True)
         row.scale_y = 0.9
 
-        # row.prop(self, "material", text="", icon='MATERIAL_DATA')
         row.prop_search(self, 'material', bpy.data, 'materials', text='', icon='MATERIAL_DATA')
 
     def draw_buttons_ext(self, context, layout):

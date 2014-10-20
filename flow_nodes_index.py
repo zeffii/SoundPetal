@@ -65,6 +65,7 @@ def make_node_cats():
         ["FlowScalarMathUgen",  "scalar math"],
         ["FlowVertsTransformUgen", "verts transform"],
         ['FlowUVEdgeSurf',      'UV EdgeSurf'],
+        ['FlowDuplivertOne',    'Dupli Obj']
     ]
 
     return node_cats

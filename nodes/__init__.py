@@ -13,6 +13,7 @@ nodes_dict = {
         'np_math',
         'uv_edge_surf',
         'verts_transform',
+        'flow_duplivert'
     ],
 
     'array': [
