@@ -25,18 +25,19 @@ from bpy.props import FloatProperty, IntProperty, EnumProperty
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
-# this is not great :) 
+# this is not great :)
+
 
 _phi = (1 + sqrt(5))/2
 constants = lambda: None
 constants.PI_TIMES = pi
 constants.PHI_TIMES = _phi
-constants.TAU_TIMES = 2*pi
+constants.TAU_TIMES = 2 * pi
 constants.E_TIMES = e
-constants.PI_DIV = pi
-constants.PHI_DIV = _phi
-constants.TAU_DIV = 2*pi
-constants.E_DIV = e
+constants.DIV_PI = pi
+constants.DIV_PHI = _phi
+constants.DIV_TAU = 2 * pi
+constants.DIV_E = e
 
 
 class FlowConstantsUgen(bpy.types.Node, FlowCustomTreeNode):
@@ -55,20 +56,20 @@ class FlowConstantsUgen(bpy.types.Node, FlowCustomTreeNode):
     TAU_TIMES = FloatProperty(name='TAU_TIMES', default=1.0, step=0.5, update=updateSD)
     PHI_TIMES = FloatProperty(name='PHI_TIMES', default=1.0, step=0.5, update=updateSD)
     E_TIMES = FloatProperty(name='E_TIMES', default=1.0, step=0.5, update=updateSD)
-    E_DIV = FloatProperty(name='E_DIV', default=1.0, step=0.5, update=updateSD)
-    PI_DIV = FloatProperty(name='PI_DIV', default=1.0, step=0.5, update=updateSD)
-    TAU_DIV = FloatProperty(name='TAU_DIV', default=1.0, step=0.5, update=updateSD)
-    PHI_DIV = FloatProperty(name='PHI_DIV', default=1.0, step=0.5, update=updateSD)
+    DIV_E = FloatProperty(name='DIV_E', default=1.0, step=0.5, update=updateSD)
+    DIV_PI = FloatProperty(name='DIV_PI', default=1.0, step=0.5, update=updateSD)
+    DIV_TAU = FloatProperty(name='DIV_TAU', default=1.0, step=0.5, update=updateSD)
+    DIV_PHI = FloatProperty(name='DIV_PHI', default=1.0, step=0.5, update=updateSD)
 
     type_options = [
         ("PI_TIMES",  "N X PI",  "", 0),
         ("TAU_TIMES", "N X TAU", "", 1),
         ("PHI_TIMES", "N X PHI", "", 2),
         ("E_TIMES",   "N X E",   "", 3),
-        ("E_DIV",     "N / E",   "", 4),
-        ("PI_DIV",    "N / PI",  "", 5),
-        ("TAU_DIV",   "N / TAU", "", 6),
-        ("PHI_DIV",   "N / PHI", "", 7),
+        ("DIV_E",     "E / N",   "", 4),
+        ("DIV_PI",    "PI / N",  "", 5),
+        ("DIV_TAU",   "TAU / N", "", 6),
+        ("DIV_PHI",   "PHI / N", "", 7),
     ]
 
     scalar_type = EnumProperty(
