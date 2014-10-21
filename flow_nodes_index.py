@@ -32,7 +32,8 @@ def make_node_cats():
     '''
 
     node_cats["vector"] = [
-        ["FlowVecMakeNode",     "Vector"]
+        ["FlowVecMakeNode",     "Vector"],
+        ["FlowVecFromInput",    "Vector from input"]
     ]
 
     node_cats["creators"] = [
@@ -65,7 +66,8 @@ def make_node_cats():
         ["FlowScalarMathUgen",  "scalar math"],
         ["FlowVertsTransformUgen", "verts transform"],
         ['FlowUVEdgeSurf',      'UV EdgeSurf'],
-        ['FlowDuplivertOne',    'Dupli Obj']
+        ['FlowDuplivertOne',    'Dupli Obj'],
+        ['FlowTreeUpdateUgen',  'Update Trigger']
     ]
 
     return node_cats

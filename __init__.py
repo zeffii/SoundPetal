@@ -87,11 +87,10 @@ if FLOW:
 
     nodes = take('FLOW.nodes')
     store(nodes)
-    node_list = make_node_list(nodes)
 
 
 def all_registerables():
-    return imported_modules + node_list
+    return imported_modules + make_node_list(nodes)
 
 
 def FLOW_nodecats(perform):
@@ -130,14 +129,6 @@ if "bpy" in locals():
 
     FLOW_nodecats('unregister')
     FLOW_nodecats('register')
-
-    #from FLOW.core import mechanisms
-    #
-    #    node = 
-    #    find apex and nearest siblings.
-    #    get node_tree context.
-    #    for node in (above):
-    #        updateSD(node, context)
 
 
 import bpy

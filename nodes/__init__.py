@@ -13,7 +13,8 @@ nodes_dict = {
         'np_math',
         'uv_edge_surf',
         'verts_transform',
-        'flow_duplivert'
+        'flow_duplivert',
+        'tree_update_node'
     ],
 
     'array': [
@@ -22,7 +23,8 @@ nodes_dict = {
     ],
 
     'vector': [
-        'vector_make'
+        'vector_make',
+        'vector_from_input'
     ],
 
     'represent': [

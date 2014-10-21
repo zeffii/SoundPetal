@@ -179,7 +179,7 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
                         return
             else:
                 b = self.inputs['vector'].fget()
-                if b.any():
+                if isinstance(b, np.ndarray) and b.any():
                     self.outputs[0].fset(do_transform(A, b, self))
                     return
 

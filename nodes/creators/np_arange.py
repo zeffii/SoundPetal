@@ -46,7 +46,10 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         b = self.inputs[1].fget(fallback=self.end, direct=True)
         c = self.inputs[2].fget(fallback=self.step, direct=True)
         # print('a b c :: ', a, b, c)
-        self.outputs[0].fset(np.arange(a, b, c))
+        try:
+            self.outputs[0].fset(np.arange(a, b, c))
+        except:
+            print('failed:\nnp.arange({a}, {b}, {c})'.format(a=a,b=b,c=c))
 
 
 def register():
