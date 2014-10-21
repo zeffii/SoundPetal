@@ -17,19 +17,12 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import numpy as np
-from math import pi, sqrt, e
 
 import bpy
 from bpy.props import FloatProperty, IntProperty, EnumProperty
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
-
-_phi = (1 + sqrt(5))/2
-constants = lambda: None
-constants.PI_TIMES = pi
-constants.PHI_TIMES = _phi
-constants.E_TIMES = e
 
 
 class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
@@ -44,18 +37,12 @@ class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Scalar int float'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    INT = IntProperty(name='INT', default=0, step=1, update=updateSD)
+    INT = IntProperty(name='INT', default=2, step=1, update=updateSD)
     FLOAT = FloatProperty(name='FLOAT', default=0.0, step=0.1, update=updateSD)
-    PI_TIMES = FloatProperty(name='PI_TIMES', default=1.0, step=0.5, update=updateSD)
-    E_TIMES = FloatProperty(name='E_TIMES', default=1.0, step=0.5, update=updateSD)
-    PHI_TIMES = FloatProperty(name='PHI_TIMES', default=1.0, step=0.5, update=updateSD)
 
     type_options = [
         ("INT", "Integer", "", 0),
         ("FLOAT", "Float", "", 1),
-        ("PI_TIMES", "n * Pi", "", 2),
-        ("E_TIMES", "n * e", "", 3),
-        ("PHI_TIMES", "n * Phi", "", 4),
     ]
 
     scalar_type = EnumProperty(
@@ -74,16 +61,7 @@ class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         val = getattr(self, self.scalar_type)
-
-        # only set if it is different, perhaps it would be clearer
-        # to just set anyway.
-        if not (self.scalar_type == self.outputs[0].prop_name):
-            self.outputs[0].prop_name = self.scalar_type
-
-        if self.scalar_type in {'PI_TIMES', 'E_TIMES', 'PHI_TIMES'}:
-            self.outputs[0].fset(val * getattr(constants, self.scalar_type))
-            return
-
+        self.outputs[0].prop_name = self.scalar_type
         self.outputs[0].fset(val)
 
 

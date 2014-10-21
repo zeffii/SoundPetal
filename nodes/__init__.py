@@ -6,6 +6,7 @@ nodes_dict = {
         'seq_16tick',
         'trig',
         'scalar_make',
+        'convenience_constants'
     ],
 
     'operations': [
