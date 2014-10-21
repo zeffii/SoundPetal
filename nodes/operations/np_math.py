@@ -124,19 +124,16 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'operation', text='', icon='DRIVER')
 
     def process(self):
+        self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS'})
         a = self.inputs[0].fget(fallback=self.A, direct=True)
         b = self.inputs[1].fget(fallback=self.B, direct=True)
 
-        # if (hasattr(a, 'any') and a.any) or isinstance(a, (float, int)):
-        #     pass
         if isinstance(a, list) and len(a) == 0:
             return
         if isinstance(b, list) and len(b) == 0:
             return
 
         self.outputs[0].fset(do_math(a, b, self.operation))
-
-        self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS'})
 
 
 def register():
