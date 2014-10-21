@@ -30,14 +30,14 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
     bl_idname = 'FlowVecFromInput'
     bl_label = 'Vector From Input'
 
-    x_comp = FloatProperty(default=1.0, step=0.1, name='x_comp')
-    y_comp = FloatProperty(default=1.0, step=0.1, name='y_comp')
-    z_comp = FloatProperty(default=1.0, step=0.1, name='z_comp')
+    x_comp = FloatProperty(default=1.0, step=0.1, name='x_comp', update=updateSD)
+    y_comp = FloatProperty(default=1.0, step=0.1, name='y_comp', update=updateSD)
+    z_comp = FloatProperty(default=1.0, step=0.1, name='z_comp', update=updateSD)
 
     def init(self, context):
-        self.inputs.new('FlowScalarSocket', 'x_comp').prop_name = 'x_comp'
-        self.inputs.new('FlowScalarSocket', 'y_comp').prop_name = 'y_comp'
-        self.inputs.new('FlowScalarSocket', 'z_comp').prop_name = 'z_comp'
+        self.inputs.new('FlowScalarSocket', 'x').prop_name = 'x_comp'
+        self.inputs.new('FlowScalarSocket', 'y').prop_name = 'y_comp'
+        self.inputs.new('FlowScalarSocket', 'z').prop_name = 'z_comp'
         self.outputs.new('FlowVectorSocket', "v out")
 
     def process(self):
