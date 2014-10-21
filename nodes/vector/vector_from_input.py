@@ -46,7 +46,6 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
         y = inputs[1].fget(fallback=self.y_comp, direct=True)
         z = inputs[2].fget(fallback=self.z_comp, direct=True)
         ftvec = np.array([x, y, z, 0])
-        print('ftvec', ftvec)
         self.outputs[0].fset(ftvec)
 
     def draw_buttons(self, context, layout):

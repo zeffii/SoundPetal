@@ -18,7 +18,7 @@
 
 import bpy
 
-from FLOW.core.mechanisms import updateSD
+from FLOW.core.mechanisms import updateSD, cascading_trigger
 from FLOW.node_tree import FlowCustomTreeNode
 
 
@@ -33,13 +33,19 @@ class FlowNodeUpdateOperator(bpy.types.Operator):
         to_nodes = {link.to_node for link in ng.links}
         from_nodes = {link.from_node for link in ng.links}
 
+        trigger_set = set()
         for link in ng.links:
             node = link.from_node
             if not (node in to_nodes):
+                trigger_set.add(node)
                 # updateSD(node, context)
                 node.select = True
 
-        return {'FINISHED'}
+        if trigger_set:
+            cascading_trigger(context, trigger_set)
+            return {'FINISHED'}
+        else:
+            return {'CANCELLED'}
 
 
 class FlowTreeUpdateUgen(bpy.types.Node, FlowCustomTreeNode):

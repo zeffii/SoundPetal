@@ -20,36 +20,19 @@
 from collections import OrderedDict
 
 
-def updateSD(self, context):
-    '''
-    Update Self and Downstream. Whenever a property has this function
-    attached, it passes update requests to the node it came from and
-    the nodes that are downstream from it.
-
-    TLDR;
-    This propagates changes into the dependency graph.
-    '''
-    self.process()
-    trigger_node = self
-
+def cascading_trigger(context, downstream_nodes):
     ng = context.space_data.node_tree
-
-    # if trigger_node has no socket connecting from it, end early
-    links_first_pass = [i.from_node for i in ng.links]
-    if not trigger_node in links_first_pass:
-        return
 
     touched_links = []
     touched = touched_links.append
-    downstream_nodes = set([trigger_node])
 
     DEBUG_MODE = True  # from settings
     if DEBUG_MODE:
-        print('-----------from:', trigger_node.name)
+        print('-----------from:', downstream_nodes)
 
     # assume a-cyclic
     major_counter = 0
-    last_node = None
+    # last_node = None
     while(True):
         if major_counter >= len(ng.links):
             break
@@ -79,3 +62,26 @@ def updateSD(self, context):
                 touched(link)
 
         major_counter += 1
+
+
+def updateSD(self, context):
+    '''
+    Update Self and Downstream. Whenever a property has this function
+    attached, it passes update requests to the node it came from and
+    the nodes that are downstream from it.
+
+    TLDR;
+    This propagates changes into the dependency graph.
+    '''
+    self.process()
+    trigger_node = self
+
+    ng = context.space_data.node_tree
+
+    # if trigger_node has no socket connecting from it, end early
+    links_first_pass = [i.from_node for i in ng.links]
+    if not trigger_node in links_first_pass:
+        return
+
+    downstream_nodes = set([trigger_node])
+    cascading_trigger(context, downstream_nodes)
