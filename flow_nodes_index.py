@@ -41,7 +41,6 @@ def make_node_cats():
         ["FlowPlanesNode",      "Plane",           "MESH_PLANE"],
         ["FlowSeq16Node",       "16tick seq"],
         ["TrigUgen",            "basic trig"],
-        ['FlowArangeUgen',      'np A-range'],
         ['FlowScalarMakeUgen',  'int or float'],
     ]
 
@@ -58,6 +57,7 @@ def make_node_cats():
     ]
 
     node_cats['array'] = [
+        ['FlowArangeUgen',      'Array numpy a-range'],
         ['FlowArrayConcatenate', 'Array Concatenate'],
         ['FlowArrayShape',      'Array Shape']
     ]

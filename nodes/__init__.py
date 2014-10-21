@@ -5,7 +5,6 @@ nodes_dict = {
         'planes',
         'seq_16tick',
         'trig',
-        'np_arange',
         'scalar_make',
     ],
 
@@ -20,6 +19,7 @@ nodes_dict = {
     'array': [
         'array_concatenate',
         'array_shape',
+        'np_arange',
     ],
 
     'vector': [
