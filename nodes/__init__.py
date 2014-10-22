@@ -34,6 +34,7 @@ nodes_dict = {
         'stdout',
         'viewer_bmesh',
         '3dview_props',
+        'frame_node'
     ],
 
     'pack': [

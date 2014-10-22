@@ -50,6 +50,7 @@ def make_node_cats():
         ["FlowMeshFilterUgen",  "filter mesh"],
         ["FlowBmeshUgen",       "bmesh"],
         ["Fl3DviewPropsNode",   "3dview props"],
+        ['FlowFrameInfoNode',   "Frame Info"]
     ]
 
     node_cats['pack'] = [
