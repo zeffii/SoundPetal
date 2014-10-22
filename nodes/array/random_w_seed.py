@@ -19,7 +19,8 @@
 import numpy as np
 
 import bpy
-from bpy.props import FloatProperty, IntProperty, EnumProperty, BoolProperty
+from bpy.props import (
+    FloatProperty, IntProperty, EnumProperty, BoolProperty, StringProperty)
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
@@ -38,6 +39,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
     inclusive = BoolProperty(description="includes max", update=updateSD)
 
+    Seed = IntProperty(name="Seed", default=0, step=1, update=updateSD)
     Elements = IntProperty(name="Elements", min=1, default=10, step=1, update=updateSD)
     I_MIN = IntProperty(name='I_MIN', default=0, step=1, update=updateSD)
     I_MAX = IntProperty(name='I_MAX', default=2, step=1, update=updateSD)
@@ -45,6 +47,10 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
     F_MAX = FloatProperty(name='F_MAX', default=1.0, step=0.1, update=updateSD)
     INT = IntProperty(name='INT', default=2, step=1, update=updateSD)
     FLOAT = FloatProperty(name='FLOAT', default=0.0, step=0.1, update=updateSD)
+
+    int_valstr = StringProperty()
+    float_valstr = StringProperty()
+    seed_valstr = StringProperty()
 
     type_options = [
         ("INT", "Random Int", "", 0),
@@ -80,6 +86,10 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
         f.prop_name = 'Elements'
         f.enabled = True
 
+        g = new_input('FlowScalarSocket', 'Seed')
+        g.prop_name = 'Seed'
+        g.enabled = True
+
         self.outputs.new('FlowArraySocket', "val")
 
     def draw_buttons(self, context, layout):
@@ -93,20 +103,29 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
         # http://docs.scipy.org/doc/numpy/reference/routines.random.html
         # this is but a quick implementation
 
+        # get element count
         inputs = self.inputs
         elements = self.inputs['Elements']
         r_num = int(elements.fget(fallback=self.Elements, direct=True))
         r_num = max(r_num, 1)  # forces minimum length of 1
 
+        # hide unhide sockets depending on type
         int_mode = (self.random_type == 'INT')
         inputs['I_MIN'].enabled = int_mode
         inputs['I_MAX'].enabled = int_mode
         inputs['F_MIN'].enabled = not int_mode
         inputs['F_MAX'].enabled = not int_mode
 
+        # get seed
+        seed = self.inputs['Seed']
+        seed_val = int(seed.fget(fallback=self.Seed, direct=True))
+        self.seed_valstr = str(seed_val)
+        np.random.seed(seed_val)
+
         if int_mode:
             r_min = inputs['I_MIN'].fget(fallback=self.I_MIN, direct=True)
             r_max = inputs['I_MAX'].fget(fallback=self.I_MAX, direct=True)
+            self.int_valstr = str(r_min) + '..' + str(r_max)
             if self.inclusive:
                 val = np.random.random_integers(r_min, r_max, size=r_num)
             else:
@@ -116,16 +135,20 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
             r_min = inputs['F_MIN'].fget(fallback=self.F_MIN, direct=True)
             r_max = inputs['F_MAX'].fget(fallback=self.F_MAX, direct=True)
             val = np.random.random_sample((r_num,)) * (r_max-r_min) + r_min
+            self.float_valstr = str(round(r_min, 3)) + '..' + str(round(r_max, 3))
 
         self.outputs[0].fset(val)
 
     def draw_label(self):
-        # if self.hide:
-        #     if self.scalar_type == "INT":
-        #         return str(self.INT)
-        #     return str(np.around(self.FLOAT, 4))
-        # else:
-        #     return self.bl_label
+        if self.hide:
+            if self.random_type == "INT":
+                rng = self.int_valstr
+            else:
+                rng = self.float_valstr
+
+            msg = 'RND {rng} | S {s}'
+            return msg.format(rng=rng, s=self.seed_valstr)
+
         return self.bl_label
 
 
