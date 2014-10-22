@@ -38,11 +38,11 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
     inclusive = BoolProperty(description="includes max", update=updateSD)
 
-    Elements = IntProperty(name="Elements", default=10, step=1, update=updateSD)
+    Elements = IntProperty(name="Elements", min=1, default=10, step=1, update=updateSD)
     I_MIN = IntProperty(name='I_MIN', default=0, step=1, update=updateSD)
-    I MAX = IntProperty(name='I_MAX', default=2, step=1, update=updateSD)
+    I_MAX = IntProperty(name='I_MAX', default=2, step=1, update=updateSD)
     F_MIN = FloatProperty(name='F_MIN', default=0.0, step=0.1, update=updateSD)
-    F_MAX = FloatProperty(name='F_MAX', default=0.0, step=0.1, update=updateSD)
+    F_MAX = FloatProperty(name='F_MAX', default=1.0, step=0.1, update=updateSD)
     INT = IntProperty(name='INT', default=2, step=1, update=updateSD)
     FLOAT = FloatProperty(name='FLOAT', default=0.0, step=0.1, update=updateSD)
 
@@ -60,15 +60,26 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
     def init(self, context):
         new_input = self.inputs.new
-        a = new_input('FlowScalarSocket', 'I_MIN').prop_name = self.I_MIN
-        b = new_input('FlowScalarSocket', 'I_MAX').prop_name = self.I_MAX
-        c = new_input('FlowScalarSocket', 'F_MIN').prop_name = self.F_MIN
-        d = new_input('FlowScalarSocket', 'F_MAX').prop_name = self.F_MAX
-        f = new_input('FlowScalarSocket', 'Elements').prop_name = self.Elements
+        a = new_input('FlowScalarSocket', 'I_MIN')
+        a.prop_name = 'I_MIN'
         a.enabled = True
+
+        b = new_input('FlowScalarSocket', 'I_MAX')
+        b.prop_name = 'I_MAX'
         b.enabled = True
+
+        c = new_input('FlowScalarSocket', 'F_MIN')
+        c.prop_name = 'F_MIN'
         c.enabled = False
+
+        d = new_input('FlowScalarSocket', 'F_MAX')
+        d.prop_name = 'F_MAX'
         d.enabled = False
+
+        f = new_input('FlowScalarSocket', 'Elements')
+        f.prop_name = 'Elements'
+        f.enabled = True
+
         self.outputs.new('FlowArraySocket', "val")
 
     def draw_buttons(self, context, layout):
@@ -80,9 +91,12 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
 
         # http://docs.scipy.org/doc/numpy/reference/routines.random.html
+        # this is but a quick implementation
 
         inputs = self.inputs
-        r_num = inputs['Elements'].fget(fallback=self.Elements, direct=True)
+        elements = self.inputs['Elements']
+        r_num = elements.fget(fallback=self.Elements, direct=True)
+        r_num = max(r_num, 1)  # forces minimum length of 1
 
         int_mode = (self.random_type == 'INT')
         inputs['I_MIN'].enabled = int_mode

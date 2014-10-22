@@ -21,6 +21,7 @@ nodes_dict = {
         'array_concatenate',
         'array_shape',
         'np_arange',
+        'random_w_seed'
     ],
 
     'vector': [
