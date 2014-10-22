@@ -26,14 +26,32 @@ from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
 
+class FLowDupliOperator(bpy.types.Operator):
+    bl_idname = 'node.flow_fdp_center_child'
+    bl_label = "Center Child"
+
+    name_child = StringProperty()
+
+    def execute(self, context):
+        ref = bpy.data.objects.get(self.name_child)
+        if ref:
+            ref.location = 0, 0, 0
+            return {'FINISHED'}
+        return {'CANCELLED'}
+
+
 class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
     ''' FlowDuplivertOne , with extras i hope'''
     bl_idname = 'FlowDuplivertOne'
     bl_label = 'Duplivert Ugen'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
-    name_parent = StringProperty(description="obj's verts are used to duplicate child")
-    name_child = StringProperty(description="name of object to duplicate")
+    name_parent = StringProperty(
+        description="obj's verts are used to duplicate child",
+        update=updateSD)
+    name_child = StringProperty(
+        description="name of object to duplicate",
+        update=updateSD)
 
     def init(self, context):
         self.inputs.new("FlowArraySocket", "Rotations")
@@ -73,14 +91,19 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
                 layout.prop(ob, "dupli_group", text="Group")
 
         col.prop_search(self, 'name_child', bpy.data, 'objects', text='child')
+        col.separator()
+        op_one = col.operator('node.flow_fdp_center_child', text='Center Child')
+        op_one.name_child = self.name_child
 
     def process(self):
         objects = bpy.data.objects
         if self.name_parent and self.name_child:
             obj_parent = objects[self.name_parent]
             obj_child = objects[self.name_child]
-            if not (obj_child.parent == obj_parent):
-                obj_child.parent = obj_parent
+
+            # if not (obj_child.parent == obj_parent):
+            #     obj_child.parent = obj_parent
+            obj_child.parent = obj_parent
 
             if obj_child.use_dupli_vertices_rotation:
 
@@ -115,7 +138,9 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
 
 def register():
     bpy.utils.register_class(FlowDuplivertOne)
+    bpy.utils.register_class(FLowDupliOperator)
 
 
 def unregister():
+    bpy.utils.unregister_class(FLowDupliOperator)
     bpy.utils.unregister_class(FlowDuplivertOne)
