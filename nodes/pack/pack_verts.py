@@ -34,8 +34,11 @@ def add_repeat_last(c, diffsize):
 
 
 def combine(x, y, z, w):
-    if x.any() or y.any() or z.any() or w.any():
-        m = [(len(c) if c.any() else 0) for c in (x, y, z, w)]
+    is_nparray = lambda k: hasattr(w, 'any')
+    len_or_zero = lambda c: len(c) if is_nparray(c) else 0
+
+    if is_nparray(x) or is_nparray(y) or is_nparray(z) or is_nparray(w):
+        m = [len_or_zero(c) for c in (x, y, z, w)]
         x_len, y_len, z_len, w_len = m
         longest = max(m)
 

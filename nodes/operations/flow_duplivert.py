@@ -62,6 +62,7 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
 
         if self.name_child and self.name_parent:
             ob = bpy.data.objects[self.name_parent]
+
             layout.prop(ob, "dupli_type", expand=True)
 
             if ob.dupli_type == 'FRAMES':
@@ -100,36 +101,28 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
         if self.name_parent and self.name_child:
             obj_parent = objects[self.name_parent]
             obj_child = objects[self.name_child]
-
-            # if not (obj_child.parent == obj_parent):
-            #     obj_child.parent = obj_parent
             obj_child.parent = obj_parent
 
+            print('does this!')
             if obj_child.use_dupli_vertices_rotation:
+                print('should be rotatin')
 
                 val = self.inputs['Rotations'].fget()
-                if val.any():
+                if hasattr(val, 'any') and val.any():
                     verts = obj_parent.data.vertices
                     if not (len(val) == len(verts)):
-                        # no fullrepeat atm.
                         print('sizes don\'t match')
                         print(len(val), len(verts))
                         return
                 else:
+                    print('no array')
                     return
 
-                iterot = (v[:3] for v in val)
-
-                ''' maybe use foreach.set here?..
-                    temporary implementation
-                '''
-
-                for idx, v in enumerate(verts):
-                    new_val = next(iterot, None)
-                    if isinstance(new_val, np.ndarray):
-                        v.normal = new_val
-                    else:
-                        break
+                # only reaches here if they are the same size
+                for v, norm in zip(verts, val):
+                    print(norm[:3])
+                    v.normal = norm[:3]
+                    # v.normal = random(), random(), random()
 
                 # race condition with bmesh node, this should be done last..
                 # update is pointless I think..
