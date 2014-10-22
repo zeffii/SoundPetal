@@ -95,7 +95,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
         inputs = self.inputs
         elements = self.inputs['Elements']
-        r_num = elements.fget(fallback=self.Elements, direct=True)
+        r_num = int(elements.fget(fallback=self.Elements, direct=True))
         r_num = max(r_num, 1)  # forces minimum length of 1
 
         int_mode = (self.random_type == 'INT')

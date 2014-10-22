@@ -133,6 +133,9 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
             if len(modulo_verts) == 1:
                 modulo_verts = modulo_verts[0]
 
+        # when using a//b produces 4.0 not 4
+        modulo_verts = int(modulo_verts)
+
         if not v.any():
             return
 
