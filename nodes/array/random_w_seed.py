@@ -31,7 +31,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
     FlowArrayRandomWSeed
     ==================
 
-    allows the creation of an array or random Int or Float
+    allows the creation of an array of random Int or Float
 
     '''
     bl_idname = 'FlowArrayRandomWSeed'
@@ -96,7 +96,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
         col = layout.column()
         col.prop(self, 'random_type', text='')
         if self.random_type == 'INT':
-            col.prop(self, 'inclusive', text='')
+            col.prop(self, 'inclusive', text='Inclusive')
 
     def process(self):
 
@@ -105,8 +105,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
         # get element count
         inputs = self.inputs
-        elements = self.inputs['Elements']
-        r_num = int(elements.fget(fallback=self.Elements, direct=True))
+        r_num = int(self.inputs['Elements'].fget2())
         r_num = max(r_num, 1)  # forces minimum length of 1
 
         # hide unhide sockets depending on type
@@ -118,13 +117,13 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
         # get seed
         seed = self.inputs['Seed']
-        seed_val = int(seed.fget(fallback=self.Seed, direct=True))
+        seed_val = int(seed.fget2())
         self.seed_valstr = str(seed_val)
         np.random.seed(seed_val)
 
         if int_mode:
-            r_min = inputs['I_MIN'].fget(fallback=self.I_MIN, direct=True)
-            r_max = inputs['I_MAX'].fget(fallback=self.I_MAX, direct=True)
+            r_min = inputs['I_MIN'].fget2()
+            r_max = inputs['I_MAX'].fget2()
             self.int_valstr = str(r_min) + '..' + str(r_max)
             if self.inclusive:
                 val = np.random.random_integers(r_min, r_max, size=r_num)
@@ -132,8 +131,8 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
                 val = np.random.randint(r_min, r_max, size=r_num)
 
         else:
-            r_min = inputs['F_MIN'].fget(fallback=self.F_MIN, direct=True)
-            r_max = inputs['F_MAX'].fget(fallback=self.F_MAX, direct=True)
+            r_min = inputs['F_MIN'].fget2()
+            r_max = inputs['F_MAX'].fget2()
             val = np.random.random_sample((r_num,)) * (r_max-r_min) + r_min
             self.float_valstr = str(round(r_min, 3)) + '..' + str(round(r_max, 3))
 

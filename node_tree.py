@@ -83,6 +83,12 @@ class FlowSocket(NodeSocket):
         else:
             return fallback
 
+    def fget2(self):
+        if self.links and self.links[0]:
+            return cache_get(self)
+        else:
+            return getattr(self.node, self.prop_name)
+
     def fset(self, data):
         cache_set(self, data)
 
