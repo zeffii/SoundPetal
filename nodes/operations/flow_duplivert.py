@@ -98,12 +98,12 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         objects = bpy.data.objects
+
         if self.name_parent and self.name_child:
             obj_parent = objects[self.name_parent]
             obj_child = objects[self.name_child]
             obj_child.parent = obj_parent
 
-            print('does this!')
             if obj_child.use_dupli_vertices_rotation:
                 print('should be rotatin')
 
@@ -120,13 +120,15 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
 
                 # only reaches here if they are the same size
                 for v, norm in zip(verts, val):
-                    print(norm[:3])
-                    v.normal = norm[:3]
-                    # v.normal = random(), random(), random()
+                    v.normal = tuple(norm[:3])
 
                 # race condition with bmesh node, this should be done last..
-                # update is pointless I think..
-                # obj_parent.data.update()
+                # could implement priority cue.
+
+        if (not self.name_parent) and self.name_child:
+            objects[self.name_child].parent = None
+
+        # print(self.name_parent, self.name_child)
 
 
 def register():
