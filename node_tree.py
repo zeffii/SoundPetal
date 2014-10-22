@@ -215,6 +215,9 @@ class FlowCustomTreeNode(object):
     def poll(cls, ntree):
         return ntree.bl_idname == 'FlowCustomTreeType'
 
+    def free(self):
+        print('removing', self.name)
+
 
 class FlowNodeCategory(NodeCategory):
     @classmethod
