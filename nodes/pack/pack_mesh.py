@@ -43,12 +43,14 @@ class FlowPackMeshUgen(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'Pack Mesh'
 
     def init(self, context):
+        self.width = 60
         self.inputs.new('FlowArraySocket', "xyzw")
         self.inputs.new('FlowArraySocket', "edges")
         self.inputs.new('FlowArraySocket', "faces")
         self.outputs.new('FlowGeometrySocket', "mesh")
 
     def process(self):
+        self.width = 60
         xyzw = self.inputs[0].fget()
         edges = self.inputs[1].fget()
         faces = self.inputs[2].fget()

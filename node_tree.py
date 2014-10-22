@@ -34,7 +34,7 @@ from bpy.types import (
     NodeSocketStandard
 )
 
-from FLOW.core.flow_cache import cache_set, cache_get
+from FLOW.core.flow_cache import cache_set, cache_get, flowcache
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
@@ -216,7 +216,31 @@ class FlowCustomTreeNode(object):
         return ntree.bl_idname == 'FlowCustomTreeType'
 
     def free(self):
-        print('removing', self.name)
+        '''
+        This function deals with removing a Node from flowcache. flowcache contains
+        tuples as keys, and socket data as values. The first element of those keys is the
+        hash of the node name, the second element being the hash of the socket.
+
+        The following procedure will walk through all keys (as a list) and pick out
+        those keys with reference the hash of the node in the element 0 of their key.
+        '''
+
+        DEBUG = True
+        if DEBUG:
+            print('attempting removal:', self.name)
+            print(flowcache)
+
+        if not flowcache:
+            return
+
+        for k in list(flowcache.keys()):
+            if not k[0] == hash(self.name):
+                continue
+            if DEBUG:
+                print(k, '|', hash(self.name), self.name)
+                print('removed', flowcache.pop(k))
+            else:
+                flowcache.pop(k)
 
 
 class FlowNodeCategory(NodeCategory):
