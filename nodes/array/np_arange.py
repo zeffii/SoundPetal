@@ -19,7 +19,7 @@
 import numpy as np
 
 import bpy
-from bpy.props import FloatProperty
+from bpy.props import FloatProperty, StringProperty
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
@@ -34,6 +34,7 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
     start = FloatProperty(name='start', default=0.0, step=0.01, update=updateSD)
     end = FloatProperty(name='end', default=0.0, step=0.01, update=updateSD)
     step = FloatProperty(name='step', default=0.0, step=0.01, update=updateSD)
+    range_label = StringProperty()
 
     def init(self, context):
         self.inputs.new('FlowScalarSocket', 'start').prop_name = 'start'
@@ -45,11 +46,21 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         a = self.inputs[0].fget(fallback=self.start, direct=True)
         b = self.inputs[1].fget(fallback=self.end, direct=True)
         c = self.inputs[2].fget(fallback=self.step, direct=True)
-        # print('a b c :: ', a, b, c)
         try:
             self.outputs[0].fset(np.arange(a, b, c))
+            msg = 'R: {a:.2f} | {b:.2f} | {c:.2f}'
+            self.range_label = msg.format(a=a, b=b, c=c)
+            self.width_hidden = 120
         except:
-            print('failed:\nnp.arange({a}, {b}, {c})'.format(a=a,b=b,c=c))
+            self.range_label = ""
+            msg = 'failed:\nnp.arange({a}, {b}, {c})'
+            print(msg.format(a=a, b=b, c=c))
+
+    def draw_label(self):
+        if self.hide and self.range_label:
+            return self.range_label
+
+        return self.bl_label
 
 
 def register():
