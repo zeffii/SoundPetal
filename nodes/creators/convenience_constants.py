@@ -27,17 +27,18 @@ from FLOW.node_tree import FlowCustomTreeNode
 
 # this is not great :)
 
-
+two_pi = 2 * pi
 _phi = (1 + sqrt(5))/2
 constants = lambda: None
-constants.PI_TIMES = pi
-constants.PHI_TIMES = _phi
-constants.TAU_TIMES = 2 * pi
-constants.E_TIMES = e
-constants.DIV_PI = pi
-constants.DIV_PHI = _phi
-constants.DIV_TAU = 2 * pi
-constants.DIV_E = e
+constants.PI_TIMES = lambda v: v * pi
+constants.PHI_TIMES = lambda v: v * _phi
+constants.TAU_TIMES = lambda v: v * two_pi
+constants.E_TIMES = lambda v: v * e
+constants.DIV_PI = lambda v: pi / v
+constants.DIV_PHI = lambda v: _phi / v
+constants.DIV_TAU = lambda v: two_pi / v
+constants.DIV_E = lambda v: e / v
+constants.redict = {}
 
 
 class FlowConstantsUgen(bpy.types.Node, FlowCustomTreeNode):
@@ -79,8 +80,14 @@ class FlowConstantsUgen(bpy.types.Node, FlowCustomTreeNode):
         default="TAU_TIMES",
         update=updateSD)
 
+    def make_redict(self):
+        if not constants.redict:
+            k = {j[0]: j[1] for j in self.type_options}
+            constants.redict = k
+
     def init(self, context):
         self.outputs.new('FlowScalarSocket', "val").prop_name = self.scalar_type
+        self.make_redict()
 
     def draw_buttons(self, context, layout):
         col = layout.column()
@@ -89,14 +96,20 @@ class FlowConstantsUgen(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         val = getattr(self, self.scalar_type)
         self.outputs[0].prop_name = self.scalar_type
-        constant = getattr(constants, self.scalar_type)
-
-        if self.scalar_type in {'PI_TIMES', 'TAU_TIMES', 'PHI_TIMES', 'E_TIMES'}:
-            outputvalue = val * constant
-        else:
-            outputvalue = constant / val
-
+        const_func = getattr(constants, self.scalar_type)
+        outputvalue = const_func(val)
         self.outputs[0].fset(outputvalue)
+
+    def draw_label(self):
+        if self.hide:
+            if constants.redict:
+                val = round(getattr(self, self.scalar_type), 4)
+                msg = constants.redict.get(self.scalar_type)
+                return msg.replace('N', str(val))
+            else:
+                self.make_redict()
+
+        return self.bl_label
 
 
 def register():
