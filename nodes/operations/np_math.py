@@ -94,6 +94,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
     A = FloatProperty(name='A', default=0.0, step=0.01, update=updateSD)
     B = FloatProperty(name='B', default=0.0, step=0.01, update=updateSD)
 
+    # if you change these, keep it compatible with def draw_labels()
     operation_types = [
         # internal, ui, "", enumidx
         ("ADD", "a + b", "", 0),
