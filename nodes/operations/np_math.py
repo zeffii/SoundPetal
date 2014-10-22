@@ -135,6 +135,29 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
 
         self.outputs[0].fset(do_math(a, b, self.operation))
 
+    def draw_label(self):
+        if self.hide:
+            ops = self.operation
+            items = [i for i in self.operation_types if i[0] == ops][0]
+            label = items[1]
+
+            if self.inputs[0].links:
+                a = 'A'
+            else:
+                a = str(round(self.A, 3))
+
+            if self.inputs[1].links:
+                b = 'B'
+            else:
+                b = str(round(self.B, 3))
+
+            label = label.replace('a ', a + ' ')
+            label = label.replace(' b', ' ' + b)
+            label = label.replace('(a)', '(' + a + ')')
+            return label
+        else:
+            return self.bl_label
+
 
 def register():
     bpy.utils.register_class(FlowScalarMathUgen)
