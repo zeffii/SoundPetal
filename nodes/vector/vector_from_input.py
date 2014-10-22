@@ -19,7 +19,7 @@
 import numpy as np
 
 import bpy
-from bpy.props import FloatProperty
+from bpy.props import FloatProperty, StringProperty
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
@@ -34,6 +34,8 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
     y_comp = FloatProperty(default=1.0, step=0.1, name='y_comp', update=updateSD)
     z_comp = FloatProperty(default=1.0, step=0.1, name='z_comp', update=updateSD)
 
+    string_repr = StringProperty("")
+
     def init(self, context):
         self.inputs.new('FlowScalarSocket', 'x').prop_name = 'x_comp'
         self.inputs.new('FlowScalarSocket', 'y').prop_name = 'y_comp'
@@ -46,11 +48,23 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
         y = inputs[1].fget(fallback=self.y_comp, direct=True)
         z = inputs[2].fget(fallback=self.z_comp, direct=True)
         ftvec = np.array([x, y, z, 0])
+        self.string_repr = str(np.around(ftvec, 2))
         self.outputs[0].fset(ftvec)
 
     def draw_buttons(self, context, layout):
         # without this line, we get artefacts
         pass
+
+    def draw_label(self):
+        fr = self.string_repr
+        if fr.startswith('[') and fr.endswith(']'):
+            fr = fr[1:-1]                 # remove brackets
+            k = fr.split(' ')             # separate components
+            k = [ik.strip() for ik in k if ik]  # remove padding
+            m = ",  ".join(k)              # join predictably
+            return m                      # fingers crossed
+        else:
+            return self.bl_label
 
 
 def register():

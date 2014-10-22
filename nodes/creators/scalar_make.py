@@ -64,6 +64,11 @@ class FlowScalarMakeUgen(bpy.types.Node, FlowCustomTreeNode):
         self.outputs[0].prop_name = self.scalar_type
         self.outputs[0].fset(val)
 
+    def draw_label(self):
+        if self.scalar_type == "INT":
+            return str(self.INT)
+        return str(np.around(self.FLOAT, 4))
+
 
 def register():
     bpy.utils.register_class(FlowScalarMakeUgen)
