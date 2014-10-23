@@ -81,8 +81,8 @@ class TrigUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'axis', expand=True)
 
     def process(self):
-        n = self.inputs['num_verts'].fget(fallback=self.num_verts, direct=True)
-        r = self.inputs['radius'].fget(fallback=self.radius, direct=True)
+        n = self.inputs['num_verts'].fget2()
+        r = self.inputs['radius'].fget2()
         gref = make_geometry(self, n, r)
         self.outputs[0].fset(gref)
 

@@ -126,7 +126,7 @@ class FlowUVEdgeSurf(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         inputs = self.inputs
         v = inputs['verts'].fget()
-        modulo_verts = inputs['modulo_verts'].fget(fallback=self.modulo_verts, direct=True)
+        modulo_verts = inputs['modulo_verts'].fget2()
 
         ## fix this soon.
         if isinstance(modulo_verts, (list,)):

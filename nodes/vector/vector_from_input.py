@@ -44,9 +44,9 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         inputs = self.inputs
-        x = inputs[0].fget(fallback=self.x_comp, direct=True)
-        y = inputs[1].fget(fallback=self.y_comp, direct=True)
-        z = inputs[2].fget(fallback=self.z_comp, direct=True)
+        x = inputs[0].fget2()
+        y = inputs[1].fget2()
+        z = inputs[2].fget2()
         ftvec = np.array([x, y, z, 0])
         self.string_repr = str(np.around(ftvec, 2))
         self.outputs[0].fset(ftvec)

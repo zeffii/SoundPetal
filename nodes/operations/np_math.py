@@ -126,8 +126,8 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def process(self):
         self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS'})
-        a = self.inputs[0].fget(fallback=self.A, direct=True)
-        b = self.inputs[1].fget(fallback=self.B, direct=True)
+        a = self.inputs[0].fget2()
+        b = self.inputs[1].fget2()
 
         if isinstance(a, list) and len(a) == 0:
             return

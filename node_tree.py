@@ -84,6 +84,14 @@ class FlowSocket(NodeSocket):
             return fallback
 
     def fget2(self):
+        '''
+        When you know fallback should not be wrapped
+        Usually FlowScalarSocket types. Use this when you
+        find yourself writing repeatedly:
+
+        inputs['A'].fget(fallback=self.some_prop_name, direct=True)
+
+        '''
         if self.links and self.links[0]:
             return cache_get(self)
         else:

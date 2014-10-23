@@ -43,9 +43,9 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new('FlowArraySocket', 'range')
 
     def process(self):
-        a = self.inputs[0].fget(fallback=self.start, direct=True)
-        b = self.inputs[1].fget(fallback=self.end, direct=True)
-        c = self.inputs[2].fget(fallback=self.step, direct=True)
+        a = self.inputs[0].fget2()
+        b = self.inputs[1].fget2()
+        c = self.inputs[2].fget2()
         try:
             self.outputs[0].fset(np.arange(a, b, c))
             msg = 'R: {a:.2f} | {b:.2f} | {c:.2f}'
