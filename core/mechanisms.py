@@ -78,7 +78,7 @@ def prototype_cascade(ng, apex):
         ldict_from[n] = []
 
     if any(ldict_from.values()):
-        print(ldict_from.values())
+        # print(ldict_from.values())
         print('error (graph has at least one cycle')
         return []
     else:
@@ -159,13 +159,13 @@ def updateSD(self, context):
     L = prototype_cascade(ng, apex)
 
     # set the cache for the apex nodes
-    print('apex:', [n.name for n in apex])
+    # print('apex:', [n.name for n in apex])
     for node in apex:
         node.process()
         #node.select = True
 
     # do full retrig
-    print('L:', [n.name for n in L])
+    # print('L:', [n.name for n in L])
     for node in L:
         node.process()
         #node.select = True

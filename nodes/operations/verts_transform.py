@@ -169,7 +169,7 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
                     self.outputs[0].fset(do_transform(A, r, self))
                     return
 
-                print(type(r))
+                # print(type(r))
                 if isinstance(r, (np.ndarray,)):
                     shape = r.shape
                     items = len(shape)

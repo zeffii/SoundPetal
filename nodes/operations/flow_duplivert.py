@@ -104,16 +104,16 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
             obj_child = objects[self.name_child]
             obj_child.parent = obj_parent
 
-            print('reaches here')
+            # print('reaches here')
             if obj_child.use_dupli_vertices_rotation:
-                print('should be rotatin')
+                # print('should be rotatin')
 
                 val = self.inputs['Rotations'].fget()
                 if hasattr(val, 'any') and val.any():
                     verts = obj_parent.data.vertices
                     if not (len(val) == len(verts)):
-                        print('sizes don\'t match')
-                        print(len(val), len(verts))
+                        # print('sizes don\'t match')
+                        # print(len(val), len(verts))
                         return
                 else:
                     print('no array')

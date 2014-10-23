@@ -26,13 +26,14 @@ from FLOW.node_tree import FlowCustomTreeNode
 
 
 math_functors = {
+    'MOD': lambda a, b: a % b,
     'ADD': lambda a, b: a + b,
     'SUB': lambda a, b: a - b,
     'DIV': lambda a, b: a / b,
     'TIMES': lambda a, b: a * b,
     'INTDIV': lambda a, b: a // b,
-    'SIN': lambda a, b: np.sin(a),      #
-    'COS': lambda a, b: np.cos(a),      #
+    'SIN': lambda a, b: np.sin(a),
+    'COS': lambda a, b: np.cos(a),
     'SINB': lambda a, b: np.sin(a)*b,
     'COSB': lambda a, b: np.cos(a)*b,
 }
@@ -106,6 +107,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         ("COS", "cos(a)", "", 6),
         ("SINB", "sin(a) * b", "", 7),
         ("COSB", "cos(a) * b", "", 8),
+        ("MOD", "a % b", "", 9),
     ]
 
     operation = EnumProperty(

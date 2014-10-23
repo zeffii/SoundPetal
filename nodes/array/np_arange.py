@@ -54,7 +54,7 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         except:
             self.range_label = ""
             msg = 'failed:\nnp.arange({a}, {b}, {c})'
-            print(msg.format(a=a, b=b, c=c))
+            # print(msg.format(a=a, b=b, c=c))
 
     def draw_label(self):
         if self.hide and self.range_label:
