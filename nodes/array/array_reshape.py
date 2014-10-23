@@ -40,25 +40,24 @@ class FlowArrayReShape(bpy.types.Node, FlowCustomTreeNode):
     shape_str = StringProperty(description="repr of array.shape")
 
     def init(self, context):
-        self.inputs.new('FlowArraySocket', "Array A")
-        self.inputs.new('FlowScalarSocket', "Rows")
-        self.inputs.new('FlowScalarSocket', "Items per Rows")        
-
+        self.inputs.new('FlowArraySocket', "Array")
+        self.inputs.new('FlowScalarSocket', "Items per Row")
         self.outputs.new('FlowArraySocket', "Reshaped")
-
 
     def draw_buttons(self, context, layout):
         l = layout.column()
         l.label(self.shape_str)
 
     def process(self):
-        a = self.inputs[0].fget()
+        inputs = self.inputs
         outputs = self.outputs
 
-        rows = outputs['Rows']
-        cols = outputs['Columns']
+        # convenience, fget2 is for scalar specifically with prop_name
+        a = inputs["Array"].fget()
+        r = inputs['Rows'].fget2()
+        c = inputs['Columns'].fget2()
 
-        if a.any():
+        if hasattr(a, 'any') and a.any():
             shape = a.shape
             self.shape_str = str(shape)
             if len(shape) == 2:
