@@ -28,12 +28,9 @@ def get_apex(ng):
     for link in ng.links:
         node = link.from_node
         # find all nodes are are start points.
-        # this automatically excludes disjoint vertices.
+        # this automatically excludes disjoint nodes.
         if not (node in to_nodes):
-            print('>>>', node.name)
             trigger_set.add(node)
-            # node.select = True
-
     return trigger_set
 
 
@@ -162,13 +159,13 @@ def updateSD(self, context):
     L = prototype_cascade(ng, apex)
 
     # set the cache for the apex nodes
-    print('apex:', apex)
+    print('apex:', [n.name for n in apex])
     for node in apex:
         node.process()
         #node.select = True
 
     # do full retrig
-    print('L:', L)
+    print('L:', [n.name for n in L])
     for node in L:
         node.process()
         #node.select = True
