@@ -17,7 +17,76 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
+
+
+def get_apex(ng):
+    to_nodes = {link.to_node for link in ng.links}
+    from_nodes = {link.from_node for link in ng.links}
+
+    trigger_set = set()
+    for link in ng.links:
+        node = link.from_node
+        # find all nodes are are start points.
+        # this automatically excludes disjoint vertices.
+        if not (node in to_nodes):
+            print('>>>', node.name)
+            trigger_set.add(node)
+            # node.select = True
+
+    return trigger_set
+
+
+def links_dict_from(links):
+    ''' {from_node: [list_of_child_nodes]}'''
+    ldict = defaultdict(list)
+    for link in links:
+        ldict[link.from_node].append(link.to_node)
+    return ldict
+
+
+def links_dict_to(links):
+    ''' {to_node: [list_of_parent_nodes]}'''
+    ldict = defaultdict(list)
+    for link in links:
+        ldict[link.to_node].append(link.from_node)
+    return ldict
+
+
+def prototype_cascade(ng, apex):
+    # http://en.wikipedia.org/wiki/Topological_sorting
+
+    L = []  # Empty list that will contain the sorted elements
+    S = set(apex)  # Set of all nodes with no incoming edges
+    add_to_L = L.append
+
+    ldict_from = links_dict_from(ng.links)
+    ldict_to = links_dict_to(ng.links)
+
+    while S:  # is non-empty do
+        n = S.pop()  # remove a node n from S
+        add_to_L(n)  # add n to tail of L
+
+        # for each node m with an edge e from n to m do
+        #     remove edge e from the graph
+        #     if m has no other incoming edges then
+        #         insert m into S
+        for m in ldict_from[n]:
+            for idx, incoming in enumerate(ldict_to[m]):
+                if incoming == n:
+                    ldict_to[m][idx] = None
+            if ldict_to[m].count(None) == len(ldict_to[m]):
+                S.add(m)
+
+        ldict_from[n] = []
+
+    if any(ldict_from.values()):
+        print(ldict_from.values())
+        print('error (graph has at least one cycle')
+        return []
+    else:
+        # (in topologically sorted order)
+        return L
 
 
 def cascading_trigger(context, downstream_nodes):
@@ -83,5 +152,24 @@ def updateSD(self, context):
     if not trigger_node in links_first_pass:
         return
 
-    downstream_nodes = set([trigger_node])
-    cascading_trigger(context, downstream_nodes)
+    # this works..triggers all upstream.
+    # - assumes their cache is valid
+    # - hence doesn't behave well on F8
+    # downstream_nodes = set([trigger_node])
+    # cascading_trigger(context, downstream_nodes)
+
+    apex = get_apex(ng)
+    L = prototype_cascade(ng, apex)
+
+    # set the cache for the apex nodes
+    print('apex:', apex)
+    for node in apex:
+
+        node.process()
+
+    # do full retrig
+    print('L:', L)
+    for node in L:
+        node.process()
+
+    #cascading_trigger(context, L)

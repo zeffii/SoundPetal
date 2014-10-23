@@ -104,6 +104,7 @@ class FlowDuplivertOne(bpy.types.Node, FlowCustomTreeNode):
             obj_child = objects[self.name_child]
             obj_child.parent = obj_parent
 
+            print('reaches here')
             if obj_child.use_dupli_vertices_rotation:
                 print('should be rotatin')
 

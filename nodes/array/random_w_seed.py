@@ -105,8 +105,12 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
 
         # get element count
         inputs = self.inputs
-        r_num = int(self.inputs['Elements'].fget2())
-        r_num = max(r_num, 1)  # forces minimum length of 1
+        r_num = inputs['Elements'].fget2()
+        if r_num:
+            r_num = int(r_num)
+            r_num = max(r_num, 1)  # forces minimum length of 1
+        else:
+            return
 
         # hide unhide sockets depending on type
         int_mode = (self.random_type == 'INT')
@@ -116,7 +120,7 @@ class FlowArrayRandomWSeed(bpy.types.Node, FlowCustomTreeNode):
         inputs['F_MAX'].enabled = not int_mode
 
         # get seed
-        seed = self.inputs['Seed']
+        seed = inputs['Seed']
         seed_val = int(seed.fget2())
         self.seed_valstr = str(seed_val)
         np.random.seed(seed_val)
