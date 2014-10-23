@@ -17,7 +17,8 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import bpy
-from bpy.app.handlers import frame_change_pre
+from bpy.app.handlers import frame_change_pre, persistent
+
 from bpy.props import IntProperty, StringProperty
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
@@ -25,6 +26,7 @@ from FLOW.node_tree import FlowCustomTreeNode
 node_ref = {}
 
 
+@persistent
 def flow_pre_frame_handler(scene):
     n = node_ref.get('starter')
     if n:

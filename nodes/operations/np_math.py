@@ -55,9 +55,12 @@ def do_math(a, b, op):
     if not a_is_array and not b_is_array:
         return functor(a, b)
 
-    ''' reaches here if one side is not scalar '''
-    if a_is_array and not b_is_array:
-        return functor(a, b)
+    if a_is_array:
+        if isinstance(b, np.float64):
+            return functor(a, b)
+
+        if not b_is_array:
+            return functor(a, b)
 
     ''' both are arrays but do they sync? '''
     if a_is_array and b_is_array:

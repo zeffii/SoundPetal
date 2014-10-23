@@ -34,6 +34,10 @@ def add_repeat_last(c, diffsize):
 
 
 def combine(x, y, z, w):
+    #print('type =', type(x))
+    #print('type =', type(y))
+    #print('type =', type(z))
+    #print('type =', type(w))
     is_nparray = lambda k: hasattr(w, 'any')
     len_or_zero = lambda c: len(c) if is_nparray(c) else 0
 
