@@ -29,10 +29,10 @@ def flow_pre_frame_handler(scene):
     n = node_ref.get('starter')
     if n:
         # print('should be doing something')
-        # n.frame_start = scene.frame_start
-        # n.frame_end = scene.frame_end
-        # n.frame_current = scene.frame_current
-        n.process()
+        n.frame_start = scene.frame_start
+        n.frame_end = scene.frame_end
+        n.frame_current = scene.frame_current
+        # n.process()
 
 
 class FlowFrameOperator(bpy.types.Operator):
@@ -67,14 +67,14 @@ class FlowFrameInfoNode(bpy.types.Node, FlowCustomTreeNode):
     bl_idname = 'FlowFrameInfoNode'
     bl_label = 'Scene Frame Info'
 
-    #frame_start = IntProperty(default=1, name='frame_start', update=updateSD)
-    #frame_end = IntProperty(default=40, name='frame_end', update=updateSD)
-    #frame_current = IntProperty(default=1, name='frame_current', update=updateSD)
+    frame_start = IntProperty(default=1, name='frame_start')  # , update=updateSD)
+    frame_end = IntProperty(default=40, name='frame_end')  # , update=updateSD)
+    frame_current = IntProperty(default=1, name='frame_current', update=updateSD)
 
     def init(self, context):
-        self.outputs.new('FlowScalarSocket', 'frame_start')  # .prop_name = 'frame_start'
-        self.outputs.new('FlowScalarSocket', 'frame_end')  # .prop_name = 'frame_end'
-        self.outputs.new('FlowScalarSocket', 'frame_current')  # .prop_name = 'frame_current'
+        self.outputs.new('FlowScalarSocket', 'frame_start').prop_name = 'frame_start'
+        self.outputs.new('FlowScalarSocket', 'frame_end').prop_name = 'frame_end'
+        self.outputs.new('FlowScalarSocket', 'frame_current').prop_name = 'frame_current'
         pass
 
     def draw_buttons(self, context, layout):
