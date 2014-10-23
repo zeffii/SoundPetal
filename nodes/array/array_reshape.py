@@ -17,7 +17,6 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import numpy as np
-from math import pi, sqrt, e
 
 import bpy
 from bpy.props import (
@@ -28,26 +27,25 @@ from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
 
-class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
+class FlowArrayReShape(bpy.types.Node, FlowCustomTreeNode):
     '''
-    FlowArrayShape
+    FlowArrayReShape
     ==============
 
-    Use to get information about dimensions
-    - col / row,
-    - items
+    flatten or unflatten array
 
     '''
-    bl_idname = 'FlowArrayShape'
-    bl_label = 'Array Shape'
+    bl_idname = 'FlowArrayReShape'
+    bl_label = 'Array ReShape'
     shape_str = StringProperty(description="repr of array.shape")
 
     def init(self, context):
         self.inputs.new('FlowArraySocket', "Array A")
-        self.outputs.new('FlowScalarSocket', "Rows")
-        self.outputs.new('FlowScalarSocket', "Columns")
-        m = self.outputs.new('FlowScalarSocket', "items")
-        m.enabled = False
+        self.inputs.new('FlowScalarSocket', "Rows")
+        self.inputs.new('FlowScalarSocket', "Items per Rows")        
+
+        self.outputs.new('FlowArraySocket', "Reshaped")
+
 
     def draw_buttons(self, context, layout):
         l = layout.column()
@@ -59,34 +57,22 @@ class FlowArrayShape(bpy.types.Node, FlowCustomTreeNode):
 
         rows = outputs['Rows']
         cols = outputs['Columns']
-        itms = outputs['items']
 
         if a.any():
             shape = a.shape
-            # print("shape:{}".format(shape))
             self.shape_str = str(shape)
             if len(shape) == 2:
-                r, c = shape
-                rows.enabled = 1
-                cols.enabled = 1
-                itms.enabled = 0
-                rows.fset(r)
-                cols.fset(c)
+                pass
+
             elif len(shape) == 1:
-                rows.enabled = 0
-                cols.enabled = 0
-                itms.enabled = 1
-                itms.fset(shape[0])
-            else:
-                msg = 'arrays of dims {shape} not handled yet'
-                print(msg.format(shape=self.shape_str))
+                pass
         else:
             self.shape_str = "(no shape)"
 
 
 def register():
-    bpy.utils.register_class(FlowArrayShape)
+    bpy.utils.register_class(FlowArrayReShape)
 
 
 def unregister():
-    bpy.utils.unregister_class(FlowArrayShape)
+    bpy.utils.unregister_class(FlowArrayReShape)
