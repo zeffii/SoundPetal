@@ -56,14 +56,15 @@ class FlowVecFromInput(bpy.types.Node, FlowCustomTreeNode):
         pass
 
     def draw_label(self):
-        fr = self.string_repr
-        if fr.startswith('[') and fr.endswith(']'):
-            fr = fr[1:-1]                       # remove brackets
-            k = fr.split(' ')                   # separate components
-            k = [ik.strip() for ik in k if ik]  # remove padding
-            m = ",  ".join(k)                   # join predictably
-            return m                            # fingers crossed
-        
+        if self.hide:
+            fr = self.string_repr
+            if fr.startswith('[') and fr.endswith(']'):
+                fr = fr[1:-1]                       # remove brackets
+                k = fr.split(' ')                   # separate components
+                k = [ik.strip() for ik in k if ik]  # remove padding
+                m = ",  ".join(k)                   # join predictably
+                return m                            # fingers crossed
+
         return self.bl_label
 
 
