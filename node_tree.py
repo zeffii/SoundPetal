@@ -85,7 +85,7 @@ class FlowSocket(NodeSocket):
 
     def fget2(self):
         '''
-        When you know fallback should not be wrapped
+        When you know val should not be wrapped
         Usually FlowScalarSocket types. Use this when you
         find yourself writing repeatedly:
 

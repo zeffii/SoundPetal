@@ -36,6 +36,7 @@ math_functors = {
     'COS': lambda a, b: np.cos(a),
     'SINB': lambda a, b: np.sin(a)*b,
     'COSB': lambda a, b: np.cos(a)*b,
+    'NEG': lambda a, b: -a,
 }
 
 
@@ -101,16 +102,17 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
     # if you change these, keep it compatible with def draw_labels()
     operation_types = [
         # internal, ui, "", enumidx
-        ("ADD", "a + b", "", 0),
-        ("SUB", "a - b", "", 1),
-        ("DIV", "a / b", "", 2),
-        ("TIMES", "a * b", "", 3),
-        ("INTDIV", "a / / b", "", 4),
-        ("SIN", "sin(a)", "", 5),
-        ("COS", "cos(a)", "", 6),
-        ("SINB", "sin(a) * b", "", 7),
-        ("COSB", "cos(a) * b", "", 8),
-        ("MOD", "a % b", "", 9),
+        ("ADD",    "a + b",      "", 0),
+        ("SUB",    "a - b",      "", 1),
+        ("DIV",    "a / b",      "", 2),
+        ("TIMES",  "a * b",      "", 3),
+        ("INTDIV", "a / / b",    "", 4),
+        ("SIN",    "sin(a)",     "", 5),
+        ("COS",    "cos(a)",     "", 6),
+        ("SINB",   "sin(a) * b", "", 7),
+        ("COSB",   "cos(a) * b", "", 8),
+        ("MOD",    "a % b",      "", 9),
+        ("NEG",    "-a ",        "", 10),
     ]
 
     operation = EnumProperty(
@@ -130,7 +132,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'operation', text='', icon='DRIVER')
 
     def process(self):
-        self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS'})
+        self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS', 'NEG'})
         a = self.inputs[0].fget2()
         b = self.inputs[1].fget2()
 

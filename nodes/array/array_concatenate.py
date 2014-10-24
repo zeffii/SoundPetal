@@ -36,7 +36,7 @@ class FlowArrayConcatenate(bpy.types.Node, FlowCustomTreeNode):
 
     '''
     bl_idname = 'FlowArrayConcatenate'
-    bl_label = 'Array Concatenate'
+    bl_label = 'A.Concatenate'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
     def init(self, context):

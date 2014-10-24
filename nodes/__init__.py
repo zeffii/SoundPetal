@@ -1,5 +1,10 @@
 nodes_dict = {
 
+    'uv': [
+        'uv_edge_surf',
+        "uv_polygon_from_verts"
+    ],
+
     'creators': [
         'lines',
         'planes',
@@ -11,7 +16,6 @@ nodes_dict = {
 
     'operations': [
         'np_math',
-        'uv_edge_surf',
         'verts_transform',
         'flow_duplivert',
         'tree_update_node'
@@ -21,7 +25,8 @@ nodes_dict = {
         'array_concatenate',
         'array_shape',
         'np_arange',
-        'random_w_seed'
+        'random_w_seed',
+        'array_reshape'
     ],
 
     'vector': [

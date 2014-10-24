@@ -33,7 +33,7 @@ def make_node_cats():
 
     node_cats["vector"] = [
         ["FlowVecMakeNode",     "Vector"],
-        ["FlowVecFromInput",    "Vector from input"]
+        ["FlowVecFromInput",    "Vector from input"],
     ]
 
     node_cats["creators"] = [
@@ -50,7 +50,7 @@ def make_node_cats():
         ["FlowMeshFilterUgen",  "filter mesh"],
         ["FlowBmeshUgen",       "bmesh"],
         ["Fl3DviewPropsNode",   "3dview props"],
-        ['FlowFrameInfoNode',   "Frame Info"]
+        ['FlowFrameInfoNode',   "Frame Info"],
     ]
 
     node_cats['pack'] = [
@@ -60,17 +60,22 @@ def make_node_cats():
 
     node_cats['array'] = [
         ['FlowArangeUgen',      'Array numpy a-range'],
-        ['FlowArrayConcatenate', 'Array Concatenate'],
-        ['FlowArrayShape',      'Array Shape'],
-        ['FlowArrayRandomWSeed', 'Array Random'],
+        ['FlowArrayConcatenate', 'Concatenate'],
+        ['FlowArrayShape',      'Get Shape'],
+        ['FlowArrayRandomWSeed', 'Array of Random values'],
+        ['FlowArrayReShape',     'Reshape'],
     ]
 
     node_cats["operations"] = [
         ["FlowScalarMathUgen",  "scalar math"],
         ["FlowVertsTransformUgen", "verts transform"],
-        ['FlowUVEdgeSurf',      'UV EdgeSurf'],
         ['FlowDuplivertOne',    'Dupli Obj'],
-        ['FlowTreeUpdateUgen',  'Update Trigger']
+        ['FlowTreeUpdateUgen',  'Update Trigger'],
+    ]
+
+    node_cats["uv"] = [
+        ['FlowUVEdgeSurf',      'UV.EdgeSurf'],
+        ['FlowUVPolygon',       'UV.Polygon'],
     ]
 
     return node_cats

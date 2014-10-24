@@ -27,21 +27,40 @@ from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
 
+fldescr_cols = "\
+if 0: reshape=(len) else: \
+if -1: then cols is inferred from what is possible given the value of rows."
+
+fldescr_rows = "if 0: reshape=(len//cols, cols) else: reshape=(cols, rows)"
+
+
 class FlowArrayReShape(bpy.types.Node, FlowCustomTreeNode):
     '''
     FlowArrayReShape
     ==============
-
-    flatten or unflatten array
+    http://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
+    flatten or unflatten array, (also called roll, unroll)
 
     '''
     bl_idname = 'FlowArrayReShape'
-    bl_label = 'Array ReShape'
+    bl_label = 'A.ReShape'
+
+    Rows = IntProperty(
+        default=0, step=1,
+        name='Rows',
+        description=fldescr_rows, update=updateSD)
+
+    Cols = IntProperty(
+        default=4, step=1,
+        name='Cols',
+        description=fldescr_cols, update=updateSD)
+
     shape_str = StringProperty(description="repr of array.shape")
 
     def init(self, context):
         self.inputs.new('FlowArraySocket', "Array")
-        self.inputs.new('FlowScalarSocket', "Items per Row")
+        self.inputs.new('FlowScalarSocket', "Rows").prop_name = 'Rows'
+        self.inputs.new('FlowScalarSocket', "Cols").prop_name = 'Cols'
         self.outputs.new('FlowArraySocket', "Reshaped")
 
     def draw_buttons(self, context, layout):
@@ -52,19 +71,29 @@ class FlowArrayReShape(bpy.types.Node, FlowCustomTreeNode):
         inputs = self.inputs
         outputs = self.outputs
 
-        # convenience, fget2 is for scalar specifically with prop_name
+        # convenience, fget2 is for scalar specifically with prop_name and no np.array wrapping
         a = inputs["Array"].fget()
         r = inputs['Rows'].fget2()
-        c = inputs['Columns'].fget2()
+        c = inputs['Cols'].fget2()
 
         if hasattr(a, 'any') and a.any():
             shape = a.shape
             self.shape_str = str(shape)
-            if len(shape) == 2:
-                pass
+            # if len(shape) == 2:
+            #     # only meaningful operations are (for now)
+            #     # - can be flattened
+            #     # - reshaped
+            #     pass
 
-            elif len(shape) == 1:
-                pass
+            # elif len(shape) == 1:
+            #     # only meaningful operations are (for now)
+            #     # - unflattened to (len//rows, rows)
+            #     # - converting to 1-element rows
+            #     pass
+            # else:
+            #     print('shape not handled yet..')
+            reshaped_array = np.reshape(a, (r, c))
+            outputs['Reshaped'].fset(reshaped_array)
         else:
             self.shape_str = "(no shape)"
 
