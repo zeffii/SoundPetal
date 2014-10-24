@@ -26,7 +26,13 @@ from FLOW.node_tree import FlowCustomTreeNode
 
 
 class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
-    ''' FlowArangeUgen '''
+    ''' FlowArangeUgen
+
+    Not the best way to make float based ranges, TODO: use linspace are per
+    http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html
+    A linspace node perhaps?
+
+    '''
     bl_idname = 'FlowArangeUgen'
     bl_label = 'A range'
     bl_icon = 'OUTLINER_OB_EMPTY'

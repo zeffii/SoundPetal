@@ -54,7 +54,8 @@ def make_geometry(self, s, ns):
         else:
             v = [[-s, -s, 0], [s, -s, 0], [s, s, 0], [-s, s, 0]]
         verts = np.array(v)
-        faces = np.array([np.arange(4, -1)])
+        faces = np.array([np.arange(4)[::-1]])
+        print(faces)
     else:
         s = np.linspace(-s, s, ns+1)
         combos = itertools.product(s, s)
