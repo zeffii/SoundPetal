@@ -65,6 +65,7 @@ def make_geometry(self, s, ns):
         else:
             verts = np.array([(x, y, 0) for x, y in combos])
 
+        # surprisingly this is the slow part.
         fit = faces_iterator(ns)
         faces = np.fromiter(fit, int).reshape(ns*ns, 4)
 
