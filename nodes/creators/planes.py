@@ -17,28 +17,57 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import numpy as np
+import itertools
 
 import bpy
-from bpy.props import EnumProperty, FloatProperty
+from bpy.props import EnumProperty, FloatProperty, IntProperty
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
 
-def make_geometry(self, s):
-    half = s / 2.0
+def faces_iterator(num_sides):
+    up_one = num_sides + 1
+    for i in range(num_sides):
+        for j in range(num_sides):
+            a = i * up_one + j
+            yield a
+            b = a+1
+            yield b
+            c = b + up_one
+            yield c
+            yield c - 1
+
+
+def make_geometry(self, s, ns):
+    s = s / 2.0
     axis = self.axis
 
-    v = []
-    if axis == 'X':
-        v = [[0, -s, -s], [0, s, -s], [0, s, s], [0, -s, s]]
-    elif axis == 'Y':
-        v = [[-s, 0, -s], [s, 0, -s], [s, 0, s], [-s, 0, s]]
-    else:
-        v = [[-s, -s, 0], [s, -s, 0], [s, s, 0], [-s, s, 0]]
+    # more code, but less execution overall.
 
-    verts = np.array(v)
-    faces = np.array([np.arange(4)])
+    if ns <= 1:
+        v = []
+        if axis == 'X':
+            v = [[0, -s, -s], [0, s, -s], [0, s, s], [0, -s, s]]
+        elif axis == 'Y':
+            v = [[-s, 0, -s], [s, 0, -s], [s, 0, s], [-s, 0, s]]
+        else:
+            v = [[-s, -s, 0], [s, -s, 0], [s, s, 0], [-s, s, 0]]
+        verts = np.array(v)
+        faces = np.array([np.arange(4, -1)])
+    else:
+        s = np.linspace(-s, s, ns+1)
+        combos = itertools.product(s, s)
+        if axis == 'X':
+            verts = np.array([(0, y, z) for y, z in combos])
+        elif axis == 'Y':
+            verts = np.array([(x, 0, z) for x, z in combos])
+        else:
+            verts = np.array([(x, y, 0) for x, y in combos])
+
+        fit = faces_iterator(ns)
+        faces = np.fromiter(fit, int).reshape(ns*ns, 4)
+
     return verts, faces
 
 
@@ -47,7 +76,12 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
     bl_idname = 'FlowPlanesNode'
     bl_label = 'Planes'
 
-    Side = FloatProperty(name='Side', update=updateSD)
+    side = FloatProperty(name='side', update=updateSD)
+
+    num_sides = IntProperty(
+        default=1, min=1, step=1, max=50,
+        name='num_sides', update=updateSD
+    )
 
     axis_options = [
         ("X", "X", "", 0),
@@ -63,7 +97,8 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
         update=updateSD)
 
     def init(self, context):
-        self.inputs.new("FlowScalarSocket", "Side").prop_name = "Side"
+        self.inputs.new("FlowScalarSocket", "side").prop_name = "side"
+        self.inputs.new("FlowScalarSocket", "num_sides").prop_name = "num_sides"
         self.outputs.new("FlowArraySocket", "verts")
         self.outputs.new("FlowArraySocket", "faces")
 
@@ -72,8 +107,9 @@ class FlowPlanesNode(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'axis', expand=True)
 
     def process(self):
-        s = self.inputs['Side'].fget2()
-        verts, faces = make_geometry(self, s)
+        s = self.inputs['side'].fget2()
+        ns = self.inputs['num_sides'].fget2()
+        verts, faces = make_geometry(self, s, ns)
         self.outputs[0].fset(verts)
         self.outputs[1].fset(faces)
 
