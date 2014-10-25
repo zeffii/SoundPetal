@@ -59,7 +59,8 @@ def make_node_cats():
     ]
 
     node_cats['array'] = [
-        ['FlowArangeUgen',      'Array numpy a-range'],
+        ['FlowArangeUgen',      'Int Array (np.arange)'],
+        ['FlowLinspaceUgen',    'Float Array (np.linspace)'],
         ['FlowArrayConcatenate', 'Concatenate'],
         ['FlowArrayShape',      'Get Shape'],
         ['FlowArrayRandomWSeed', 'Array of Random values'],

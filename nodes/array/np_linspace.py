@@ -19,26 +19,28 @@
 import numpy as np
 
 import bpy
-from bpy.props import IntProperty, StringProperty
+from bpy.props import FloatProperty, StringProperty, IntProperty, BoolProperty
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 
 
-class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
-    ''' FlowArangeUgen
+class FlowLinspaceUgen(bpy.types.Node, FlowCustomTreeNode):
+    ''' FlowLinspaceUgen
 
-    For Int ranges only,
+    use linspace are per
     http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html
-    For a float range use the linspace node?
+
+    This is temporary, might implement other linspace features.
 
     '''
-    bl_idname = 'FlowArangeUgen'
-    bl_label = 'Int Range'
+    bl_idname = 'FlowLinspaceUgen'
+    bl_label = 'Float Range'
 
-    start = IntProperty(name='start', default=0, step=1, update=updateSD)
-    end = IntProperty(name='end', default=10, step=1, update=updateSD)
-    step = IntProperty(name='step', default=1, step=1, update=updateSD)
+    start = FloatProperty(name='start', default=0.0, step=0.1, update=updateSD)
+    end = FloatProperty(name='end', default=1.0, step=0.1, update=updateSD)
+    num = IntProperty(name='num', default=20, step=1, update=updateSD)
+    end_point = BoolProperty(name='end_point', default=1, update=updateSD)
     range_label = StringProperty()
 
     def init(self, context):
@@ -47,18 +49,22 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
         self.inputs.new('FlowScalarSocket', 'step').prop_name = 'step'
         self.outputs.new('FlowArraySocket', 'range')
 
+    def draw_buttons(self, context, layout):
+        col = layout.column()
+        col.prop(self, 'end_point', text='incl endpoint', toggle=True)
+
     def process(self):
         a = self.inputs[0].fget2()
         b = self.inputs[1].fget2()
         c = self.inputs[2].fget2()
         try:
-            self.outputs[0].fset(np.arange(a, b, c))
-            msg = 'R: {a} | {b} | {c}'
+            self.outputs[0].fset(np.linspace(a, b, c, endpoint=self.end_point))
+            msg = 'R: {a:.2f} | {b:.2f} | {c:.2f}'
             self.range_label = msg.format(a=a, b=b, c=c)
             self.width_hidden = 120
         except:
             self.range_label = ""
-            msg = 'failed:\nnp.arange({a}, {b}, {c})'
+            msg = 'failed:\nnp.linspace({a}, {b}, {c})'
             print(msg.format(a=a, b=b, c=c))
 
     def draw_label(self):
@@ -69,8 +75,8 @@ class FlowArangeUgen(bpy.types.Node, FlowCustomTreeNode):
 
 
 def register():
-    bpy.utils.register_class(FlowArangeUgen)
+    bpy.utils.register_class(FlowLinspaceUgen)
 
 
 def unregister():
-    bpy.utils.unregister_class(FlowArangeUgen)
+    bpy.utils.unregister_class(FlowLinspaceUgen)

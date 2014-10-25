@@ -25,6 +25,7 @@ nodes_dict = {
         'array_concatenate',
         'array_shape',
         'np_arange',
+        'np_linspace',
         'random_w_seed',
         'array_reshape'
     ],
