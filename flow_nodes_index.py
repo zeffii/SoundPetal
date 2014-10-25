@@ -43,6 +43,7 @@ def make_node_cats():
         ["TrigUgen",            "basic trig"],
         ['FlowScalarMakeUgen',  'int or float'],
         ['FlowConstantsUgen',   'constants'],
+        ['FlowOscServer',       'Osc Server']
     ]
 
     node_cats["represent"] = [

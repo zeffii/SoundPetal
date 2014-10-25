@@ -11,14 +11,15 @@ nodes_dict = {
         'seq_16tick',
         'trig',
         'scalar_make',
-        'convenience_constants'
+        'convenience_constants',
+        'osc_server'
     ],
 
     'operations': [
         'np_math',
         'verts_transform',
         'flow_duplivert',
-        'tree_update_node'
+        'tree_update_node',
     ],
 
     'array': [
