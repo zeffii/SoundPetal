@@ -67,7 +67,8 @@ def make_geometry(self, s, ns):
             verts = np.array([(x, y, 0) for x, y in combos])
 
         # surprisingly this is the slow part.
-        # or rather: the instantiation of the vert+face object with bmesh_from_pydata
+        # or rather: the instantiation of the vert+face 
+        # object with bmesh_from_pydata
         fit = faces_iterator(ns)
         faces = np.fromiter(fit, int).reshape(ns*ns, 4)
 
