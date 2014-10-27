@@ -70,7 +70,7 @@ def trigger_event():
         client.send(msg)
 
 
-class FlowOscServerOps(bpy.types.Operator):
+class FlowOscServerOps(bpy.types.Operator, object):
 
     """Operator which runs its self from a timer"""
     bl_idname = "wm.flow_osc_server"
@@ -80,6 +80,7 @@ class FlowOscServerOps(bpy.types.Operator):
     mode = StringProperty(default='')
     node_name = StringProperty(default='')
     node_group = StringProperty(default='')
+    speed = FloatProperty()
 
     def modal(self, context, event):
         if self.node_group and self.node_name:
@@ -107,7 +108,7 @@ class FlowOscServerOps(bpy.types.Operator):
         if type_op == 'start':
             context.node.active = True
             wm = context.window_manager
-            self._timer = wm.event_timer_add(1, context.window)
+            self._timer = wm.event_timer_add(self.speed, context.window)
             wm.modal_handler_add(self)
 
             # start osc server.
@@ -145,16 +146,20 @@ class FlowOscServer(bpy.types.Node, FlowCustomTreeNode):
     active = BoolProperty(
         description="current state", default=0, name='comms on')
     State = FloatProperty(default=1.0, name='State')
+    speed = FloatProperty(default=1.0)
 
     def init(self, context):
         self.outputs.new('FlowSinkHoleSocket', "send")
 
     def draw_buttons(self, context, layout):
-        row = layout.row()
+        col = layout.column()
+        col.prop(self, 'speed')
         flash_operator = 'wm.flow_osc_server'
         tstr = 'start' if not self.active else 'end'
 
-        row.operator(flash_operator, text=tstr).mode = tstr
+        osc_serv = col.operator(flash_operator, text=tstr)
+        osc_serv.mode = tstr
+        osc_serv.speed = self.speed
 
     def process(self):
         # self.outputs[0].fset(self.seq_row_1[:])
