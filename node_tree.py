@@ -102,7 +102,12 @@ class FlowSocket(NodeSocket):
 
 
 class FlowMatrixSocket(FlowSocket):
-    '''n x n matrix Socket_type'''
+    '''
+    n x n matrix Socket_type
+
+    this may be redundant if a node 'Array as matrix' is implemented,
+    if there are numpy ops that only work on a Matrix data type.
+    '''
     bl_idname = "FlowMatrixSocket"
     bl_label = "Matrix Socket"
 
@@ -235,8 +240,10 @@ class FlowCustomTreeNode(object):
         tuples as keys, and socket data as values. The first element of those keys is the
         hash of the node name, the second element being the hash of the socket.
 
-        The following procedure will walk through all keys (as a list) and pick out
-        those keys with reference the hash of the node in the element 0 of their key.
+        {(hash(node), hash(node.to_socket)) : values, ..}
+
+        The following procedure will walk through all keys (as a list) and pop those keys
+        where the first element is the same as the hash of the node.
         '''
 
         DEBUG = True

@@ -105,7 +105,7 @@ def make_bmesh_geometry(node, context, name, mesh):
         fl_object = objects.new(name, temp_mesh)
         scene.objects.link(fl_object)
 
-    ''' There is overalapping code here for testing! '''
+    ''' There is overlapping code here for testing! '''
 
     mesh = fl_object.data
     current_count = len(mesh.vertices)
@@ -197,7 +197,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
         description='sets which base name the object will use, \
         use N-panel to pick alternative random names')
 
-    material = StringProperty(default='', update=updateSD)
+    material = StringProperty(default='')# , update=updateSD)
     grouping = BoolProperty(default=True, update=updateSD)
     state_view = BoolProperty(default=True, update=updateSD)
     state_render = BoolProperty(default=True, update=updateSD)
@@ -217,7 +217,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
         self.use_custom_color = True
         self.inputs.new('FlowGeometrySocket', 'geometry')
 
-    def draw_buttons(self, context, layout):
+    def draw_buttons_min(self, context, layout):
         row = layout.row(align=True)
         split = row.split()
         col1 = split.column()
@@ -255,10 +255,25 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
         row = col.row(align=True)
         row.scale_y = 0.9
 
-        row.prop_search(self, 'material', bpy.data, 'materials', text='', icon='MATERIAL_DATA')
+    def draw_buttons(self, context, layout):
+        self.draw_buttons_min(context, layout)
+        # row = layout.row()
+        # row.prop_search(self, 'material', bpy.data, 'materials', text='', icon='MATERIAL_DATA')
 
     def draw_buttons_ext(self, context, layout):
-        self.draw_buttons(context, layout)
+        self.draw_buttons_min(context, layout)
+
+        # offer slightly more elaborate new material options.
+        ob = bpy.data.objects[self.basemesh_name + '_0']
+        if ob:
+            row = layout.row(align=True)
+            split = row.split(0.9)
+            split.template_ID(ob, "active_material", new="material.new")
+            row = split.row()
+            mat = ob.active_material
+            if mat:
+                row.prop(mat, "use_nodes", icon='NODETREE', text="")
+
         layout.separator()
 
         row = layout.row(align=True)
