@@ -46,7 +46,7 @@ class FlowLinspaceUgen(bpy.types.Node, FlowCustomTreeNode):
     def init(self, context):
         self.inputs.new('FlowScalarSocket', 'start').prop_name = 'start'
         self.inputs.new('FlowScalarSocket', 'end').prop_name = 'end'
-        self.inputs.new('FlowScalarSocket', 'step').prop_name = 'step'
+        self.inputs.new('FlowScalarSocket', 'num').prop_name = 'num'
         self.outputs.new('FlowArraySocket', 'range')
 
     def draw_buttons(self, context, layout):

@@ -77,9 +77,6 @@ def do_transform(A, b, node):
 
 
 def make_multiple_transforms(A, r, self):
-    # for row in r:
-    #     geom = do_transform(A, row, self)
-    #     k = np.concatenate((k, geom), 0)
 
     def make_iterable(k):
         for row_geom in A:
@@ -90,6 +87,26 @@ def make_multiple_transforms(A, r, self):
             geom = do_transform(A, row, self)
             for row_geom in geom:
                 for co in row_geom:
+                    yield co
+
+    num_verts = len(A)
+    iterable = make_iterable(A)
+    j = np.fromiter(iterable, float)
+    total_flat = len(j)
+    return j.reshape(total_flat // 4, 4)
+
+
+def make_multiple_scales(A, r, self):
+
+    # arguably, this should be joined with the above function..
+    def make_iterable(k):
+
+        for row in r:
+            print('row; ', row)
+            geom = do_transform(A, row, self)
+            for row_geom in geom:
+                for co in row_geom:
+                    print(co)
                     yield co
 
     num_verts = len(A)
@@ -159,24 +176,52 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
         A = self.inputs[0].fget()
 
         is_rotation = (self.operation == 'ROTATE')
+        is_scale = (self.operation == 'SCALE')
         self.inputs['scalar'].enabled = is_rotation
         self.inputs['vector'].enabled = not is_rotation
 
+        # maybe use isinstance(A, np.ndarray)..
         if hasattr(A, 'any') and A.any():
+
+            # the function 'do_transform' looks at self.operation to
+            # perform scale, rotate, or translate .
+
             if is_rotation:
                 r = self.inputs['scalar'].fget()
                 if isinstance(r, (float, int)):
                     self.outputs[0].fset(do_transform(A, r, self))
                     return
 
-                # print(type(r))
-                if isinstance(r, (np.ndarray,)):
+                if isinstance(r, np.ndarray):
                     shape = r.shape
                     items = len(shape)
                     if items == 1:
                         kt = make_multiple_transforms(A, r, self)
                         self.outputs[0].fset(kt)
                         return
+
+            elif is_scale:
+                b = self.inputs['vector'].fget()
+
+                # could be this
+                # -if flat array, uniformly scale by each value
+                # -if 1*4, then single object
+                # -if n*4, then repeat with individual vectors.
+
+                if isinstance(b, np.ndarray) and b.any():
+                    shape = b.shape
+                    if ((len(shape) == 1) and (len(b) == 4)):
+                        print('does single vector')
+                        do_func = do_transform
+                    elif ((len(shape) == 2) and (shape[1] == 4)):
+                        print('# shape is 2, and n*4')
+                        do_func = make_multiple_scales
+                    else:
+                        return
+                    ck = do_func(A, b, self)
+                    print(ck)
+                    self.outputs[0].fset(ck)
+
             else:
                 b = self.inputs['vector'].fget()
                 if isinstance(b, np.ndarray) and b.any():
