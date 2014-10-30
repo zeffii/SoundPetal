@@ -234,6 +234,12 @@ class FlowCustomTreeNode(object):
     def poll(cls, ntree):
         return ntree.bl_idname == 'FlowCustomTreeType'
 
+    def draw_buttons(self, context, layout):
+        # this helps some nodes which don't have buttons but do have sliders
+        # to not be visually weird. (else the effect is cropping in y direction)
+        # this somehow adds a few pixels.
+        pass
+
     def free(self):
         '''
         This function deals with removing a Node from flowcache. flowcache contains

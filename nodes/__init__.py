@@ -33,7 +33,8 @@ nodes_dict = {
 
     'vector': [
         'vector_make',
-        'vector_from_input'
+        'vector_from_input',
+        'vector_len'
     ],
 
     'represent': [
@@ -47,6 +48,7 @@ nodes_dict = {
     'pack': [
         'pack_verts',
         'pack_mesh',
+        'unpack_verts',
     ]
 
 

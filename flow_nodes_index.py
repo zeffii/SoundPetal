@@ -34,6 +34,7 @@ def make_node_cats():
     node_cats["vector"] = [
         ["FlowVecMakeNode",     "Vector"],
         ["FlowVecFromInput",    "Vector from input"],
+        ['FlowVectorLengthUgen', "Vector Length(s)"]
     ]
 
     node_cats["creators"] = [
@@ -57,6 +58,7 @@ def make_node_cats():
     node_cats['pack'] = [
         ["FlowPackVertsUgen",   "pack verts"],
         ["FlowPackMeshUgen",    "pack mesh"],
+        ["FlowUnpackVertsUgen", "un-pack mesh"],
     ]
 
     node_cats['array'] = [

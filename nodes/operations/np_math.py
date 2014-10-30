@@ -37,16 +37,18 @@ math_functors = {
     'SINB': lambda a, b: np.sin(a)*b,
     'COSB': lambda a, b: np.cos(a)*b,
     'NEG': lambda a, b: -a,
+    'POW2': lambda a, b: np.power(a, 2),
+    'SQRT': lambda a, b: np.sqrt(a),
 }
+
+single_socket_ops = {'SIN', 'COS', 'NEG', 'POW2', 'SQRT'}
 
 
 def do_math(a, b, op):
     functor = math_functors.get(op)
 
-    # print('a b --->', a, b)
-
     ''' only interested in one socket, a '''
-    if op in {'SIN', 'COS'}:
+    if op in single_socket_ops:
         return functor(a, None)
 
     a_is_array = hasattr(a, 'any')
@@ -93,7 +95,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
     ''' FlowScalarMathUgen '''
 
     bl_idname = 'FlowScalarMathUgen'
-    bl_label = 'Scalar Math'
+    bl_label = 'Math (scalar, ndarray)'
     bl_icon = 'OUTLINER_OB_EMPTY'
 
     A = FloatProperty(name='A', default=0.0, step=0.01, update=updateSD)
@@ -101,7 +103,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
 
     # if you change these, keep it compatible with def draw_labels()
     operation_types = [
-        # internal, ui, "", enumidx
+        # internal, ui,          "", enumidx
         ("ADD",    "a + b",      "", 0),
         ("SUB",    "a - b",      "", 1),
         ("DIV",    "a / b",      "", 2),
@@ -113,6 +115,8 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         ("COSB",   "cos(a) * b", "", 8),
         ("MOD",    "a % b",      "", 9),
         ("NEG",    "-a ",        "", 10),
+        ("POW2",    "a POW 2 ",  "", 11),
+        ("SQRT",    "SQRT a ",   "", 12),
     ]
 
     operation = EnumProperty(
@@ -132,7 +136,7 @@ class FlowScalarMathUgen(bpy.types.Node, FlowCustomTreeNode):
         row.prop(self, 'operation', text='', icon='DRIVER')
 
     def process(self):
-        self.inputs['B'].enabled = not (self.operation in {'SIN', 'COS', 'NEG'})
+        self.inputs['B'].enabled = not (self.operation in single_socket_ops)
         a = self.inputs[0].fget2()
         b = self.inputs[1].fget2()
 

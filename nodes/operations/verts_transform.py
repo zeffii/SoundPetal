@@ -102,11 +102,9 @@ def make_multiple_scales(A, r, self):
     def make_iterable(k):
 
         for row in r:
-            print('row; ', row)
             geom = do_transform(A, row, self)
             for row_geom in geom:
                 for co in row_geom:
-                    print(co)
                     yield co
 
     num_verts = len(A)
