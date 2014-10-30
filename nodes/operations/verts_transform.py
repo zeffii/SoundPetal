@@ -181,54 +181,56 @@ class FlowVertsTransformUgen(bpy.types.Node, FlowCustomTreeNode):
         self.inputs['vector'].enabled = not is_rotation
 
         # maybe use isinstance(A, np.ndarray)..
-        if hasattr(A, 'any') and A.any():
+        if not(hasattr(A, 'any') and A.any()):
+            # undefined operation, output A
+            self.outputs[0].fset(A)
 
-            # the function 'do_transform' looks at self.operation to
-            # perform scale, rotate, or translate .
+        # the function 'do_transform' looks at self.operation to
+        # perform scale, rotate, or translate .
 
-            if is_rotation:
-                r = self.inputs['scalar'].fget()
-                if isinstance(r, (float, int)):
-                    self.outputs[0].fset(do_transform(A, r, self))
+        if is_rotation:
+            r = self.inputs['scalar'].fget()
+            if isinstance(r, (float, int)):
+                self.outputs[0].fset(do_transform(A, r, self))
+                return
+
+            if isinstance(r, np.ndarray):
+                shape = r.shape
+                items = len(shape)
+                if items == 1:
+                    kt = make_multiple_transforms(A, r, self)
+                    self.outputs[0].fset(kt)
                     return
 
-                if isinstance(r, np.ndarray):
-                    shape = r.shape
-                    items = len(shape)
-                    if items == 1:
-                        kt = make_multiple_transforms(A, r, self)
-                        self.outputs[0].fset(kt)
-                        return
+        elif is_scale:
+            b = self.inputs['vector'].fget()
 
-            elif is_scale:
-                b = self.inputs['vector'].fget()
+            # could be this
+            # -if flat array, uniformly scale by each value
+            # -if 1*4, then single object
+            # -if n*4, then repeat with individual vectors.
 
-                # could be this
-                # -if flat array, uniformly scale by each value
-                # -if 1*4, then single object
-                # -if n*4, then repeat with individual vectors.
-
-                if isinstance(b, np.ndarray) and b.any():
-                    shape = b.shape
-                    if ((len(shape) == 1) and (len(b) == 4)):
-                        print('does single vector')
-                        do_func = do_transform
-                    elif ((len(shape) == 2) and (shape[1] == 4)):
-                        print('# shape is 2, and n*4')
-                        do_func = make_multiple_scales
-                    else:
-                        return
-                    ck = do_func(A, b, self)
-                    print(ck)
-                    self.outputs[0].fset(ck)
-
-            else:
-                b = self.inputs['vector'].fget()
-                if isinstance(b, np.ndarray) and b.any():
-                    self.outputs[0].fset(do_transform(A, b, self))
+            if isinstance(b, np.ndarray) and b.any():
+                shape = b.shape
+                if ((len(shape) == 1) and (len(b) == 4)):
+                    print('does single vector')
+                    do_func = do_transform
+                elif ((len(shape) == 2) and (shape[1] == 4)):
+                    print('# shape is 2, and n*4')
+                    do_func = make_multiple_scales
+                else:
                     return
+                ck = do_func(A, b, self)
+                self.outputs[0].fset(ck)
+                return
 
-        # undefined operation, output A
+        else:
+            b = self.inputs['vector'].fget()
+            if isinstance(b, np.ndarray) and b.any():
+                self.outputs[0].fset(do_transform(A, b, self))
+                return
+
+        # just in case..
         self.outputs[0].fset(A)
 
 
