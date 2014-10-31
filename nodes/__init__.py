@@ -12,7 +12,8 @@ nodes_dict = {
         'trig',
         'scalar_make',
         'convenience_constants',
-        'osc_server'
+        'osc_server',
+        'prototyper'
     ],
 
     'operations': [

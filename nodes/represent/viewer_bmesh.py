@@ -264,7 +264,7 @@ class FlowBmeshUgen(bpy.types.Node, FlowCustomTreeNode):
         self.draw_buttons_min(context, layout)
 
         # offer slightly more elaborate new material options.
-        ob = bpy.data.objects[self.basemesh_name + '_0']
+        ob = bpy.data.objects.get(self.basemesh_name + '_0')
         if ob:
             row = layout.row(align=True)
             split = row.split(0.9)
