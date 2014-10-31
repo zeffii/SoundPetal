@@ -130,6 +130,8 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
             if pcl:
                 pobject = pcl()
                 m = pobject.process('20', 30)
+                print(pobject.sockets_in)
+                print(pobject.sockets_out)
                 print(m)
 
 
