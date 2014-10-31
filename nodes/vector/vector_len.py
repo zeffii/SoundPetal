@@ -48,9 +48,9 @@ class FlowVectorLengthUgen(bpy.types.Node, FlowCustomTreeNode):
     take an np.ndarray of verts (or one vector) spit out the scalar
     length of the vector(s).
 
-    The fact that this accepts Vector or Array of Vector input is 
-    pure user convenience. It's only weird because that's the 
-    kneejerk reaction to it. Once you know this is a predictable 
+    The fact that this accepts Vector or Array of Vector input is
+    pure user convenience. It's only weird because that's the
+    kneejerk reaction to it. Once you know this is a predictable
     behaviour for that socket, then it's second nature.
     '''
 
@@ -65,7 +65,8 @@ class FlowVectorLengthUgen(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         A = self.inputs[0].fget()
         x = do_vector_lengths(A)
-        if isinstance(x, np.ndarray):
+
+        if isinstance(x, (np.ndarray, np.float64)):
             self.outputs[0].fset(x)
 
 
