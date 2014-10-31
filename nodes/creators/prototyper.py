@@ -44,7 +44,7 @@ class PrototypeScript(object):
         array_in = args[0]
         multiplier = args[1]
         
-        gen = [0,2,3,4,5,6]         
+        gen = [0,2,3,4,5,6, multiplier]         
         
         return gen
 
@@ -125,15 +125,12 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def prepare_from_script(self):
         this_dict = self.node_dict.get(hash(self))
-        print(this_dict)
         if this_dict:
-            pcl = this_dict.get('pclass')()
+            pcl = this_dict.get('pclass')
             if pcl:
-                process_fn = pcl.process('20', 30)
-                m = process_fn
+                pobject = pcl()
+                m = pobject.process('20', 30)
                 print(m)
-                print('rarr')
-        pass
 
 
 def register():
