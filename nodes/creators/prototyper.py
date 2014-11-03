@@ -63,7 +63,7 @@ def script_parser(script_name):
     local = locals()
     pclass = local.get('PrototypeScript')
     if pclass:
-        return pclass
+        return local
 
 
 class FlowPrototyperLoader(bpy.types.Operator):
@@ -76,7 +76,8 @@ class FlowPrototyperLoader(bpy.types.Operator):
     def execute(self, context):
         node = context.node
         script_name = node.internal_script_name
-        pclass = script_parser(script_name)
+        local = script_parser(script_name)
+        pclass = local.get('PrototypeScript')
 
         # # can happen between F8.
         if not node.node_dict.get(hash(node)):
@@ -91,6 +92,8 @@ class FlowPrototyperLoader(bpy.types.Operator):
             booted = True
             print(node.node_dict)
             node.node_dict[hash(node)]['pclass'] = pclass
+            # node.node_dict[hash(node)]['local'] = local
+            globals().update(local)
             node.prepare_from_script()
 
         node.boot_strapped = booted
@@ -133,6 +136,7 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
         this_dict = self.node_dict.get(hash(self))
         pcl = this_dict.get('pclass')
         if pcl:
+            # globals().update(this_dict.get('local'))
             inputs = [s.fget() for s in self.inputs]
             pobject = pcl()
             m = pobject.process(*inputs)
