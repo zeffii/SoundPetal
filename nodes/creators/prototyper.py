@@ -20,40 +20,29 @@
 import numpy as np
 
 import bpy
-from bpy.props import BoolProperty, BoolVectorProperty, StringProperty
+from bpy.props import (
+    BoolProperty,
+    BoolVectorProperty,
+    StringProperty,
+    IntProperty,
+    FloatProperty,
+)
 
 from FLOW.core.mechanisms import updateSD
 from FLOW.node_tree import FlowCustomTreeNode
 from FLOW.utils.fl_proto_util import sock
 
-
 '''
-import numpy as np
+This is intended to be a ridiculously lightweight
+implementation of a SN (Scripted Node).
 
-class PrototypeScript(object):
-    
-    sockets_in = [
-        sock(kind='array', name='nx4'),
-        sock(kind='scalar', name='multiplier'), 
-    ]
-    
-    sockets_out = [
-        sock(kind='array', name='generated')
-    ]
-
-    @classmethod
-    def process(self, *args):
-        array_in = args[0]
-        multiplier = args[1]
-        gen = [0,2,3,4,5,6, multiplier]
-        return {'generated': np.array(gen)}
-
+some examples: https://github.com/zeffii/FLOW/issues/10
 
 '''
 
 
 def script_parser(script_name):
-    ''' 
+    '''
     script in data.texts must fullfil these criteria before it
     can be loaded and used as a Node body.
 
@@ -79,7 +68,6 @@ class FlowPrototyperLoader(bpy.types.Operator):
         local = script_parser(script_name)
         pclass = local.get('PrototypeScript')
 
-        # # can happen between F8.
         if not node.node_dict.get(hash(node)):
             node.reset()
 
@@ -92,7 +80,6 @@ class FlowPrototyperLoader(bpy.types.Operator):
             booted = True
             print(node.node_dict)
             node.node_dict[hash(node)]['pclass'] = pclass
-            # node.node_dict[hash(node)]['local'] = local
             globals().update(local)
             node.prepare_from_script()
 
@@ -114,7 +101,7 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
     boot_strapped = BoolProperty(
         description='used to indicate the state of loading')
 
-    # internal storage
+    # internal storage for locals and pclass
     node_dict = {}
 
     def init(self, context):
@@ -131,17 +118,28 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
     def process(self):
         if not self.boot_strapped:
             print('not bootstrapped')
-            return 
+            return
 
         this_dict = self.node_dict.get(hash(self))
         pcl = this_dict.get('pclass')
         if pcl:
-            # globals().update(this_dict.get('local'))
             inputs = [s.fget() for s in self.inputs]
             pobject = pcl()
             m = pobject.process(*inputs)
             for key, val in m.items():
                 self.outputs[key].fset(val)
+
+    def create_socket_slider(self, sock):
+        stype = sock.kind
+        offset = len(self.inputs)
+        io_sock = self.inputs.new(stype, sock.name)
+        if stype == 'FlowScalarSocket':
+            if isinstance(sock.default, float):
+                io_sock.prop_type = "float"
+                io_sock.prop_float_value = sock.default
+            if isinstance(sock.default, int):
+                io_sock.prop_type = "int"
+                io_sock.prop_int_value = sock.default
 
     def prepare_from_script(self):
         this_dict = self.node_dict.get(hash(self))
@@ -151,8 +149,7 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
                 pobject = pcl()
                 self.inputs.clear()
                 for sock in pobject.sockets_in:
-                    stype = sock.kind
-                    self.inputs.new(stype, sock.name)
+                    self.create_socket_slider(sock)
 
                 self.outputs.clear()
                 for sock in pobject.sockets_out:

@@ -25,7 +25,8 @@ from bpy.props import (
     StringProperty,
     BoolProperty,
     FloatVectorProperty,
-    IntProperty
+    IntProperty,
+    FloatProperty
 )
 
 from bpy.types import (
@@ -50,7 +51,13 @@ class FlowSocket(NodeSocket):
     """ Socket type to inherit several useful class functions """
     bl_idname = "FlowGenericFSocket"
     bl_label = "generic fsocket"
+
     prop_name = StringProperty(default='')
+    prop_type = StringProperty(default='')
+
+    prop_float_value = FloatProperty()
+    prop_int_value = IntProperty()
+
     socket_col = FloatVectorProperty(size=4, default=(1, 1, 1, 1))
 
     def draw(self, context, layout, node, text):
@@ -77,6 +84,11 @@ class FlowSocket(NodeSocket):
         '''
         if self.links and self.links[0]:
             return cache_get(self)
+        elif self.prop_type:
+            if self.prop_type == 'float':
+                return self.prop_float_value
+            if self.prop_type == 'int':
+                return self.prop_int_value
         elif self.prop_name and not direct:
             val = getattr(self.node, self.prop_name)
             return np.array([val])
@@ -195,23 +207,35 @@ class FlowScalarSocket(FlowSocket):
     bl_idname = "FlowScalarSocket"
     bl_label = "Scalar Socket"
 
+    # prop_float_value = FloatProperty()
+    # prop_int_value = IntProperty()
+
+    prop_type = StringProperty()
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
 
     def draw(self, context, layout, node, text):
+        row = layout.row()
         if self.is_output and self.prop_name:
-            row = layout.row()
             row.prop(node, self.prop_name)
         else:
             if self.is_linked:
-                layout.label(text)
+                row.label(text)
+                return
+
+            if self.prop_type and (not self.is_output):
+                if self.prop_type == 'float':
+                    print('am here!')
+                    row.prop(self, 'prop_float_value', text=self.name)
+                if self.prop_type == 'int':
+                    row.prop(self, 'prop_int_value', text=self.name)
                 return
 
             if not self.prop_name:
-                layout.label(text)
+                row.label(text)
                 return
 
-            layout.prop(node, self.prop_name)
+            row.prop(node, self.prop_name)
 
 ''' T r e e '''
 
