@@ -136,6 +136,7 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
             pobject = pcl()
             m = pobject.process(*inputs)
             for val, sock in zip(m, self.outputs):
+                print('::::', val)
                 sock.fset(val)
 
     def prepare_from_script(self):
