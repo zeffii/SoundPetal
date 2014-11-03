@@ -33,12 +33,12 @@ import numpy as np
 class PrototypeScript(object):
     
     sockets_in = [
-        sock(kind='array', name='nx4', var='array_in'),
+        sock(kind='array', name='nx4'),
         sock(kind='scalar', name='multiplier'), 
     ]
     
     sockets_out = [
-        sock(kind='array', name='generated', var='gen')
+        sock(kind='array', name='generated')
     ]
 
     @classmethod
@@ -46,7 +46,7 @@ class PrototypeScript(object):
         array_in = args[0]
         multiplier = args[1]
         gen = [0,2,3,4,5,6, multiplier]
-        return (np.array(gen), )
+        return {'generated': np.array(gen)}
 
 
 '''
@@ -136,9 +136,8 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
             inputs = [s.fget() for s in self.inputs]
             pobject = pcl()
             m = pobject.process(*inputs)
-            for val, sock in zip(m, self.outputs):
-                print('::::', val)
-                sock.fset(val)
+            for key, val in m.items():
+                self.outputs[key].fset(val)
 
     def prepare_from_script(self):
         this_dict = self.node_dict.get(hash(self))
@@ -146,8 +145,6 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
             pcl = this_dict.get('pclass')
             if pcl:
                 pobject = pcl()
-                m = pobject.process('20', 30)
-
                 self.inputs.clear()
                 for sock in pobject.sockets_in:
                     stype = sock.kind
