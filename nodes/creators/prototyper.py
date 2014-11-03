@@ -31,22 +31,22 @@ from FLOW.utils.fl_proto_util import sock
 class PrototypeScript(object):
     
     sockets_in = [
-        sock(type='array', name='nx4', var='array_in'),
-        sock(type='scalar', name='multiplier'), 
+        sock(kind='array', name='nx4', var='array_in'),
+        sock(kind='scalar', name='multiplier'), 
     ]
     
     sockets_out = [
-        sock(type='array', name='generated', var='gen')
+        sock(kind='array', name='generated', var='gen')
     ]
 
     @classmethod
     def process(self, *args):
         array_in = args[0]
         multiplier = args[1]
-        
-        gen = [0,2,3,4,5,6, multiplier]         
+        gen = [0,2,3,4,5,6, multiplier]
         
         return gen
+
 
 '''
 
@@ -77,6 +77,10 @@ class FlowPrototyperLoader(bpy.types.Operator):
         script_name = node.internal_script_name
         booted = node.boot_strapped
         pclass = script_parser(script_name)
+
+        # # can happen between F8.
+        if not node.node_dict.get(hash(node)):
+            node.reset()
 
         if not pclass:
             booted = False
@@ -110,9 +114,9 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
     node_dict = {}
 
     def init(self, context):
-        self.reset(context)
+        self.reset()
 
-    def reset(self, context):
+    def reset(self):
         self.node_dict[hash(self)] = {}
 
     def draw_buttons(self, context, layout):
@@ -130,9 +134,17 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
             if pcl:
                 pobject = pcl()
                 m = pobject.process('20', 30)
-                print(pobject.sockets_in)
-                print(pobject.sockets_out)
-                print(m)
+
+                self.inputs.clear()
+                for sock in pobject.sockets_in:
+                    stype = sock.kind
+                    self.inputs.new(stype, sock.name)
+
+                self.outputs.clear()
+                for sock in pobject.sockets_out:
+                    stype = sock.kind
+                    self.outputs.new(stype, sock.name)
+
 
 
 def register():
