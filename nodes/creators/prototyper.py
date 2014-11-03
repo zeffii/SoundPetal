@@ -75,7 +75,6 @@ class FlowPrototyperLoader(bpy.types.Operator):
     def execute(self, context):
         node = context.node
         script_name = node.internal_script_name
-        booted = node.boot_strapped
         pclass = script_parser(script_name)
 
         # # can happen between F8.
@@ -93,6 +92,7 @@ class FlowPrototyperLoader(bpy.types.Operator):
             node.node_dict[hash(node)]['pclass'] = pclass
             node.prepare_from_script()
 
+        node.boot_strapped = booted
         return {'FINISHED'}
 
 
@@ -125,7 +125,18 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
         row.operator('node.flow_protonode_loader', text='GO!')
 
     def process(self):
-        pass
+        if not self.boot_strapped:
+            print('not bootstrapped')
+            return 
+
+        this_dict = self.node_dict.get(hash(self))
+        pcl = this_dict.get('pclass')
+        if pcl:
+            inputs = [s.fget() for s in self.inputs]
+            pobject = pcl()
+            m = pobject.process(*inputs)
+            for val, sock in zip(m, self.outputs):
+                sock.fset(val)
 
     def prepare_from_script(self):
         this_dict = self.node_dict.get(hash(self))
@@ -144,7 +155,6 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
                 for sock in pobject.sockets_out:
                     stype = sock.kind
                     self.outputs.new(stype, sock.name)
-
 
 
 def register():
