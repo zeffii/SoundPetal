@@ -28,6 +28,8 @@ from FLOW.utils.fl_proto_util import sock
 
 
 '''
+import numpy as np
+
 class PrototypeScript(object):
     
     sockets_in = [
@@ -44,8 +46,7 @@ class PrototypeScript(object):
         array_in = args[0]
         multiplier = args[1]
         gen = [0,2,3,4,5,6, multiplier]
-        
-        return gen
+        return (np.array(gen), )
 
 
 '''
