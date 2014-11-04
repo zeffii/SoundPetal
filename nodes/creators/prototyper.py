@@ -90,9 +90,7 @@ class FlowPrototyperLoader(bpy.types.Operator):
             self.report({'INFO'}, 'failed')
         else:
             booted = True
-            print(node.node_dict)
             node.node_dict[hash(node)]['pclass'] = pclass
-            # node.node_dict[hash(node)]['local'] = local
             globals().update(local)
             node.prepare_from_script()
 
@@ -136,7 +134,6 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
         this_dict = self.node_dict.get(hash(self))
         pcl = this_dict.get('pclass')
         if pcl:
-            # globals().update(this_dict.get('local'))
             inputs = [s.fget() for s in self.inputs]
             pobject = pcl()
             m = pobject.process(*inputs)
@@ -152,7 +149,14 @@ class FlowPrototyperUgen(bpy.types.Node, FlowCustomTreeNode):
                 self.inputs.clear()
                 for sock in pobject.sockets_in:
                     stype = sock.kind
-                    self.inputs.new(stype, sock.name)
+                    t = self.inputs.new(stype, sock.name)
+                    if isinstance(sock.default, (int, float)):
+                        if isinstance(sock.default, int):
+                            t.prop_type = 'int'
+                            t.prop_int = sock.default
+                        if isinstance(sock.default, float):
+                            t.prop_type = 'float'
+                            t.prop_float = sock.default
 
                 self.outputs.clear()
                 for sock in pobject.sockets_out:

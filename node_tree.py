@@ -25,7 +25,8 @@ from bpy.props import (
     StringProperty,
     BoolProperty,
     FloatVectorProperty,
-    IntProperty
+    IntProperty,
+    FloatProperty
 )
 
 from bpy.types import (
@@ -52,6 +53,10 @@ class FlowSocket(NodeSocket):
     bl_label = "generic fsocket"
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=(1, 1, 1, 1))
+
+    prop_int = IntProperty()
+    prop_float = FloatProperty()
+    prop_type = StringProperty()
 
     def draw(self, context, layout, node, text):
         if self.is_linked:
@@ -165,7 +170,6 @@ class FlowTextSocket(FlowSocket):
 
     prop_name = StringProperty(default='')
     prop_type = StringProperty(default='')
-    prop_index = IntProperty()
     socket_col = FloatVectorProperty(size=4, default=fl_text_col)
     pass
 
@@ -195,6 +199,10 @@ class FlowScalarSocket(FlowSocket):
     bl_idname = "FlowScalarSocket"
     bl_label = "Scalar Socket"
 
+    prop_int = IntProperty()
+    prop_float = FloatProperty()
+    prop_type = StringProperty()
+
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
 
@@ -207,11 +215,48 @@ class FlowScalarSocket(FlowSocket):
                 layout.label(text)
                 return
 
+            if self.prop_type:
+                row = layout.row()
+                if self.prop_type == 'int':
+                    row.prop(self, 'prop_int', text=self.name)
+                if self.prop_type == 'float':
+                    row.prop(self, 'prop_float', text=self.name)
+                return
+
             if not self.prop_name:
                 layout.label(text)
                 return
 
             layout.prop(node, self.prop_name)
+
+    def fget(self, fallback=np.array([]), direct=False):
+        '''
+        fallback:   node supplies sane or desired value if no links.
+        direct:     means use the fallbback if no links+links[0]
+                    direct -- is useful if you don't want to
+                    implicitely wrap values in an array. I need to
+                    see how more nodes interact with eachother
+                    before comitting to this kind of scheme. Something
+                    tells me it is not clear now and won't be clear when
+                    I returns to it. self = warned.
+        '''
+        if self.links and self.links[0]:
+            return cache_get(self)
+        elif self.prop_type:
+            if self.prop_type == 'int':
+                k = self.prop_int
+            if self.prop_type == 'float':
+                k = self.prop_float
+            print(k)
+            return k
+
+        elif self.prop_name and not direct:
+            val = getattr(self.node, self.prop_name)
+            return np.array([val])
+        else:
+            return fallback
+
+
 
 ''' T r e e '''
 
