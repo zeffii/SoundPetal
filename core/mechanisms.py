@@ -171,3 +171,15 @@ def updateSD(self, context):
         #node.select = True
 
     #cascading_trigger(context, L)
+
+
+def updateFromUI(self, context):
+    '''
+    Update Self and Downstream. Whenever a property has this function
+    attached, it passes update requests to the node it came from and
+    the nodes that are downstream from it.
+
+    TLDR;
+    This propagates changes into the dependency graph.
+    '''
+    updateSD(self.node, context)

@@ -36,6 +36,7 @@ from bpy.types import (
 )
 
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
+from FLOW.core.mechanisms import updateFromUI
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
@@ -199,8 +200,8 @@ class FlowScalarSocket(FlowSocket):
     bl_idname = "FlowScalarSocket"
     bl_label = "Scalar Socket"
 
-    prop_int = IntProperty()
-    prop_float = FloatProperty()
+    prop_int = IntProperty(update=updateFromUI)
+    prop_float = FloatProperty(update=updateFromUI)
     prop_type = StringProperty()
 
     prop_name = StringProperty(default='')
@@ -247,7 +248,6 @@ class FlowScalarSocket(FlowSocket):
                 k = self.prop_int
             if self.prop_type == 'float':
                 k = self.prop_float
-            print(k)
             return k
 
         elif self.prop_name and not direct:
