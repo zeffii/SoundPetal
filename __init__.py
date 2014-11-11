@@ -17,12 +17,12 @@
 # ##### END GPL LICENSE BLOCK #####
 
 bl_info = {
-    "name": "Flow",
+    "name": "SoundPetal (Flow)",
     "author": "Dealga McArdle (Based in part on Sverchok) ",
     "version": (0, 1),
     "blender": (2, 7, 2),
     "location": "Nodes > CustomNodesTree > Add user nodes",
-    "description": "Generic Flow based interface for Blender",
+    "description": "Flow based SuperCollider interface for Blender",
     "warning": "",
     "wiki_url": "",
     "tracker_url": "",
@@ -35,6 +35,9 @@ import numpy
 from collections import OrderedDict
 
 FLOW = 'FLOW'
+
+if __name__ != FLOW:
+    sys.modules[FLOW] = sys.modules[__name__]
 
 if FLOW:
     print("\n> Loading", __name__)
