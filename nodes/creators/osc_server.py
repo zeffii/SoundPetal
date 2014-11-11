@@ -40,7 +40,8 @@ osc_statemachine = {'status': STATUS}
 
 def start_server_comms():
     ip = "127.0.0.1"
-    port = 6449
+    # port = 6449 # renoise
+    port = 57120 # SuperCollider
     client = udp_client.UDPClient(ip, port)
     osc_statemachine['status'] = RUNNING
     osc_msg = osc_message_builder.OscMessageBuilder
@@ -60,7 +61,8 @@ def trigger_event():
     # identifiers.
     osc_msg = osc_statemachine.get('osc_msg')
     if osc_msg:
-        msg = osc_msg(address="/renoise/trigger/note_on")
+        # msg = osc_msg(address="/renoise/trigger/note_on")
+        msg = osc_msg(address="/main/toggle1")
         for i in note_out_list:
             msg.add_arg(i)
 
