@@ -257,7 +257,6 @@ class FlowScalarSocket(FlowSocket):
             return fallback
 
 
-
 ''' T r e e '''
 
 
