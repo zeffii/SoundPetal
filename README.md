@@ -1,4 +1,4 @@
-FLOW
+SoundPetal
 ====
 
 ![img](https://cloud.githubusercontent.com/assets/619340/4859556/a7717896-60eb-11e4-9b0d-89f1cd58c4e0.png)
