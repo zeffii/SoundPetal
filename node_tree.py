@@ -262,7 +262,7 @@ class FlowScalarSocket(FlowSocket):
 
 
 class FlowCustomTree(NodeTree):
-    ''' FLow nodes, pragma '''
+    ''' SoundPetal Nodes, (FLow) '''
     bl_idname = 'FlowCustomTreeType'
     bl_label = 'Flow Custom Tree'
     bl_icon = 'SEQ_CHROMA_SCOPE'
