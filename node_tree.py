@@ -39,6 +39,7 @@ from bpy.types import (
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
 from FLOW.core.mechanisms import updateFromUI
 from FLOW.core.mechanisms import updateSD
+from FLOW.core.mechanisms import serialize
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
@@ -399,6 +400,20 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     def draw_buttons(self, context, layout):
         row = layout.row()
         row.prop(self, 'sp_rate', expand=True)
+
+    # a generic implementation suitable for most ugens, else override
+    def process(self):
+
+        # not fully defined yet.
+        if not self.sp_args:
+            return
+
+        # if inputs does not match number of args, return early.
+        if not len(self.inputs) == self.sp_args.count(':'):
+            return
+
+        result = serialize(self)
+        self.outputs[0].fset(result)
 
 
 class FlowNodeCategory(NodeCategory):

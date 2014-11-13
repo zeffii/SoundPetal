@@ -17,9 +17,6 @@
 # ##### END GPL LICENSE BLOCK #####
 
 import bpy
-
-from FLOW.core.mechanisms import updateSD
-from FLOW.core.mechanisms import serialize
 from FLOW.node_tree import SoundPetalUgen
 
 
@@ -28,15 +25,7 @@ class UgenSawOsc(SoundPetalUgen):
     bl_idname = 'UgenSawOsc'
     bl_label = 'Saw'
     sp_args = "(freq: 440, mul: 1, add: 0)"
-
     sp_rate = SoundPetalUgen.sp_rate
-
-    def process(self):
-        if not len(self.inputs) == 3:
-            return
-
-        result = serialize(self)
-        self.outputs[0].fset(result)
 
 
 def register():
