@@ -50,7 +50,7 @@ nodes_dict = {
         'pack_verts',
         'pack_mesh',
         'unpack_verts',
-    ]
+    ],
 
     'sc_ugen_osc': [
         'sin_osc',

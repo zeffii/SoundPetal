@@ -320,6 +320,34 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         should be defined some other way than hardcoding individual Ugens.
 
     '''
+    bl_idname = ""
+
+    # expecs similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
+    # yes, including parens.
+    sp_args = StringProperty()
+
+    def init(self, context):
+        self.sp_init(context)
+
+    def sp_init(self, context):
+        if not self.sp_args:
+            error_str = '{}: error, sp_args not provided in node definition'
+            msg = error_str.format(self.bl_idname)
+            return
+
+        args = self.sp_args
+        if args[0] == '(' and args[-1] == ')':
+            args = args[1:-1]
+        else:
+            print(self.bl_idname, ': error, args unparsable, wrap in parens')
+            return
+
+        # no parens, should parse.
+        for arg in args.split(','):
+            argname, argvalue = arg.split(':')
+            argname = argname.strip()
+            argvalue = argvalue.strip()
+            print(argname, argvalue)
 
     def draw_buttons_ext(self, context, layout):
         row = layout.row()

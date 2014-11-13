@@ -30,12 +30,13 @@ class UgenSinOsc(SoundPetalUgen):
     ''' UgenSinOsc '''
     bl_idname = 'UgenSinOsc'
     bl_label = 'SinOsc Ugen'
+    sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
 
-    def init(self, context):
-        self.inputs.new("FlowScalarSocket", "props")
-        # self.inputs.new("FlowScalarSocket", "num_sides")
-        # self.outputs.new("FlowArraySocket", "verts")
-        self.outputs.new("FlowTextSocket", "eval")
+    # def init(self, context):
+    #     self.inputs.new("FlowScalarSocket", "props")
+    #     # self.inputs.new("FlowScalarSocket", "num_sides")
+    #     # self.outputs.new("FlowArraySocket", "verts")
+    #     self.outputs.new("FlowTextSocket", "eval")
 
     def draw_buttons(self, context, layout):
         # row = layout.row()
