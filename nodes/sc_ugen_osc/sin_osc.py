@@ -23,28 +23,31 @@ import bpy
 from bpy.props import EnumProperty, FloatProperty, IntProperty
 
 from FLOW.core.mechanisms import updateSD
+from FLOW.core.mechanisms import serialize
+
 from FLOW.node_tree import SoundPetalUgen
 
 
 class UgenSinOsc(SoundPetalUgen):
     ''' UgenSinOsc '''
     bl_idname = 'UgenSinOsc'
-    bl_label = 'SinOsc Ugen'
+    bl_label = 'SinOsc'
     sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
 
+    sp_rate = SoundPetalUgen.sp_rate
+
     def draw_buttons(self, context, layout):
-        # row = layout.row()
-        # row.prop(self, 'axis', expand=True)
-        pass
+        row = layout.row()
+        row.prop(self, 'sp_rate', expand=True)
 
     def process(self):
-        # s = self.inputs['side'].fget2()
-        # ns = self.inputs['num_sides'].fget2()
-        # verts, faces = make_geometry(self, s, ns)
-        # self.outputs[0].fset(verts)
-        for i in self.inputs:
-            print(i.name)
-        self.outputs[0].fset("SinOsc(300, 2, 3)")
+        freq = self.inputs['freq'].fgetx()
+        phase = self.inputs['phase'].fgetx()
+        mul = self.inputs['mul'].fgetx()
+        add = self.inputs['add'].fgetx()
+
+        result = serialize(self, freq, phase, mul, add)
+        self.outputs[0].fset(result)
 
 
 def register():

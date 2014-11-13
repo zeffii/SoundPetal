@@ -26,7 +26,8 @@ from bpy.props import (
     BoolProperty,
     FloatVectorProperty,
     IntProperty,
-    FloatProperty
+    FloatProperty,
+    EnumProperty
 )
 
 from bpy.types import (
@@ -37,6 +38,7 @@ from bpy.types import (
 
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
 from FLOW.core.mechanisms import updateFromUI
+from FLOW.core.mechanisms import updateSD
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
@@ -256,6 +258,22 @@ class FlowScalarSocket(FlowSocket):
         else:
             return fallback
 
+    def fgetx(self):
+        ''' 
+        if unconnected: should return the value
+        if connected should return the node_id as str
+        '''
+
+        if self.links and self.links[0]:
+            return cache_get(self)
+        else:
+            if self.prop_type == 'int':
+                k = self.prop_int
+            if self.prop_type == 'float':
+                k = self.prop_float
+            return k
+
+
 
 ''' T r e e '''
 
@@ -321,6 +339,19 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
 
     '''
     bl_idname = ""
+
+    # control rate or audio rate features on many Ugens
+    rate_options = [
+        ("AudioRate", ".ar", "", 0),
+        ("KontrolRate", ".kr", "", 1),
+        ("InitRate", ".ir", "", 2)
+    ]
+    sp_rate = EnumProperty(
+        items=rate_options,
+        name="Type of rate",
+        description='audiorate or controlrate',
+        default="AudioRate",
+        update=updateSD)
 
     # expecs similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
     # yes, including parens.

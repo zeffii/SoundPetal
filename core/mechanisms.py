@@ -183,3 +183,16 @@ def updateFromUI(self, context):
     This propagates changes into the dependency graph.
     '''
     updateSD(self.node, context)
+
+
+def serialize(node, *args):
+    arglist = []
+    for arg in args:
+        arglist.append(str(arg))
+    stringified_arglist = ','.join(arglist)
+
+    rate = dict(
+        AudioRate='ar', KontrolRate='kr', InitRate='ir').get(node.sp_rate)
+
+    # return UgenName(parameters), like SinOsc.kr(330, 3, 0, 1)
+    return '{0}.{1}({2})'.format(node.bl_label, rate, stringified_arglist)
