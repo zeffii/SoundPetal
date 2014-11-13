@@ -83,6 +83,10 @@ def make_node_cats():
         ['FlowUVPolygon',       'UV.Polygon'],
     ]
 
+    node_cats["sv_ugen_osc"] = [
+        ['UgenSinOsc',      'SinOsc'],
+    ]
+
     return node_cats
 
 

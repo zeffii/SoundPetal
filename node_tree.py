@@ -314,6 +314,18 @@ class FlowCustomTreeNode(object):
                 flowcache.pop(k)
 
 
+class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
+    '''
+        SoundPetal nodes will behave differently and the interface
+        should be defined some other way than hardcoding individual Ugens.
+
+    '''
+
+    def draw_buttons_ext(self, context, layout):
+        row = layout.row()
+        row.label('yoko!')
+
+
 class FlowNodeCategory(NodeCategory):
     @classmethod
     def poll(cls, context):

@@ -52,6 +52,9 @@ nodes_dict = {
         'unpack_verts',
     ]
 
+    'sc_ugen_osc': [
+        'sin_osc',
+    ]
 
 
 
