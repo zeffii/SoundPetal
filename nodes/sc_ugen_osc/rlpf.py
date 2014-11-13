@@ -20,37 +20,16 @@ import bpy
 from FLOW.node_tree import SoundPetalUgen
 
 
-class UgenSinOsc(SoundPetalUgen):
-    ''' UgenSinOsc '''
-    bl_idname = 'UgenSinOsc'
-    bl_label = 'SinOsc'
-    sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-
-
-class UgenFSinOsc(SoundPetalUgen):
-    ''' UgenFSinOsc '''
-    bl_idname = 'UgenFSinOsc'
-    bl_label = 'FSinOsc'
-    sp_args = "(freq: 440, iphase: 0, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-
-
-class UgenSinOscFB(SoundPetalUgen):
-    ''' UgenSinOscFB '''
-    bl_idname = 'UgenSinOscFB'
-    bl_label = 'SinOscFB'
-    sp_args = "(freq: 440, feedback: 0, mul: 1, add: 0)"
+class UgenRLPF(SoundPetalUgen):
+    bl_idname = 'UgenRLPF'
+    bl_label = 'RLPF'
+    sp_args = "(in: 0, freq: 440, rq: 1, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
 
 
 def register():
-    bpy.utils.register_class(UgenSinOsc)
-    bpy.utils.register_class(UgenFSinOsc)
-    bpy.utils.register_class(UgenSinOscFB)
+    bpy.utils.register_class(UgenRLPF)
 
 
 def unregister():
-    bpy.utils.unregister_class(UgenSinOsc)
-    bpy.utils.unregister_class(UgenFSinOsc)
-    bpy.utils.unregister_class(UgenSinOscFB)
+    bpy.utils.unregister_class(UgenRLPF)

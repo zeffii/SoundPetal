@@ -56,6 +56,7 @@ nodes_dict = {
         'sin_osc',
         'blip',
         'saw_osc',
+        'rlpf',
     ]
 
 
