@@ -259,7 +259,7 @@ class FlowScalarSocket(FlowSocket):
             return fallback
 
     def fgetx(self):
-        ''' 
+        '''
         if unconnected: should return the value
         if connected should return the node_id as str
         '''
@@ -272,7 +272,6 @@ class FlowScalarSocket(FlowSocket):
             if self.prop_type == 'float':
                 k = self.prop_float
             return k
-
 
 
 ''' T r e e '''
@@ -395,6 +394,11 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     def draw_buttons_ext(self, context, layout):
         row = layout.row()
         row.label('yoko!')
+
+    # for most ugens this is enough drawing.. else override.
+    def draw_buttons(self, context, layout):
+        row = layout.row()
+        row.prop(self, 'sp_rate', expand=True)
 
 
 class FlowNodeCategory(NodeCategory):

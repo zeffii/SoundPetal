@@ -23,11 +23,11 @@ from FLOW.core.mechanisms import serialize
 from FLOW.node_tree import SoundPetalUgen
 
 
-class UgenSinOsc(SoundPetalUgen):
-    ''' UgenSinOsc '''
-    bl_idname = 'UgenSinOsc'
-    bl_label = 'SinOsc'
-    sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
+class UgenBlip(SoundPetalUgen):
+    ''' UgenBlip '''
+    bl_idname = 'UgenBlip'
+    bl_label = 'Blip'
+    sp_args = "(freq: 440, numharm: 200, mul: 1, add: 0)"
 
     sp_rate = SoundPetalUgen.sp_rate
 
@@ -36,17 +36,17 @@ class UgenSinOsc(SoundPetalUgen):
             return
 
         freq = self.inputs['freq'].fgetx()
-        phase = self.inputs['phase'].fgetx()
+        numharm = self.inputs['numharm'].fgetx()
         mul = self.inputs['mul'].fgetx()
         add = self.inputs['add'].fgetx()
 
-        result = serialize(self, freq, phase, mul, add)
+        result = serialize(self, freq, numharm, mul, add)
         self.outputs[0].fset(result)
 
 
 def register():
-    bpy.utils.register_class(UgenSinOsc)
+    bpy.utils.register_class(UgenBlip)
 
 
 def unregister():
-    bpy.utils.unregister_class(UgenSinOsc)
+    bpy.utils.unregister_class(UgenBlip)

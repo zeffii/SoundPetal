@@ -54,6 +54,7 @@ nodes_dict = {
 
     'sc_ugen_osc': [
         'sin_osc',
+        'blip',
     ]
 
 
