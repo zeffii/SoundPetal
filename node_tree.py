@@ -327,7 +327,16 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     sp_args = StringProperty()
 
     def init(self, context):
+        self.outputs.new("FlowTextSocket", 'Out')
         self.sp_init(context)
+
+    def convert(self, in_str):
+        m = -3000
+        try:
+            m = float(in_str)
+        except ValueError:
+            print("Not a float")
+        return m
 
     def sp_init(self, context):
         if not self.sp_args:
@@ -347,6 +356,9 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             argname, argvalue = arg.split(':')
             argname = argname.strip()
             argvalue = argvalue.strip()
+            s = self.inputs.new("FlowScalarSocket", argname)
+            s.prop_type = 'float'
+            s.prop_float = self.convert(argvalue)
             print(argname, argvalue)
 
     def draw_buttons_ext(self, context, layout):

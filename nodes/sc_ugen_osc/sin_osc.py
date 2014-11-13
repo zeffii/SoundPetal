@@ -32,12 +32,6 @@ class UgenSinOsc(SoundPetalUgen):
     bl_label = 'SinOsc Ugen'
     sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
 
-    # def init(self, context):
-    #     self.inputs.new("FlowScalarSocket", "props")
-    #     # self.inputs.new("FlowScalarSocket", "num_sides")
-    #     # self.outputs.new("FlowArraySocket", "verts")
-    #     self.outputs.new("FlowTextSocket", "eval")
-
     def draw_buttons(self, context, layout):
         # row = layout.row()
         # row.prop(self, 'axis', expand=True)
@@ -48,6 +42,8 @@ class UgenSinOsc(SoundPetalUgen):
         # ns = self.inputs['num_sides'].fget2()
         # verts, faces = make_geometry(self, s, ns)
         # self.outputs[0].fset(verts)
+        for i in self.inputs:
+            print(i.name)
         self.outputs[0].fset("SinOsc(300, 2, 3)")
 
 
