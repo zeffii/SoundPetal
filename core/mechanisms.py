@@ -141,9 +141,10 @@ def updateFromUI(self, context):
     updateSD(self.node, context)
 
 
-def serialize(node, *args):
+def serialize(node):
     arglist = []
-    for arg in args:
+    for socket in node.inputs:
+        arg = socket.fgetx()
         arglist.append(str(arg))
     stringified_arglist = ','.join(arglist)
 

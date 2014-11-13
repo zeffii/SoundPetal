@@ -35,12 +35,7 @@ class UgenBlip(SoundPetalUgen):
         if not len(self.inputs) == 4:
             return
 
-        freq = self.inputs['freq'].fgetx()
-        numharm = self.inputs['numharm'].fgetx()
-        mul = self.inputs['mul'].fgetx()
-        add = self.inputs['add'].fgetx()
-
-        result = serialize(self, freq, numharm, mul, add)
+        result = serialize(self)
         self.outputs[0].fset(result)
 
 

@@ -86,6 +86,7 @@ def make_node_cats():
     node_cats["sv_ugen_osc"] = [
         ['UgenSinOsc',      'SinOsc'],
         ['UgenBlip',        'Blip'],
+        ['UgenSawOsc',      'SawOsc'],
     ]
 
     return node_cats
