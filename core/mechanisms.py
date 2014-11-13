@@ -86,50 +86,6 @@ def prototype_cascade(ng, apex):
         return L
 
 
-# def cascading_trigger(context, downstream_nodes):
-#     ng = context.space_data.node_tree
-
-#     touched_links = []
-#     touched = touched_links.append
-
-#     DEBUG_MODE = True  # from settings
-#     if DEBUG_MODE:
-#         print('-----------from:', downstream_nodes)
-
-#     # assume a-cyclic
-#     major_counter = 0
-#     # last_node = None
-#     while(True):
-#         if major_counter >= len(ng.links):
-#             break
-
-#         current_downstream = set(downstream_nodes)
-#         downstream_nodes = set()
-#         for trigger_node in current_downstream:
-#             for link in ng.links:
-#                 if not link.is_valid:
-#                     break
-#                 if link in touched_links:
-#                     continue
-
-#                 if link.from_node == trigger_node:
-#                     if DEBUG_MODE:
-#                         msg = 'calling {name}\'s .process()'
-#                         print(msg.format(name=link.to_node.name))
-
-#                     link.to_node.process()
-#                     downstream_nodes.add(link.to_node)
-
-#                 elif link.to_node == trigger_node:
-#                     pass
-#                 else:
-#                     continue
-
-#                 touched(link)
-
-#         major_counter += 1
-
-
 def updateSD(self, context):
     '''
     Update Self and Downstream. Whenever a property has this function
