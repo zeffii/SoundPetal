@@ -90,6 +90,8 @@ def make_node_cats():
         ['UgenBlip',        'Blip'],
         ['UgenSawOsc',      'SawOsc'],
         ['UgenRLPF',        'RLPF'],
+        ['UgenXLine',       'XLine'],
+        ['UgenLine',        'Line'],
     ]
 
     return node_cats

@@ -57,6 +57,7 @@ nodes_dict = {
         'blip',
         'saw_osc',
         'rlpf',
+        'line',
     ]
 
 
