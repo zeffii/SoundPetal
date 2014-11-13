@@ -388,6 +388,9 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             argname = argname.strip()
             argvalue = argvalue.strip()
             s = self.inputs.new("FlowScalarSocket", argname)
+            # todo: if argname in {'in, out'}, should be an int slider
+            # todo: if (freq, in, *)
+            # should accept array too (automatic multichannel expansion)
             s.prop_type = 'float'
             s.prop_float = self.convert(argvalue)
             print(argname, argvalue)
