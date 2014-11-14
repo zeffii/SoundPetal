@@ -361,12 +361,12 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         self.outputs.new("FlowTextSocket", 'Out')
         self.sp_init(context)
 
-    def convert(self, in_str):
+    def convert(self, in_str, to_type):
         m = -3000
         try:
-            m = float(in_str)
+            m = to_type(in_str)
         except ValueError:
-            print("Not a float")
+            print("Not a", to_type)
         return m
 
     def sp_init(self, context):
@@ -388,11 +388,18 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             argname = argname.strip()
             argvalue = argvalue.strip()
             s = self.inputs.new("FlowScalarSocket", argname)
-            # todo: if argname in {'in, out'}, should be an int slider
+
+            if argname in {'in', 'out', 'doneAction'}:
+                # should be an int slider, this list might grow
+                s.prop_type = 'int'
+                s.prop_int = self.convert(argvalue, int)
+            else:
+                s.prop_type = 'float'
+                s.prop_float = self.convert(argvalue, float)
+
             # todo: if (freq, in, *)
             # should accept array too (automatic multichannel expansion)
-            s.prop_type = 'float'
-            s.prop_float = self.convert(argvalue)
+
             print(argname, argvalue)
 
     def draw_buttons_ext(self, context, layout):
