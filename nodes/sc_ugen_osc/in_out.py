@@ -34,11 +34,20 @@ class UgenOut(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate2
 
 
+class UgenSplay(SoundPetalUgen):
+    bl_idname = 'UgenSplay'
+    bl_label = 'Splay'
+    sp_args = "(inArray, spread: 1, level: 1, center: 0, levelComp: true)"
+    sp_rate = SoundPetalUgen.sp_rate2
+
+
 def register():
     bpy.utils.register_class(UgenIn)
     bpy.utils.register_class(UgenOut)
+    bpy.utils.register_class(UgenSplay)
 
 
 def unregister():
     bpy.utils.unregister_class(UgenIn)
     bpy.utils.unregister_class(UgenOut)
+    bpy.utils.unregister_class(UgenSplay)

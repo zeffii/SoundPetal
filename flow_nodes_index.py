@@ -94,6 +94,7 @@ def make_node_cats():
         ['UgenLine',        'Line'],
         ['UgenIn',          'In'],
         ['UgenOut',         'Out'],
+        ['UgenSplay',       'Splay'],
     ]
 
     return node_cats
