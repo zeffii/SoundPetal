@@ -213,6 +213,9 @@ class FlowScalarSocket(FlowSocket):
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
 
+    def draw_color(self, context, node):
+        return self.socket_col
+
     def draw(self, context, layout, node, text):
         if self.is_output and self.prop_name:
             row = layout.row()
@@ -266,7 +269,7 @@ class FlowScalarSocket(FlowSocket):
             return fallback
 
 
-class FlowTransferSocket(FlowScalarSocket):
+class FlowTransferSocket(FlowSocket):
     '''Transfer Any Type: Use primarily for everything SoundPetal'''
     bl_idname = "FlowTransferSocket"
     bl_label = "Transfer Socket"
@@ -278,6 +281,35 @@ class FlowTransferSocket(FlowScalarSocket):
 
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_transfer_col)
+
+    def draw_color(self, context, node):
+        return self.socket_col
+
+    def draw(self, context, layout, node, text):
+        if self.is_output and self.prop_name:
+            row = layout.row()
+            row.prop(node, self.prop_name)
+        else:
+            if self.is_linked:
+                layout.label(text)
+                return
+
+            if self.prop_type:
+                row = layout.row()
+                if self.prop_type == 'int':
+                    row.prop(self, 'prop_int', text=self.name)
+                if self.prop_type == 'float':
+                    row.prop(self, 'prop_float', text=self.name)
+                if self.prop_type == 'bool':
+                    row.prop(self, 'prop_bool', text=self.name)
+
+                return
+
+            if not self.prop_name:
+                layout.label(text)
+                return
+
+            layout.prop(node, self.prop_name)
 
     def fgetx(self):
         '''
