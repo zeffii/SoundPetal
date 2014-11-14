@@ -471,8 +471,17 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         if not len(self.inputs) == (self.sp_args.count(',') + 1):
             return
 
-        result = serialize_inputs(self)
-        self.outputs[0].fset(result)
+        variable_name = self.get_varname()
+        self.outputs[0].fset(self.name.replace('.', '_'))
+        print(self.get_args())
+
+    def get_args(self):
+        varname = self.get_varname()
+        args = serialize_inputs(self)
+        return 'var {0} = {1};'.format(varname, args)
+
+    def get_varname(self):
+        return self.name.replace('.', '_')
 
 
 class FlowNodeCategory(NodeCategory):
