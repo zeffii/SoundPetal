@@ -274,10 +274,13 @@ class FlowScalarSocket(FlowSocket):
             return cache_get(self)
         else:
             if self.prop_type == 'int':
-                k = self.prop_int
+                return self.prop_int
             if self.prop_type == 'float':
-                k = self.prop_float
-            return k
+                return self.prop_float
+            if self.prop_type == 'bool':
+                return self.prop_bool
+
+            print(self, self.node.name, 'failed to implement fgetx')
 
 
 ''' T r e e '''

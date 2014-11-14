@@ -152,7 +152,7 @@ def serialize_inputs(node):
         if isinstance(arg, bool):
             arg = str(arg).lower()
         arglist.append(socket.name + ': ' + str(arg))
-    stringified_arglist = ','.join(arglist)
+    stringified_arglist = ', '.join(arglist)
 
     rate = audiorate_dict.get(node.sp_rate)
     return '{0}.{1}({2})'.format(node.bl_label, rate, stringified_arglist)
