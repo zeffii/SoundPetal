@@ -181,7 +181,7 @@ def args_to_sockets(node, chopped_args):
                     argvalue = {'true': True, 'false': False}.get(argvalue)
 
                 # currently this is the most flexible.
-                s = node.inputs.new("FlowScalarSocket", argname)
+                s = node.inputs.new("FlowTransferSocket", argname)
 
                 if is_boolean:
                     s.prop_type = 'bool'
@@ -197,4 +197,4 @@ def args_to_sockets(node, chopped_args):
             else:
                 # this is 'somearg'
                 argname = arg.strip()
-                s = node.inputs.new("FlowScalarSocket", argname)
+                s = node.inputs.new("FlowTransferSocket", argname)

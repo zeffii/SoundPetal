@@ -50,6 +50,7 @@ fl_scalar_col = (.69, .9, .69, 1.0)
 fl_text_col = (.2, .6, .5, 1.0)
 fl_sink_col = (.0, .0, .0, 1.0)
 fl_geom_col = (.99, .3, .3, 1.0)
+fl_transfer_col = (0.7, 0.9, 1.0, 1.0)
 
 
 class FlowSocket(NodeSocket):
@@ -264,12 +265,25 @@ class FlowScalarSocket(FlowSocket):
         else:
             return fallback
 
+
+class FlowTransferSocket(FlowScalarSocket):
+    '''Transfer Any Type: Use primarily for everything SoundPetal'''
+    bl_idname = "FlowTransferSocket"
+    bl_label = "Transfer Socket"
+
+    prop_int = IntProperty(update=updateFromUI)
+    prop_float = FloatProperty(update=updateFromUI)
+    prop_bool = BoolProperty(update=updateFromUI)
+    prop_type = StringProperty()
+
+    prop_name = StringProperty(default='')
+    socket_col = FloatVectorProperty(size=4, default=fl_transfer_col)
+
     def fgetx(self):
         '''
         if unconnected: should return the value
         if connected should return the node_id as str
         '''
-
         if self.links and self.links[0]:
             return cache_get(self)
         else:
@@ -378,7 +392,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     sp_args = StringProperty()
 
     def init(self, context):
-        self.outputs.new("FlowTextSocket", 'Out')
+        self.outputs.new("FlowTransferSocket", 'Out')
         self.sp_init(context)
 
     def convert(self, in_str, to_type):
@@ -444,7 +458,8 @@ tree_classes = [
     FlowTextSocket,
     FlowSinkHoleSocket,
     FlowGeometrySocket,
-    FlowScalarSocket
+    FlowScalarSocket,
+    FlowTransferSocket,
 ]
 
 
