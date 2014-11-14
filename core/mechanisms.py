@@ -19,6 +19,8 @@
 
 from collections import OrderedDict, defaultdict
 
+audiorate_dict = dict(AudioRate='ar', KontrolRate='kr', InitRate='ir')
+
 
 def get_apex(ng):
     to_nodes = {link.to_node for link in ng.links}
@@ -141,17 +143,58 @@ def updateFromUI(self, context):
     updateSD(self.node, context)
 
 
-def serialize(node):
+def serialize_inputs(node):
     arglist = []
     for socket in node.inputs:
         arg = socket.fgetx()
         if isinstance(arg, float):
             arg = round(arg, 6)
-        arglist.append(str(arg))
+        if isinstance(arg, bool):
+            arg = str(arg).lower()
+        arglist.append(socket.name + ': ' + str(arg))
     stringified_arglist = ','.join(arglist)
 
-    rate = dict(
-        AudioRate='ar', KontrolRate='kr', InitRate='ir').get(node.sp_rate)
-
-    # return UgenName(parameters), like SinOsc.kr(330, 3, 0, 1)
+    rate = audiorate_dict.get(node.sp_rate)
     return '{0}.{1}({2})'.format(node.bl_label, rate, stringified_arglist)
+
+
+def args_to_sockets(node, chopped_args):
+    ''' to be used by sp_init to create sockets from sp_args'''
+
+    if chopped_args:
+        if not ',' in chopped_args:
+            return
+        args = chopped_args.split(',')
+        for _arg in args:
+            arg = _arg.strip()
+
+            is_boolean = False
+
+            if ':' in arg:
+                # this is  'somearg: somevariable'
+                argname, argvalue = arg.split(':')
+                argname = argname.strip()
+                argvalue = argvalue.strip()
+
+                if argvalue in {'true', 'false'}:
+                    is_boolean = True
+                    argvalue = {'true': True, 'false': False}.get(argvalue)
+
+                # currently this is the most flexible.
+                s = node.inputs.new("FlowScalarSocket", argname)
+
+                if is_boolean:
+                    s.prop_type = 'bool'
+                    s.prop_int = argvalue
+
+                elif argname in {'in', 'out', 'doneAction'}:
+                    s.prop_type = 'int'
+                    s.prop_int = node.convert(argvalue, int)
+                else:
+                    s.prop_type = 'float'
+                    s.prop_float = node.convert(argvalue, float)
+
+            else:
+                # this is 'somearg'
+                argname = arg.strip()
+                s = node.inputs.new("FlowScalarSocket", argname)

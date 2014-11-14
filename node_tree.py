@@ -39,7 +39,8 @@ from bpy.types import (
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
 from FLOW.core.mechanisms import updateFromUI
 from FLOW.core.mechanisms import updateSD
-from FLOW.core.mechanisms import serialize
+from FLOW.core.mechanisms import serialize_inputs
+from FLOW.core.mechanisms import args_to_sockets
 from nodeitems_utils import NodeCategory, NodeItem
 
 fl_matrix_col = (.2, .8, .8, 1.0)
@@ -205,6 +206,7 @@ class FlowScalarSocket(FlowSocket):
 
     prop_int = IntProperty(update=updateFromUI)
     prop_float = FloatProperty(update=updateFromUI)
+    prop_bool = BoolProperty(update=updateFromUI)
     prop_type = StringProperty()
 
     prop_name = StringProperty(default='')
@@ -225,6 +227,9 @@ class FlowScalarSocket(FlowSocket):
                     row.prop(self, 'prop_int', text=self.name)
                 if self.prop_type == 'float':
                     row.prop(self, 'prop_float', text=self.name)
+                if self.prop_type == 'bool':
+                    row.prop(self, 'prop_bool', text=self.name)
+
                 return
 
             if not self.prop_name:
@@ -395,26 +400,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             print(self.bl_idname, ': error, args unparsable, wrap in parens')
             return
 
-        if ':' in args:
-            # means we have an argument list like: (arg1:0, arg2:0)
-            for arg in args.split(','):
-                argname, argvalue = arg.split(':')
-                argname = argname.strip()
-                argvalue = argvalue.strip()
-                s = self.inputs.new("FlowScalarSocket", argname)
-
-                if argname in {'in', 'out', 'doneAction'}:
-                    s.prop_type = 'int'
-                    s.prop_int = self.convert(argvalue, int)
-                else:
-                    s.prop_type = 'float'
-                    s.prop_float = self.convert(argvalue, float)
-
-                # should accept array too (automatic multichannel expansion)
-                print(argname, argvalue)
-        else:
-            # means we have something like (bus, channelsArray)
-            pass
+        args_to_sockets(self, args)
 
     def draw_buttons_ext(self, context, layout):
         row = layout.row()
@@ -433,10 +419,10 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             return
 
         # if inputs does not match number of args, return early.
-        if not len(self.inputs) == self.sp_args.count(':'):
+        if not len(self.inputs) == (self.sp_args.count(',') + 1):
             return
 
-        result = serialize(self)
+        result = serialize_inputs(self)
         self.outputs[0].fset(result)
 
 
