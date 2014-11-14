@@ -346,15 +346,27 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         ("KontrolRate", ".kr", "", 1),
         ("InitRate", ".ir", "", 2)
     ]
+
+    rate_options2 = [
+        ("AudioRate", ".ar", "", 0),
+        ("KontrolRate", ".kr", "", 1),
+    ]
+
     sp_rate = EnumProperty(
         items=rate_options,
+        name="Type of rate",
+        description='audiorate, controlrate and initrate',
+        default="AudioRate",
+        update=updateSD)
+
+    sp_rate2 = EnumProperty(
+        items=rate_options2,
         name="Type of rate",
         description='audiorate or controlrate',
         default="AudioRate",
         update=updateSD)
 
     # expecs similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
-    # yes, including parens.
     sp_args = StringProperty()
 
     def init(self, context):
@@ -375,6 +387,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             msg = error_str.format(self.bl_idname)
             return
 
+        # remove parents.
         args = self.sp_args
         if args[0] == '(' and args[-1] == ')':
             args = args[1:-1]
@@ -382,25 +395,26 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             print(self.bl_idname, ': error, args unparsable, wrap in parens')
             return
 
-        # no parens, should parse.
-        for arg in args.split(','):
-            argname, argvalue = arg.split(':')
-            argname = argname.strip()
-            argvalue = argvalue.strip()
-            s = self.inputs.new("FlowScalarSocket", argname)
+        if ':' in args:
+            # means we have an argument list like: (arg1:0, arg2:0)
+            for arg in args.split(','):
+                argname, argvalue = arg.split(':')
+                argname = argname.strip()
+                argvalue = argvalue.strip()
+                s = self.inputs.new("FlowScalarSocket", argname)
 
-            if argname in {'in', 'out', 'doneAction'}:
-                # should be an int slider, this list might grow
-                s.prop_type = 'int'
-                s.prop_int = self.convert(argvalue, int)
-            else:
-                s.prop_type = 'float'
-                s.prop_float = self.convert(argvalue, float)
+                if argname in {'in', 'out', 'doneAction'}:
+                    s.prop_type = 'int'
+                    s.prop_int = self.convert(argvalue, int)
+                else:
+                    s.prop_type = 'float'
+                    s.prop_float = self.convert(argvalue, float)
 
-            # todo: if (freq, in, *)
-            # should accept array too (automatic multichannel expansion)
-
-            print(argname, argvalue)
+                # should accept array too (automatic multichannel expansion)
+                print(argname, argvalue)
+        else:
+            # means we have something like (bus, channelsArray)
+            pass
 
     def draw_buttons_ext(self, context, layout):
         row = layout.row()

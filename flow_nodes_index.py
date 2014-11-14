@@ -92,6 +92,8 @@ def make_node_cats():
         ['UgenRLPF',        'RLPF'],
         ['UgenXLine',       'XLine'],
         ['UgenLine',        'Line'],
+        ['UgenIn',          'In'],
+        ['UgenOut',         'Out'],
     ]
 
     return node_cats

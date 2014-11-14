@@ -58,6 +58,7 @@ nodes_dict = {
         'saw_osc',
         'rlpf',
         'line',
+        'in_out',
     ]
 
 
