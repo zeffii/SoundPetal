@@ -145,6 +145,8 @@ def serialize(node):
     arglist = []
     for socket in node.inputs:
         arg = socket.fgetx()
+        if isinstance(arg, float):
+            arg = round(arg, 6)
         arglist.append(str(arg))
     stringified_arglist = ','.join(arglist)
 
