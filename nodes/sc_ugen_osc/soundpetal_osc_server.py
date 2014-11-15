@@ -121,7 +121,7 @@ def send_synthdef_trigger():
     if osc_msg:
 
         msg = osc_msg(address='/flow/triggerSynth')
-        msg.add_arg(r'\tone')
+        msg.add_arg('tone')
         msg = msg.build()
 
         client = osc_statemachine.get('client')

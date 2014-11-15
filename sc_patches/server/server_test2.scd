@@ -21,7 +21,8 @@ OSCdef.new(
 	\triggerSynth, {
         arg msg, time, addr;
         // ~synth = Synth.new(msg[1]);
-        ~synth = Synth.new(\tone, [\gate, 1]);
+        // ~synth = Synth.new(\tone, [\gate, 1]);
+        ~synth = Synth.new(msg[1], [\gate, 1]);
     }, '/flow/triggerSynth'
 ))
 
