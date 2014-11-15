@@ -83,7 +83,6 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
     def event_dispatcher(self, context, type_op):
         if type_op == 'start':
             context.node.active = True
-            # start osc server.
             status = osc_statemachine.get('status')
             if status in {FOUND, DISABLED}:
                 print('opening server comms')
@@ -92,7 +91,7 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
                 print('pythonosc module is needed but not found')
 
         if type_op == 'end':
-            # doesn't end OSC listener.
+            # doesn't end OSC listener, merely disables UI for now
             osc_statemachine['status'] == DISABLED
             context.node.active = False
 
@@ -131,7 +130,6 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
             if not osc_statemachine['status'] == RUNNING:
                 return
             else:
-                print('sending synthdef to operator')
                 send_synthdef_str(default_synthdef)
 
     def execute(self, context):
@@ -152,13 +150,10 @@ class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
     bl_idname = 'SoundPetalOscServer'
     bl_label = 'SP OSC Server'
 
-    draw_to_host = BoolProperty(
-        description="switch it on and off",
-        default=0, name='draw_to_host')
-
     active = BoolProperty(
         description="current state",
-        default=0, name='comms on')
+        default=0,
+        name='comms on')
 
     def init(self, context):
         pass
@@ -167,7 +162,7 @@ class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
         col = layout.column()
         tstr = 'start' if not self.active else 'end'
         col.operator('wm.spflow_osc_server', text=tstr).mode = tstr
-        
+
         # show some controls when server is started
         if tstr == 'end':
             col.operator('wm.spflow_eval_synthdef', text='send').mode = 'send'
