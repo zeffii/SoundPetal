@@ -75,13 +75,11 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
     bl_label = "start n stop osc server"
 
     mode = StringProperty(default='')
-    # node_name = StringProperty(default='')
-    # node_group = StringProperty(default='')
 
     def event_dispatcher(self, context, type_op):
-        print(dir(context))
+        ntree = context.space_data.node_tree
         if type_op == 'start':
-            # context.node.active = True
+            ntree.osc_state = True
             status = osc_statemachine.get('status')
             if status in {FOUND, DISABLED}:
                 print('opening server comms')
@@ -92,13 +90,9 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
         if type_op == 'end':
             # doesn't end OSC listener, merely disables UI for now
             osc_statemachine['status'] == DISABLED
-            # context.node.active = False
+            ntree.osc_state = False
 
     def execute(self, context):
-        # n = context.node
-        print(dir(context))
-        # self.node_name = context.node.name
-        # self.node_group = context.node.id_data.name
         self.event_dispatcher(context, self.mode)
         return {'RUNNING_MODAL'}
 
@@ -148,8 +142,6 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
     bl_label = "start n stop osc server"
 
     mode = StringProperty(default='')
-    # node_name = StringProperty(default='')
-    # node_group = StringProperty(default='')
 
     def event_dispatcher(self, context, type_op):
         if not osc_statemachine['status'] == RUNNING:
@@ -163,9 +155,6 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
             send_synthdef_free()
 
     def execute(self, context):
-        # n = context.node
-        # self.node_name = context.node.name
-        # self.node_group = context.node.id_data.name
         self.event_dispatcher(context, self.mode)
         return {'RUNNING_MODAL'}
 
@@ -182,11 +171,6 @@ class SoundPetalOSCpanel(bpy.types.Panel):
     bl_options = {'DEFAULT_CLOSED'}
     use_pin = True
 
-    active = BoolProperty(
-        description="current state",
-        default=0,
-        name='comms on')
-
     @classmethod
     def poll(cls, context):
         try:
@@ -195,9 +179,11 @@ class SoundPetalOSCpanel(bpy.types.Panel):
             return False
 
     def draw(self, context):
+        ntree = context.space_data.node_tree
+
         layout = self.layout
         col = layout.column()
-        tstr = 'start' if not self.active else 'end'
+        tstr = 'start' if not ntree.osc_state else 'end'
         col.operator('wm.spflow_osc_server', text=tstr).mode = tstr
 
         # show some controls when server is started
@@ -208,6 +194,11 @@ class SoundPetalOSCpanel(bpy.types.Panel):
 
 
 def register():
+    bpy.types.FlowCustomTreeType.osc_state = BoolProperty(
+        default=False,
+        description='toggle used to indicate state of osc client and hide buttons'
+        )
+
     bpy.utils.register_class(SoundPetalOscServerOps)
     bpy.utils.register_class(SoundPetalSendSynthdef)
     bpy.utils.register_class(SoundPetalOSCpanel)
@@ -217,3 +208,4 @@ def unregister():
     bpy.utils.unregister_class(SoundPetalOSCpanel)
     bpy.utils.unregister_class(SoundPetalSendSynthdef)
     bpy.utils.unregister_class(SoundPetalOscServerOps)
+    del bpy.types.FlowCustomTreeType.osc_state
