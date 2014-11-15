@@ -19,8 +19,8 @@
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty, StringProperty, FloatProperty
 
-from FLOW.core.mechanisms import updateSD
-from FLOW.node_tree import FlowCustomTreeNode
+# from FLOW.core.mechanisms import updateSD
+# from FLOW.node_tree import FlowCustomTreeNode
 
 FOUND = 1
 RUNNING = 3
@@ -75,12 +75,13 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
     bl_label = "start n stop osc server"
 
     mode = StringProperty(default='')
-    node_name = StringProperty(default='')
-    node_group = StringProperty(default='')
+    # node_name = StringProperty(default='')
+    # node_group = StringProperty(default='')
 
     def event_dispatcher(self, context, type_op):
+        print(dir(context))
         if type_op == 'start':
-            context.node.active = True
+            # context.node.active = True
             status = osc_statemachine.get('status')
             if status in {FOUND, DISABLED}:
                 print('opening server comms')
@@ -91,12 +92,13 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
         if type_op == 'end':
             # doesn't end OSC listener, merely disables UI for now
             osc_statemachine['status'] == DISABLED
-            context.node.active = False
+            # context.node.active = False
 
     def execute(self, context):
-        n = context.node
-        self.node_name = context.node.name
-        self.node_group = context.node.id_data.name
+        # n = context.node
+        print(dir(context))
+        # self.node_name = context.node.name
+        # self.node_group = context.node.id_data.name
         self.event_dispatcher(context, self.mode)
         return {'RUNNING_MODAL'}
 
@@ -107,7 +109,6 @@ def send_synthdef_str(_str_):
     if osc_msg:
 
         msg = osc_msg(address='/flow/evalSynthDef')
-        # bytes = str.encode(_str_)
         msg.add_arg(_str_)
         msg = msg.build()
 
@@ -147,8 +148,8 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
     bl_label = "start n stop osc server"
 
     mode = StringProperty(default='')
-    node_name = StringProperty(default='')
-    node_group = StringProperty(default='')
+    # node_name = StringProperty(default='')
+    # node_group = StringProperty(default='')
 
     def event_dispatcher(self, context, type_op):
         if not osc_statemachine['status'] == RUNNING:
@@ -162,32 +163,39 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
             send_synthdef_free()
 
     def execute(self, context):
-        n = context.node
-        self.node_name = context.node.name
-        self.node_group = context.node.id_data.name
+        # n = context.node
+        # self.node_name = context.node.name
+        # self.node_group = context.node.id_data.name
         self.event_dispatcher(context, self.mode)
         return {'RUNNING_MODAL'}
 
 
-class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
+class SoundPetalOSCpanel(bpy.types.Panel):
     '''
-    SoundPetalOscServer
     : intended to handle io of OSC messages
-
     '''
-
-    bl_idname = 'SoundPetalOscServer'
-    bl_label = 'SP OSC Server'
+    bl_idname = "SoundPetalOSCpanel"
+    bl_label = "SoundPetal OSC panel"
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = 'FLOW'
+    bl_options = {'DEFAULT_CLOSED'}
+    use_pin = True
 
     active = BoolProperty(
         description="current state",
         default=0,
         name='comms on')
 
-    def init(self, context):
-        pass
+    @classmethod
+    def poll(cls, context):
+        try:
+            return context.space_data.node_tree.bl_idname == 'FlowCustomTreeType'
+        except:
+            return False
 
-    def draw_buttons(self, context, layout):
+    def draw(self, context):
+        layout = self.layout
         col = layout.column()
         tstr = 'start' if not self.active else 'end'
         col.operator('wm.spflow_osc_server', text=tstr).mode = tstr
@@ -198,17 +206,14 @@ class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
             col.operator('wm.spflow_eval_synthdef', text='trigger').mode = 'trigger'
             col.operator('wm.spflow_eval_synthdef', text='free').mode = 'free'
 
-    def process(self):
-        pass
-
 
 def register():
-    bpy.utils.register_class(SoundPetalOscServer)
     bpy.utils.register_class(SoundPetalOscServerOps)
     bpy.utils.register_class(SoundPetalSendSynthdef)
+    bpy.utils.register_class(SoundPetalOSCpanel)
 
 
 def unregister():
-    bpy.utils.unregister_class(SoundPetalOscServer)
-    bpy.utils.unregister_class(SoundPetalOscServerOps)
+    bpy.utils.unregister_class(SoundPetalOSCpanel)
     bpy.utils.unregister_class(SoundPetalSendSynthdef)
+    bpy.utils.unregister_class(SoundPetalOscServerOps)

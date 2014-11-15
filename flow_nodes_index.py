@@ -95,7 +95,7 @@ def make_node_cats():
         ['UgenIn',          'In'],
         ['UgenOut',         'Out'],
         ['UgenSplay',       'Splay'],
-        ['SoundPetalOscServer', 'SP OscServer'],
+        # ['SoundPetalOscServer', 'SP OscServer'],
     ]
 
     return node_cats

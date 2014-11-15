@@ -47,7 +47,7 @@ if FLOW:
     node_list = []
     core_modules = ["flow_cache", "mechanisms"]
     root_modules = ["node_tree", "flow_nodes_index"]
-    util_modules = ['fl_bmesh_utils', 'fl_proto_util']
+    util_modules = ['fl_bmesh_utils', 'fl_proto_util', 'osc_panel']
     ui_modules = []
 
     # alias alias alias alias
@@ -123,8 +123,6 @@ def FLOW_modules(perform):
 
 
 if "bpy" in locals():
-    # this handles only existing nodes,
-    # new nodes are not yet detected
     importlib.reload(nodes)
 
     for im in all_registerables():
