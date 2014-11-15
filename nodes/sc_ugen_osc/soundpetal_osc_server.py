@@ -167,7 +167,10 @@ class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
         col = layout.column()
         tstr = 'start' if not self.active else 'end'
         col.operator('wm.spflow_osc_server', text=tstr).mode = tstr
-        col.operator('wm.spflow_eval_synthdef', text='send').mode = 'send'
+        
+        # show some controls when server is started
+        if tstr == 'end':
+            col.operator('wm.spflow_eval_synthdef', text='send').mode = 'send'
 
     def process(self):
         pass
