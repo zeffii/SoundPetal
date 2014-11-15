@@ -39,12 +39,11 @@ except:
 osc_statemachine = {'status': STATUS}
 
 
-default_synthdef = r"""
-(
+default_synthdef = r"""(
 SynthDef.new(\tone, {
-    arg freq=40, nharm=12, detune=0.2, gate=0,
-    pan=0, amp=1, out=0;
+    arg freq=40, nharm=12, detune=0.2, gate=0, pan=0, amp=1, out=0;
     var sig, env;
+
     env = EnvGen.kr(Env.adsr(0.05, 0.1, 0.5, 3), gate);
     sig = Blip.ar(
         freq *
@@ -57,8 +56,7 @@ SynthDef.new(\tone, {
     sig = sig * env * amp;
     Out.ar(out, sig);
 }).add
-)
-"""
+)"""
 
 
 def start_server_comms():
@@ -103,16 +101,43 @@ class SoundPetalOscServerOps(bpy.types.Operator, object):
         return {'RUNNING_MODAL'}
 
 
+# verbose for now
 def send_synthdef_str(_str_):
     osc_msg = osc_statemachine.get('osc_msg')
     if osc_msg:
 
         msg = osc_msg(address='/flow/evalSynthDef')
+        # bytes = str.encode(_str_)
         msg.add_arg(_str_)
         msg = msg.build()
 
         client = osc_statemachine.get('client')
-        print('sending synthdef over osc')
+        print('sending synthdef')
+        client.send(msg)
+
+
+def send_synthdef_trigger():
+    osc_msg = osc_statemachine.get('osc_msg')
+    if osc_msg:
+
+        msg = osc_msg(address='/flow/triggerSynth')
+        msg.add_arg(r'\tone')
+        msg = msg.build()
+
+        client = osc_statemachine.get('client')
+        print('sending synthdef trigger')
+        client.send(msg)
+
+
+def send_synthdef_free():
+    osc_msg = osc_statemachine.get('osc_msg')
+    if osc_msg:
+        msg = osc_msg(address='/flow/freeSynth')
+        msg.add_arg('free')
+        msg = msg.build()
+
+        client = osc_statemachine.get('client')
+        print('sending free.synth')
         client.send(msg)
 
 
@@ -126,11 +151,15 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
     node_group = StringProperty(default='')
 
     def event_dispatcher(self, context, type_op):
+        if not osc_statemachine['status'] == RUNNING:
+            return
+
         if type_op == 'send':
-            if not osc_statemachine['status'] == RUNNING:
-                return
-            else:
-                send_synthdef_str(default_synthdef)
+            send_synthdef_str(default_synthdef)
+        if type_op == 'trigger':
+            send_synthdef_trigger()
+        if type_op == 'free':
+            send_synthdef_free()
 
     def execute(self, context):
         n = context.node
@@ -166,6 +195,8 @@ class SoundPetalOscServer(bpy.types.Node, FlowCustomTreeNode):
         # show some controls when server is started
         if tstr == 'end':
             col.operator('wm.spflow_eval_synthdef', text='send').mode = 'send'
+            col.operator('wm.spflow_eval_synthdef', text='trigger').mode = 'trigger'
+            col.operator('wm.spflow_eval_synthdef', text='free').mode = 'free'
 
     def process(self):
         pass
