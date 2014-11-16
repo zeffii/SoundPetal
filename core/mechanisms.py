@@ -18,6 +18,7 @@
 # ##### END GPL LICENSE BLOCK #####
 
 from collections import OrderedDict, defaultdict
+from FLOW.core.variables_cache import global_name
 
 audiorate_dict = dict(AudioRate='ar', KontrolRate='kr', InitRate='ir')
 
@@ -146,16 +147,8 @@ def updateFromUI(self, context):
 def serialize_inputs(node):
     arglist = []
     for socket in node.inputs:
-        arg = socket.fgetx()
-        if isinstance(arg, float):
-            arg = round(arg, 6)
-        if isinstance(arg, bool):
-            arg = str(arg).lower()
-        # if isinstance(arg, list) and (len(arg) == 0):
-        #     # arg = socket.links[0].from_node.name
-        #     print('rrrr', socket.links[0])
-        #     arg = socket.links[0]
-        arglist.append(socket.name + ': ' + str(arg))
+        final_arg = global_name(node) + socket.name
+        arglist.append(final_arg)
     stringified_arglist = ', '.join(arglist)
 
     rate = audiorate_dict.get(node.sp_rate)
