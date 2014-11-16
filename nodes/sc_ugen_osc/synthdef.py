@@ -19,6 +19,7 @@
 import bpy
 from bpy.props import StringProperty
 from FLOW.node_tree import FlowCustomTreeNode
+from FLOW.utils.osc_panel import osc_statemachine
 
 
 class MakeSynthDefOps(bpy.types.Operator):
@@ -36,6 +37,8 @@ class MakeSynthDefOps(bpy.types.Operator):
                 print('    ' + arg_line)
 
         print('});')
+
+        print(osc_statemachine)
         return {'FINISHED'}
 
 
