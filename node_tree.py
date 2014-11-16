@@ -314,7 +314,7 @@ class FlowTransferSocket(FlowSocket):
     def fgetx(self):
         '''
         if unconnected: should return the value
-        if connected should return the node_id as str
+        if connected: should return the node_id as str
         '''
         if self.links and self.links[0]:
             return cache_get(self)
