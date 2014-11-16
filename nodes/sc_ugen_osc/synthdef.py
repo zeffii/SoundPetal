@@ -39,6 +39,7 @@ class MakeSynthDefOps(bpy.types.Operator):
         list_print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
         list_print('    arg')
 
+        # this needs to be sorted to avoid undeclared references.
         petalkeys = sorted(soundpetal_vars.keys())
         num_items = len(petalkeys)
         for idx, varname in enumerate(petalkeys):
