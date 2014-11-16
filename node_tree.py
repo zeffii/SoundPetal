@@ -420,7 +420,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         default="AudioRate",
         update=updateSD)
 
-    # expecs similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
+    # expects similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
     sp_args = StringProperty()
 
     def init(self, context):
@@ -452,8 +452,9 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         args_to_sockets(self, args)
 
     def draw_buttons_ext(self, context, layout):
-        row = layout.row()
-        row.label('yoko!')
+        # row = layout.row()
+        # row.label('yoko!')
+        pass
 
     # for most ugens this is enough drawing.. else override.
     def draw_buttons(self, context, layout):
