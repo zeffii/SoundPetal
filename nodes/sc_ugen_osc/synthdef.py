@@ -20,6 +20,7 @@ import bpy
 from bpy.props import StringProperty
 from FLOW.node_tree import FlowCustomTreeNode
 from FLOW.utils.osc_panel import osc_statemachine
+from FLOW.core.variables_cache import soundpetal_vars
 
 
 class MakeSynthDefOps(bpy.types.Operator):
@@ -39,6 +40,7 @@ class MakeSynthDefOps(bpy.types.Operator):
         print('});')
 
         print(osc_statemachine)
+        print('varrs!!:', soundpetal_vars)
         return {'FINISHED'}
 
 

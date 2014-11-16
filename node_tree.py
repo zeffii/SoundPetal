@@ -37,6 +37,14 @@ from bpy.types import (
 )
 
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
+from FLOW.core.variables_cache import (
+    store_variable,
+    free_variables,
+    get_variables,
+    free_all_variables,
+    global_name
+)
+
 from FLOW.core.mechanisms import updateFromUI
 from FLOW.core.mechanisms import updateSD
 from FLOW.core.mechanisms import serialize_inputs
@@ -464,7 +472,6 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     # a generic implementation suitable for most ugens, else override
     def process(self):
 
-        # not fully defined yet.
         if not self.sp_args:
             return
 
@@ -472,9 +479,12 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         if not len(self.inputs) == (self.sp_args.count(',') + 1):
             return
 
-        variable_name = self.get_varname()
-        self.outputs[0].fset(self.name.replace('.', '_'))
+        sanitized_name = global_name(self)
+        self.outputs[0].fset(sanitized_name)
         # print(self.get_args())
+
+        for socket in self.inputs:
+            store_variable(self, socket.name, socket.fgetx())
 
     def get_args(self):
         varname = self.get_varname()

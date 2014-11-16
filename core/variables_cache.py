@@ -19,11 +19,13 @@
 soundpetal_vars = {}
 
 
+# helper
 def global_name(node):
     '''all variables must start lowercase'''
-    return node.name.replace('.', '_').lower() + '__' + var_name
+    return node.name.replace('.', '_').lower() + '__'
 
 
+# helper
 def get_variables_for_node(node):
     return [n for n in soundpetal_vars.keys() if n.startswith(name)]
 
