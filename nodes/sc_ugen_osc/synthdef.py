@@ -32,6 +32,19 @@ class MakeSynthDefOps(bpy.types.Operator):
         ng_id = ng.name
         print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
         print('    arg')
+
+        petalkeys = sorted(soundpetal_vars.keys())
+        num_items = len(petalkeys)
+        for idx, varname in enumerate(petalkeys):
+            varval = soundpetal_vars[varname]
+            if idx < num_items-1:
+                terminator = ','
+            else:
+                terminator = ';'
+            print('    {0} = {1}{2}'.format(varname, varval, terminator))
+
+        print()
+
         for node in ng.nodes:
             arg_line = node.get_args()
             if arg_line:
@@ -40,7 +53,6 @@ class MakeSynthDefOps(bpy.types.Operator):
         print('});')
 
         print(osc_statemachine)
-        print('varrs!!:', soundpetal_vars)
         return {'FINISHED'}
 
 
