@@ -1,3 +1,5 @@
+![img2](https://cloud.githubusercontent.com/assets/619340/5063043/11c664de-6dd7-11e4-98de-39a57b2f2641.png)
+
 SoundPetal
 ====
 
