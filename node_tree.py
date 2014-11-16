@@ -488,6 +488,11 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
                 if variable_result.endswith('__'):
                     print('skipping:', variable_result)
                     continue
+            if isinstance(variable_result, bool):
+                variable_result = str(variable_result).lower()
+            if isinstance(variable_result, float):
+                variable_result = round(variable_result, 5)
+
             store_variable(self, socket.name, variable_result)
             print('stored')
 
