@@ -30,8 +30,14 @@ class MakeSynthDefOps(bpy.types.Operator):
     def execute(self, context):
         ng = context.space_data.node_tree
         ng_id = ng.name
-        print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
-        print('    arg')
+
+        temp_list = []
+
+        def list_print(in_str):
+            temp_list.append(in_str)
+
+        list_print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
+        list_print('    arg')
 
         petalkeys = sorted(soundpetal_vars.keys())
         num_items = len(petalkeys)
@@ -41,18 +47,22 @@ class MakeSynthDefOps(bpy.types.Operator):
                 terminator = ','
             else:
                 terminator = ';'
-            print('    {0} = {1}{2}'.format(varname, varval, terminator))
+            list_print('    {0} = {1}{2}'.format(varname, varval, terminator))
 
-        print()
+        list_print('\n')
 
         for node in ng.nodes:
             arg_line = node.get_args()
             if arg_line:
-                print('    ' + arg_line)
+                list_print('    ' + arg_line)
 
-        print('});')
+        list_print('});')
 
         print(osc_statemachine)
+
+        for line in temp_list:
+            print(line)
+
         return {'FINISHED'}
 
 
