@@ -26,8 +26,12 @@ class MakeSynthDefOps(bpy.types.Operator):
     bl_label = 'Make SynthDef'
 
     def execute(self, context):
-        m = context.space_data.node_tree.name
-        print('Synthdef:', m)
+        ng = context.space_data.node_tree
+        ng_id = ng.name
+        print('Synthdef:', ng_id)
+        print(ng.nodes)
+
+        return {'FINISHED'}
 
 
 class SoundPetalSynthDef(bpy.types.Node, FlowCustomTreeNode):
@@ -43,6 +47,9 @@ class SoundPetalSynthDef(bpy.types.Node, FlowCustomTreeNode):
         col = layout.column()
         col.prop(self, 'synth_name', text='name')
         col.operator("node.sp_serialize_synthdef", text='make synthdef')
+
+    def process(self):
+        pass
 
 
 def register():
