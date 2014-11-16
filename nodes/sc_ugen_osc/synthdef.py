@@ -30,6 +30,8 @@ class MakeSynthDefOps(bpy.types.Operator):
         ng_id = ng.name
         print('Synthdef:', ng_id)
         print(ng.nodes)
+        for node in ng.nodes:
+            print(node.get_args())
 
         return {'FINISHED'}
 
@@ -49,6 +51,9 @@ class SoundPetalSynthDef(bpy.types.Node, FlowCustomTreeNode):
         col.operator("node.sp_serialize_synthdef", text='make synthdef')
 
     def process(self):
+        pass
+
+    def get_args(self):
         pass
 
 

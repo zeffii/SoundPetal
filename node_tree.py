@@ -474,7 +474,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
 
         variable_name = self.get_varname()
         self.outputs[0].fset(self.name.replace('.', '_'))
-        print(self.get_args())
+        # print(self.get_args())
 
     def get_args(self):
         varname = self.get_varname()
