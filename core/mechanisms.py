@@ -147,7 +147,12 @@ def updateFromUI(self, context):
 def serialize_inputs(node):
     arglist = []
     for socket in node.inputs:
-        final_arg = global_name(node) + socket.name
+        variable_result = socket.fgetx()
+        if isinstance(variable_result, str):
+            if variable_result.endswith('__'):
+                final_arg = variable_result
+        else:
+            final_arg = global_name(node) + socket.name
         arglist.append(final_arg)
     stringified_arglist = ', '.join(arglist)
 
