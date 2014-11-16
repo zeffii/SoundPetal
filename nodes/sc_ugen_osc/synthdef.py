@@ -28,14 +28,14 @@ class MakeSynthDefOps(bpy.types.Operator):
     def execute(self, context):
         ng = context.space_data.node_tree
         ng_id = ng.name
-        print('Synthdef:', ng_id)
-        print(ng.nodes)
         print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
+        print('    arg')
         for node in ng.nodes:
             arg_line = node.get_args()
             if arg_line:
                 print('    ' + arg_line)
 
+        print('});')
         return {'FINISHED'}
 
 
