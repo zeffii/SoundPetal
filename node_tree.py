@@ -481,15 +481,20 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
 
         sanitized_name = global_name(self)
         self.outputs[0].fset(sanitized_name)
-        # print(self.get_args())
 
         for socket in self.inputs:
-            store_variable(self, socket.name, socket.fgetx())
+            variable_result = socket.fgetx()
+            if isinstance(variable_result, str):
+                if variable_result.endswith('__'):
+                    print('skipping:', variable_result)
+                    continue
+            store_variable(self, socket.name, variable_result)
+            print('stored')
 
     def get_args(self):
         varname = self.get_varname()
         sanitized_name = global_name(self)
-        
+
         args = serialize_inputs(self)
         return 'var {0} = {1};'.format(sanitized_name, args)
 

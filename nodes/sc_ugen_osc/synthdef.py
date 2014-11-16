@@ -49,7 +49,7 @@ class MakeSynthDefOps(bpy.types.Operator):
                 terminator = ';'
             list_print('    {0} = {1}{2}'.format(varname, varval, terminator))
 
-        list_print('\n')
+        list_print('')
 
         for node in ng.nodes:
             arg_line = node.get_args()
