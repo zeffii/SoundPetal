@@ -488,8 +488,10 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
 
     def get_args(self):
         varname = self.get_varname()
+        sanitized_name = global_name(self)
+        
         args = serialize_inputs(self)
-        return 'var {0} = {1};'.format(varname, args)
+        return 'var {0} = {1};'.format(sanitized_name, args)
 
     def get_varname(self):
         return self.name.replace('.', '_')

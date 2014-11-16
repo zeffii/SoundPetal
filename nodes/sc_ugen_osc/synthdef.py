@@ -60,6 +60,7 @@ class MakeSynthDefOps(bpy.types.Operator):
 
         print(osc_statemachine)
 
+        print()
         for line in temp_list:
             print(line)
 
