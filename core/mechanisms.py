@@ -151,6 +151,10 @@ def serialize_inputs(node):
             arg = round(arg, 6)
         if isinstance(arg, bool):
             arg = str(arg).lower()
+        # if isinstance(arg, list) and (len(arg) == 0):
+        #     # arg = socket.links[0].from_node.name
+        #     print('rrrr', socket.links[0])
+        #     arg = socket.links[0]
         arglist.append(socket.name + ': ' + str(arg))
     stringified_arglist = ', '.join(arglist)
 
