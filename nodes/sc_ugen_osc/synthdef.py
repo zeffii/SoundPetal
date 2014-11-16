@@ -30,8 +30,11 @@ class MakeSynthDefOps(bpy.types.Operator):
         ng_id = ng.name
         print('Synthdef:', ng_id)
         print(ng.nodes)
+        print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
         for node in ng.nodes:
-            print(node.get_args())
+            arg_line = node.get_args()
+            if arg_line:
+                print('    ' + arg_line)
 
         return {'FINISHED'}
 

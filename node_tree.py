@@ -326,7 +326,7 @@ class FlowTransferSocket(FlowSocket):
             if self.prop_type == 'bool':
                 return self.prop_bool
 
-            print(self, self.node.name, 'failed to implement fgetx')
+            # print(self, self.node.name, 'failed to implement fgetx')
 
 
 ''' T r e e '''
