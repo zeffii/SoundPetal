@@ -18,6 +18,8 @@
 
 import bpy
 from FLOW.node_tree import SoundPetalUgen
+from FLOW.core.variables_cache import global_name
+from FLOW.core.mechanisms import serialize_inputs
 
 
 class UgenIn(SoundPetalUgen):
@@ -38,7 +40,7 @@ class UgenOut(SoundPetalUgen):
         sanitized_name = global_name(self)
 
         args = serialize_inputs(self)
-        return '{1};'.format(args)
+        return '{0};'.format(args)
 
 
 class UgenSplay(SoundPetalUgen):
