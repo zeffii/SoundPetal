@@ -114,9 +114,6 @@ class FlowScalarSocket(FlowSocket):
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_scalar_col)
 
-    # def draw_color(self, context, node):
-    #     return self.socket_col
-
     def draw(self, context, layout, node, text):
         if self.is_output and self.prop_name:
             row = layout.row()
@@ -320,6 +317,26 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         description='audiorate or controlrate',
         default="AudioRate",
         update=updateSD)
+
+    # modifier -----------------------------
+    modifiers = BoolProperty()
+
+    modifier_options = [
+        ("RoundNearest", ".round", "", 0),
+        ("RoundGiven", ".round({0})", "", 1),
+        ("Reciprocal",  ".reciprocal", "", 2),
+        ("Reciprocal Mult",  ".reciprocal * {0}", "", 3),
+        ("range",  ".range({0},{1})", "", 4),
+        ("exprange",  ".exprange({0},{1})", "", 5),
+    ]
+
+    modifier_type = EnumProperty(
+        items=modifier,
+        name="Type of modifier",
+        description='append a modifier',
+        default="AudioRate",
+        update=updateSD)
+    # --------------------------------------
 
     # expects similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
     sp_args = StringProperty()
