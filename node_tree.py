@@ -22,27 +22,18 @@ import numpy as np
 import bpy
 
 from bpy.props import (
-    StringProperty,
-    BoolProperty,
-    FloatVectorProperty,
-    IntProperty,
-    FloatProperty,
-    EnumProperty
+    StringProperty, BoolProperty, FloatVectorProperty,
+    IntProperty, FloatProperty, EnumProperty
 )
 
 from bpy.types import (
-    NodeTree,
-    NodeSocket,
-    NodeSocketStandard
+    NodeTree, NodeSocket, NodeSocketStandard
 )
 
 from FLOW.core.flow_cache import cache_set, cache_get, flowcache
 from FLOW.core.variables_cache import (
-    store_variable,
-    free_variables,
-    get_variables,
-    free_all_variables,
-    global_name
+    store_variable, free_variables, get_variables,
+    free_all_variables, global_name
 )
 
 from FLOW.core.mechanisms import updateFromUI
@@ -82,39 +73,6 @@ class FlowSocket(NodeSocket):
 
     def get_info(self):
         return ""
-
-    def fget(self, fallback=np.array([]), direct=False):
-        '''
-        fallback:   node supplies sane or desired value if no links.
-        direct:     means use the fallbback if no links+links[0]
-                    direct -- is useful if you don't want to
-                    implicitely wrap values in an array. I need to
-                    see how more nodes interact with eachother
-                    before comitting to this kind of scheme. Something
-                    tells me it is not clear now and won't be clear when
-                    I returns to it. self = warned.
-        '''
-        if self.links and self.links[0]:
-            return cache_get(self)
-        elif self.prop_name and not direct:
-            val = getattr(self.node, self.prop_name)
-            return np.array([val])
-        else:
-            return fallback
-
-    def fget2(self):
-        '''
-        When you know val should not be wrapped
-        Usually FlowScalarSocket types. Use this when you
-        find yourself writing repeatedly:
-
-        inputs['A'].fget(fallback=self.some_prop_name, direct=True)
-
-        '''
-        if self.links and self.links[0]:
-            return cache_get(self)
-        else:
-            return getattr(self.node, self.prop_name)
 
     def fset(self, data):
         cache_set(self, data)
