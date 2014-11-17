@@ -120,21 +120,6 @@ class FlowSocket(NodeSocket):
         cache_set(self, data)
 
 
-class FlowMatrixSocket(FlowSocket):
-    '''
-    n x n matrix Socket_type
-
-    this may be redundant if a node 'Array as matrix' is implemented,
-    if there are numpy ops that only work on a Matrix data type.
-    '''
-    bl_idname = "FlowMatrixSocket"
-    bl_label = "Matrix Socket"
-
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_matrix_col)
-    pass
-
-
 class FlowArraySocket(FlowSocket):
     '''n x n array Socket_type'''
     bl_idname = "FlowArraySocket"
@@ -156,56 +141,6 @@ class FlowArraySocket(FlowSocket):
             return
 
         layout.prop(node, self.prop_name)
-
-
-class FlowVectorSocket(FlowSocket):
-    '''Vector Socket Type'''
-    bl_idname = "FlowVectorSocket"
-    bl_label = "Vector Socket"
-
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_vector_col)
-
-    def draw(self, context, layout, node, text):
-        if self.is_output and self.prop_name:
-            row = layout.row()
-            row.prop(node, self.prop_name)
-
-        else:
-            if self.is_linked:
-                text += (self.get_info())
-            layout.label(text)
-
-
-class FlowTextSocket(FlowSocket):
-    '''Text, human readable characters'''
-    bl_idname = "FlowTextSocket"
-    bl_label = "Text Socket"
-
-    prop_name = StringProperty(default='')
-    prop_type = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_text_col)
-    pass
-
-
-class FlowSinkHoleSocket(FlowSocket):
-    '''Sink Hole Socket Type'''
-    bl_idname = "FlowSinkHoleSocket"
-    bl_label = "SinkHole Socket"
-
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_sink_col)
-    pass
-
-
-class FlowGeometrySocket(FlowSocket):
-    '''Geometry Socket Type'''
-    bl_idname = "FlowGeometrySocket"
-    bl_label = "Geometry Socket"
-
-    prop_name = StringProperty(default='')
-    socket_col = FloatVectorProperty(size=4, default=fl_geom_col)
-    pass
 
 
 class FlowScalarSocket(FlowSocket):
@@ -516,12 +451,7 @@ class FlowNodeCategory(NodeCategory):
 tree_classes = [
     FlowSocket,
     FlowCustomTree,
-    FlowMatrixSocket,
     FlowArraySocket,
-    FlowVectorSocket,
-    FlowTextSocket,
-    FlowSinkHoleSocket,
-    FlowGeometrySocket,
     FlowScalarSocket,
     FlowTransferSocket,
 ]

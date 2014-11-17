@@ -30,74 +30,33 @@ def make_node_cats():
 
     |   |                       |                              |
     '''
-
-    node_cats["vector"] = [
-        ["FlowVecMakeNode",     "Vector"],
-        ["FlowVecFromInput",    "Vector from input"],
-        ['FlowVectorLengthUgen', "Vector Length(s)"]
-    ]
-
-    node_cats["creators"] = [
-        ["FlowLinesNode",       "Line",                  "GRIP"],
-        ["FlowPlanesNode",      "Plane",           "MESH_PLANE"],
-        ["FlowSeq16Node",       "16tick seq"],
-        ["TrigUgen",            "basic trig"],
-        ['FlowScalarMakeUgen',  'int or float'],
-        ['FlowConstantsUgen',   'constants'],
-        ['FlowOscServer',       'Osc Server'],
-        ['FlowPrototyperUgen',  'sn prototyper'],
-    ]
-
-    node_cats["represent"] = [
-        ["FlowStdOutNode",      "std out"],
-        ["FlowMeshFilterUgen",  "filter mesh"],
-        ["FlowBmeshUgen",       "bmesh"],
-        ["Fl3DviewPropsNode",   "3dview props"],
-        ['FlowFrameInfoNode',   "Frame Info"],
-    ]
-
-    node_cats['pack'] = [
-        ["FlowPackVertsUgen",   "pack verts"],
-        ["FlowPackMeshUgen",    "pack mesh"],
-        ["FlowUnpackVertsUgen", "un-pack mesh"],
-    ]
-
-    node_cats['array'] = [
-        ['FlowArangeUgen',      'Int Array (np.arange)'],
-        ['FlowLinspaceUgen',    'Float Array (np.linspace)'],
-        ['FlowArrayConcatenate', 'Concatenate'],
-        ['FlowArrayShape',      'Get Shape'],
-        ['FlowArrayRandomWSeed', 'Array of Random values'],
-        ['FlowArrayReShape',     'Reshape'],
-    ]
-
-    node_cats["operations"] = [
-        ["FlowScalarMathUgen",  "scalar math"],
-        ["FlowVertsTransformUgen", "verts transform"],
-        ['FlowDuplivertOne',    'Dupli Obj'],
-        ['FlowTreeUpdateUgen',  'Update Trigger'],
-    ]
-
-    node_cats["uv"] = [
-        ['FlowUVEdgeSurf',      'UV.EdgeSurf'],
-        ['FlowUVPolygon',       'UV.Polygon'],
-    ]
-
-    node_cats["sv_ugen_osc"] = [
+    node_cats["oscillators"] = [
         ['UgenSinOsc',      'SinOsc'],
         ['UgenFSinOsc',     'FSinOsc'],
         ['UgenSinOscFB',    'SinOscFB'],
         ['UgenBlip',        'Blip'],
         ['UgenPulse',       'Pulse'],
         ['UgenSawOsc',      'SawOsc'],
+    ]
+
+    node_cats["filters"] = [
         ['UgenLPF',         'LPF'],
         ['UgenRLPF',        'RLPF'],
         ['UgenMoogFF',      'MoogFF'],
+    ]
+
+    node_cats["noise"] = [
         ['UgenLFNoise0',    'LFNoise0'],
         ['UgenLFNoise1',    'LFNoise1'],
         ['UgenLFNoise2',    'LFNoise2'],
+    ]
+
+    node_cats["envelope"] = [
         ['UgenXLine',       'XLine'],
         ['UgenLine',        'Line'],
+    ]
+
+    node_cats["transport"] = [
         ['UgenIn',          'In'],
         ['UgenOut',         'Out'],
         ['UgenSplay',       'Splay'],
