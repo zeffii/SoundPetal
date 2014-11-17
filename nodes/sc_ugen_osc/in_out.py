@@ -33,6 +33,13 @@ class UgenOut(SoundPetalUgen):
     sp_args = "(bus, channelsArray)"
     sp_rate = SoundPetalUgen.sp_rate2
 
+    def get_args(self):
+        varname = self.get_varname()
+        sanitized_name = global_name(self)
+
+        args = serialize_inputs(self)
+        return '{1};'.format(args)
+
 
 class UgenSplay(SoundPetalUgen):
     bl_idname = 'UgenSplay'

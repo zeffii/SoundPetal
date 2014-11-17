@@ -20,6 +20,20 @@ import bpy
 from FLOW.node_tree import SoundPetalUgen
 
 
+class UgenMoogFF(SoundPetalUgen):
+    bl_idname = 'UgenMoogFF'
+    bl_label = 'MoogFF'
+    sp_args = "(in, freq: 100, gain: 2, reset: 0, mul: 1, add: 0)"
+    sp_rate = SoundPetalUgen.sp_rate
+
+
+class UgenLPF(SoundPetalUgen):
+    bl_idname = 'UgenLPF'
+    bl_label = 'LPF'
+    sp_args = "(in: 0, freq: 440, mul: 1, add: 0)"
+    sp_rate = SoundPetalUgen.sp_rate
+
+
 class UgenRLPF(SoundPetalUgen):
     bl_idname = 'UgenRLPF'
     bl_label = 'RLPF'
@@ -28,8 +42,12 @@ class UgenRLPF(SoundPetalUgen):
 
 
 def register():
+    bpy.utils.register_class(UgenMoogFF)
+    bpy.utils.register_class(UgenLPF)
     bpy.utils.register_class(UgenRLPF)
 
 
 def unregister():
+    bpy.utils.unregister_class(UgenMoogFF)
+    bpy.utils.unregister_class(UgenLPF)
     bpy.utils.unregister_class(UgenRLPF)
