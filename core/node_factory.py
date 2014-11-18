@@ -21,7 +21,9 @@ import bpy
 from FLOW.node_tree import SoundPetalUgen
 
 
-def make_ugen_class(ugenname, sp_args, basename='Ugen'):
+def make_ugen_class(ugenname, sp_args, basename='Ugen', rate_type=''):
+    '''sp_rate can be: sp_rate or sp_rate2 '''
+
     name = basename + ugenname
     bl_idname = name
     bl_label = ugenname
@@ -29,7 +31,7 @@ def make_ugen_class(ugenname, sp_args, basename='Ugen'):
         'bl_idname': name,
         'bl_label': ugenname,
         'sp_args': sp_args,
-        'sp_rate':  SoundPetalUgen.sp_rate,
+        'sp_rate': getattr(SoundPetalUgen, ('sp_rate' + str(rate_type))),
         'modifiers': SoundPetalUgen.modifiers,
         'modifier_type': SoundPetalUgen.modifier_type,
         'modifier_xf': SoundPetalUgen.modifier_xf,

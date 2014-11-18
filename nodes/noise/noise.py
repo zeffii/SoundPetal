@@ -18,42 +18,22 @@
 
 import bpy
 from FLOW.node_tree import SoundPetalUgen
+from FLOW.core.node_factory import make_ugen_class
 
 
-class UgenLFNoise0(SoundPetalUgen):
-    ''' UgenLFNoise0 '''
-    bl_idname = 'UgenLFNoise0'
-    bl_label = 'LFNoise0'
-    sp_args = "(freq: 500, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenLFNoise0 = make_ugen_class(
+    'LFNoise0',
+    "(freq: 500, mul: 1, add: 0)")
 
 
-class UgenLFNoise1(SoundPetalUgen):
-    ''' UgenLFNoise1 '''
-    bl_idname = 'UgenLFNoise1'
-    bl_label = 'LFNoise1'
-    sp_args = "(freq: 500, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenLFNoise1 = make_ugen_class(
+    'LFNoise1',
+    "(freq: 500, mul: 1, add: 0)")
 
 
-class UgenLFNoise2(SoundPetalUgen):
-    ''' UgenLFNoise2 '''
-    bl_idname = 'UgenLFNoise2'
-    bl_label = 'LFNoise2'
-    sp_args = "(freq: 500, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenLFNoise2 = make_ugen_class(
+    'LFNoise2',
+    "(freq: 500, mul: 1, add: 0)")
 
 
 def register():
