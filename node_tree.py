@@ -283,6 +283,15 @@ class FlowCustomTreeNode(object):
             else:
                 flowcache.pop(k)
 
+modifier_rewrites = {
+    "RoundN":       (0, ".round"),
+    "RoundG":       (1, ".round({0}"),
+    "Recip":        (0, ".reciprocal"),
+    "RecipMult":    (1, ".reciprocal * {0}"),
+    "Range":        (2, ".range({0},{1})"),
+    "Exprange":     (2, ".exprange({0},{1})")
+}
+
 
 class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     '''
@@ -322,19 +331,19 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     modifiers = BoolProperty()
 
     modifier_options = [
-        ("RoundNearest", ".round", "", 0),
-        ("RoundGiven", ".round({0})", "", 1),
-        ("Reciprocal",  ".reciprocal", "", 2),
-        ("Reciprocal Mult",  ".reciprocal * {0}", "", 3),
-        ("range",  ".range({0},{1})", "", 4),
-        ("exprange",  ".exprange({0},{1})", "", 5),
+        ("RoundN", ".round", "", 0),
+        ("RoundG", ".round(x)", "", 1),
+        ("Recip",  ".reciprocal", "", 2),
+        ("RecipMult",  ".reciprocal * x", "", 3),
+        ("Range",  ".range(x,y)", "", 4),
+        ("Exprange",  ".exprange(x,y)", "", 5),
     ]
 
     modifier_type = EnumProperty(
-        items=modifier,
+        items=modifier_options,
         name="Type of modifier",
         description='append a modifier',
-        default="AudioRate",
+        default='Range',
         update=updateSD)
     # --------------------------------------
 
@@ -378,6 +387,14 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
     def draw_buttons(self, context, layout):
         row = layout.row()
         row.prop(self, 'sp_rate', expand=True)
+
+        col = layout.column()
+
+        if hasattr(self, 'modifiers'):
+            col.prop(self, 'modifiers')
+            if self.modifiers:
+                col.prop(self, 'modifier_type', text='')
+                # row = layout.row
 
     # a generic implementation suitable for most ugens, else override
     def process(self):
