@@ -48,6 +48,10 @@ class MakeSynthDefOps(bpy.types.Operator):
                 terminator = ','
             else:
                 terminator = ';'
+            if varname.endswith('__bus'):
+                varval = '[0,1]'
+            if varname.endswith('__in'):
+                varval = '[0]'
             list_print('    {0} = {1}{2}'.format(varname, varval, terminator))
 
         list_print('')
