@@ -1,12 +1,11 @@
-![img2](https://cloud.githubusercontent.com/assets/619340/5063043/11c664de-6dd7-11e4-98de-39a57b2f2641.png)
-
 SoundPetal
 ====
 
-![img](https://cloud.githubusercontent.com/assets/619340/4859556/a7717896-60eb-11e4-9b0d-89f1cd58c4e0.png)
+SuperCollider Wrapper for Blender's Custom Python Nodes.
+License: GNU GPL 3.  
 
-GNU GPL 3.  "Just Another Nodes Framework" for Blender
+![img2](https://cloud.githubusercontent.com/assets/619340/5063043/11c664de-6dd7-11e4-98de-39a57b2f2641.png)
 
-My goal is to implement something that works for me, the way I like it. I'm not seeking to please anyone or fullfil feature requests (but you are welcome to suggest them, i'm not closed to cool ideas).
+This implementation focusses on experimentations with SuperCollider 3. SoundPetal is a thin wrapper around the SuperCollider components. Most of the nodes are derived from a SuperClass called SoundPetalUGen, the classes are defined by succintly passing their name and arglist to a class generator function located in `core.node_factory` called `make_ugen_class`. 
 
-This implementation focusses on experimentations with SuperCollider 3. Mapping Ugens to Nodes, allowing abstract tree types. Early days yet, hopefully this will become interesting.
+Certain nodes are not generated this way, like `in`, `out`, and `Make SynthDef`, these have dedicated node Class definitions because their UI interface is sufficiently different.
