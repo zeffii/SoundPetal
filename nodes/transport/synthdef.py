@@ -57,7 +57,7 @@ class MakeSynthDefOps(bpy.types.Operator):
             if arg_line:
                 list_print('    ' + arg_line)
 
-        list_print('});')
+        list_print('}).add;')
 
         print(osc_statemachine)
 

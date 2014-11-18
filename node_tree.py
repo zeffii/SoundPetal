@@ -449,7 +449,19 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         sanitized_name = global_name(self)
 
         args = serialize_inputs(self)
-        return 'var {0} = {1};'.format(sanitized_name, args)
+        part2 = ""
+        if hasattr(self, 'modifiers') and self.modifiers:
+            ops = modifier_rewrites.get(self.modifier_type)
+            if ops[0] == 1:
+                part2 = ops[1].format(
+                    round(self.modifier_xf, 6))
+            if ops[0] == 2:
+                part2 = ops[1].format(
+                    round(self.modifier_xf, 6),
+                    round(self.modifier_yf, 6))
+
+        part1 = 'var {0} = {1}'.format(sanitized_name, args)
+        return part1 + part2 + ';'
 
     def get_varname(self):
         return self.name.replace('.', '_')
