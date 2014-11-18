@@ -91,9 +91,6 @@ class FlowTransferSocket(FlowSocket):
     prop_name = StringProperty(default='')
     socket_col = FloatVectorProperty(size=4, default=fl_transfer_col)
 
-    # def draw_color(self, context, node):
-    #     return self.socket_col
-
     def draw(self, context, layout, node, text):
         if self.is_output and self.prop_name:
             row = layout.row()
@@ -387,8 +384,6 @@ class FlowNodeCategory(NodeCategory):
 tree_classes = [
     FlowSocket,
     FlowCustomTree,
-    FlowArraySocket,
-    FlowScalarSocket,
     FlowTransferSocket,
 ]
 

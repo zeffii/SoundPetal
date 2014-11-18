@@ -148,7 +148,18 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
             return
 
         if type_op == 'send':
-            send_synthdef_str(default_synthdef)
+
+            sd = context.space_data.edit_tree.nodes.get('SynthDef Maker')
+            print('sd:', sd)
+            if sd:
+                print(sd.generated_synthdef)
+                print('sending generated')
+                send_synthdef_str(sd.generated_synthdef)
+
+            else:
+                print('sending predefined')
+                send_synthdef_str(default_synthdef)
+
         if type_op == 'trigger':
             send_synthdef_trigger()
         if type_op == 'free':

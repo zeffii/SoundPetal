@@ -21,6 +21,7 @@ from bpy.props import StringProperty
 from FLOW.node_tree import FlowCustomTreeNode
 from FLOW.utils.osc_panel import osc_statemachine
 from FLOW.core.variables_cache import soundpetal_vars
+from FLOW.core.reversed_DAG import get_DAG
 
 
 class MakeSynthDefOps(bpy.types.Operator):
@@ -36,6 +37,7 @@ class MakeSynthDefOps(bpy.types.Operator):
         def list_print(in_str):
             temp_list.append(in_str)
 
+        list_print('(')
         list_print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
         list_print('    arg')
 
@@ -61,14 +63,16 @@ class MakeSynthDefOps(bpy.types.Operator):
             if arg_line:
                 list_print('    ' + arg_line)
 
-        list_print('}).add;')
+        list_print('}).add;\n)')
 
         print(osc_statemachine)
 
         print()
-        for line in temp_list:
-            print(line)
+        # for line in temp_list:
+        #     print(line)
 
+        context.node.generated_synthdef = '\n'.join(temp_list)
+        print(context.node.generated_synthdef)
         return {'FINISHED'}
 
 
@@ -77,6 +81,7 @@ class SoundPetalSynthDef(bpy.types.Node, FlowCustomTreeNode):
     bl_label = 'SynthDef Maker'
 
     synth_name = StringProperty(description='identifies this ugen collection')
+    generated_synthdef = StringProperty()
 
     def init(self, context):
         self.inputs.new('FlowTransferSocket', 'master')
