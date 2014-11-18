@@ -18,18 +18,11 @@
 
 import bpy
 from FLOW.node_tree import SoundPetalUgen
+from FLOW.core.node_factory import make_ugen_class
 
 
-class UgenSawOsc(SoundPetalUgen):
-    ''' UgenSawOsc '''
-    bl_idname = 'UgenSawOsc'
-    bl_label = 'Saw'
-    sp_args = "(freq: 440, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenSawOsc = make_ugen_class(
+    'Saw', "(freq: 440, mul: 1, add: 0)")
 
 
 def register():

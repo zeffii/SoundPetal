@@ -18,39 +18,22 @@
 
 import bpy
 from FLOW.node_tree import SoundPetalUgen
+from FLOW.core.node_factory import make_ugen_class
 
 
-class UgenMoogFF(SoundPetalUgen):
-    bl_idname = 'UgenMoogFF'
-    bl_label = 'MoogFF'
-    sp_args = "(in, freq: 100, gain: 2, reset: 0, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenMoogFF = make_ugen_class(
+    'MoogFF',
+    "(in, freq: 100, gain: 2, reset: 0, mul: 1, add: 0)")
 
 
-class UgenLPF(SoundPetalUgen):
-    bl_idname = 'UgenLPF'
-    bl_label = 'LPF'
-    sp_args = "(in: 0, freq: 440, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenLPF = make_ugen_class(
+    'LPF',
+    "(in: 0, freq: 440, mul: 1, add: 0)")
 
 
-class UgenRLPF(SoundPetalUgen):
-    bl_idname = 'UgenRLPF'
-    bl_label = 'RLPF'
-    sp_args = "(in: 0, freq: 440, rq: 1, mul: 1, add: 0)"
-    sp_rate = SoundPetalUgen.sp_rate
-    modifiers = SoundPetalUgen.modifiers
-    modifier_type = SoundPetalUgen.modifier_type
-    modifier_xf = SoundPetalUgen.modifier_xf
-    modifier_yf = SoundPetalUgen.modifier_yf
+UgenRLPF = make_ugen_class(
+    'RLPF',
+    "(in: 0, freq: 440, rq: 1, mul: 1, add: 0)")
 
 
 def register():
