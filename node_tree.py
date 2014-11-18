@@ -350,7 +350,7 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
                 variable_result = round(variable_result, 5)
 
             store_variable(self, socket.name, variable_result)
-            print('stored')
+            # print('stored')
 
     def get_args(self):
         varname = self.get_varname()

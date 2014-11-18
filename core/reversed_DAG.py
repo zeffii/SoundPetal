@@ -17,28 +17,8 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+from collections import defaultdict
+
 
 def get_DAG(ng):
-    ''' from the synthdef'''
-    # mark all non connected nodes- these can be ignored.
-
-    # find SynthDef, (find immediate connections, recurse)
-    # stop at first instance, should really disallow multiple
-    # instances.. but for now it doesn't.
-    count = 0
-    for n in ng.nodes:
-        if n.bl_idname == 'SoundPetalSynthDef':
-            count += 1
-
-    if count > 1:
-        return 'too many synthdefs in layout'
-    else:
-        # this only gets triggered by a synthdef
-        SDEF = 'SynthDef Maker'
-
-    # if the direction is left to right, this will find the reverse
-    # direction and branches.
-    for p in ng.links:  # p = 'patch cable'
-        print(p.from_node.name, '->', p.to_node.name)
-
     pass

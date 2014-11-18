@@ -34,9 +34,14 @@ class MakeSynthDefOps(bpy.types.Operator):
         ng_id = ng.name
 
         temp_list = []
+        temp_list2 = []
+        temp_list3 = []
 
         def list_print(in_str):
             temp_list.append(in_str)
+
+        def var_list_print(in_str):
+            temp_list2.append(in_str)
 
         list_print('(')
         list_print('SynthDef.new("{0}", {{'.format(context.node.synth_name))
@@ -58,19 +63,17 @@ class MakeSynthDefOps(bpy.types.Operator):
 
         list_print('')
 
-        # sorting debg, Directed Acyclic Graph
-        print(get_DAG(ng))
-
         # this needs to be sorted to avoid undeclared references.
         for node in ng.nodes:
             arg_line = node.get_args()
             if arg_line:
-                list_print('    ' + arg_line)
+                var_list_print('    ' + arg_line)
 
-        list_print('}).add;\n)')
+        [print(i) for i in temp_list2]
+        temp_list3.append('}).add;\n)')
 
-        context.node.generated_synthdef = '\n'.join(temp_list)
-        # print(context.node.generated_synthdef)
+        joined_lists = '\n'.join(temp_list + temp_list2 + temp_list3)
+        context.node.generated_synthdef = joined_lists
         return {'FINISHED'}
 
 
