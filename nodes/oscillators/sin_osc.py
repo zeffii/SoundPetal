@@ -26,6 +26,8 @@ class UgenSinOsc(SoundPetalUgen):
     bl_label = 'SinOsc'
     sp_args = "(freq: 440, phase: 0, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 class UgenFSinOsc(SoundPetalUgen):
@@ -34,6 +36,8 @@ class UgenFSinOsc(SoundPetalUgen):
     bl_label = 'FSinOsc'
     sp_args = "(freq: 440, iphase: 0, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 class UgenSinOscFB(SoundPetalUgen):
@@ -42,6 +46,8 @@ class UgenSinOscFB(SoundPetalUgen):
     bl_label = 'SinOscFB'
     sp_args = "(freq: 440, feedback: 0, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 def register():

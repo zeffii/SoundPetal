@@ -26,6 +26,8 @@ class UgenXLine(SoundPetalUgen):
     bl_label = 'XLine'
     sp_args = "(start: 1, end: 2, dur: 1, mul: 1, add: 0, doneAction: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 class UgenLine(SoundPetalUgen):
@@ -34,6 +36,8 @@ class UgenLine(SoundPetalUgen):
     bl_label = 'Line'
     sp_args = "(start: 0, end: 1, dur: 1, mul: 1, add: 0, doneAction: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 def register():

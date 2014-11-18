@@ -20,17 +20,31 @@ import bpy
 from FLOW.node_tree import SoundPetalUgen
 
 
+class UgenBlip(SoundPetalUgen):
+    ''' UgenBlip '''
+    bl_idname = 'UgenBlip'
+    bl_label = 'Blip'
+    sp_args = "(freq: 440, numharm: 200, mul: 1, add: 0)"
+    sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
+
+
 class UgenPulse(SoundPetalUgen):
     ''' UgenPulse - audiorate mostly.'''
     bl_idname = 'UgenPulse'
     bl_label = 'Pulse'
     sp_args = "(freq: 440, width: 0.5, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 def register():
+    bpy.utils.register_class(UgenBlip)
     bpy.utils.register_class(UgenPulse)
 
 
 def unregister():
+    bpy.utils.unregister_class(UgenBlip)
     bpy.utils.unregister_class(UgenPulse)

@@ -28,6 +28,10 @@ class UgenIn(SoundPetalUgen):
     sp_args = "(bus, channelsArray)"
     sp_rate = SoundPetalUgen.sp_rate2
 
+    def draw_buttons(self, context, layout):
+        row = layout.row()
+        row.prop(self, 'sp_rate', expand=True)
+
 
 class UgenOut(SoundPetalUgen):
     bl_idname = 'UgenOut'
@@ -42,12 +46,20 @@ class UgenOut(SoundPetalUgen):
         args = serialize_inputs(self)
         return '{0};'.format(args)
 
+    def draw_buttons(self, context, layout):
+        row = layout.row()
+        row.prop(self, 'sp_rate', expand=True)
+
 
 class UgenSplay(SoundPetalUgen):
     bl_idname = 'UgenSplay'
     bl_label = 'Splay'
     sp_args = "(inArray, spread: 1, level: 1, center: 0, levelComp: true)"
     sp_rate = SoundPetalUgen.sp_rate2
+
+    def draw_buttons(self, context, layout):
+        row = layout.row()
+        row.prop(self, 'sp_rate', expand=True)
 
 
 def register():

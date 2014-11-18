@@ -26,6 +26,8 @@ class UgenSawOsc(SoundPetalUgen):
     bl_label = 'Saw'
     sp_args = "(freq: 440, mul: 1, add: 0)"
     sp_rate = SoundPetalUgen.sp_rate
+    modifiers = SoundPetalUgen.modifiers
+    modifier_type = SoundPetalUgen.modifier_type
 
 
 def register():
