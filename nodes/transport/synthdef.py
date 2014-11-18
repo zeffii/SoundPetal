@@ -29,6 +29,7 @@ class MakeSynthDefOps(bpy.types.Operator):
     bl_label = 'Make SynthDef'
 
     def execute(self, context):
+        print(osc_statemachine)
         ng = context.space_data.node_tree
         ng_id = ng.name
 
@@ -57,6 +58,9 @@ class MakeSynthDefOps(bpy.types.Operator):
 
         list_print('')
 
+        # sorting debg, Directed Acyclic Graph
+        print(get_DAG(ng))
+
         # this needs to be sorted to avoid undeclared references.
         for node in ng.nodes:
             arg_line = node.get_args()
@@ -65,14 +69,8 @@ class MakeSynthDefOps(bpy.types.Operator):
 
         list_print('}).add;\n)')
 
-        print(osc_statemachine)
-
-        print()
-        # for line in temp_list:
-        #     print(line)
-
         context.node.generated_synthdef = '\n'.join(temp_list)
-        print(context.node.generated_synthdef)
+        # print(context.node.generated_synthdef)
         return {'FINISHED'}
 
 
