@@ -16,25 +16,24 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+
 import bpy
 from FLOW.node_tree import SoundPetalUgen
-from FLOW.core.node_factory import make_ugen_class
 
 
-UgenXLine = make_ugen_class(
-    'XLine',
-    '(start: 1, end: 2, dur: 1, mul: 1, add: 0, doneAction: 0)')
+def make_ugen_class(ugenname, sp_args, basename='Ugen'):
+    name = basename + ugenname
+    bl_idname = name
+    bl_label = ugenname
+    property_overwrites = {
+        'bl_idname': name,
+        'bl_label': ugenname,
+        'sp_args': sp_args,
+        'sp_rate':  SoundPetalUgen.sp_rate,
+        'modifiers': SoundPetalUgen.modifiers,
+        'modifier_type': SoundPetalUgen.modifier_type,
+        'modifier_xf': SoundPetalUgen.modifier_xf,
+        'modifier_yf': SoundPetalUgen.modifier_yf
+    }
 
-UgenLine = make_ugen_class(
-    'Line',
-    '(start: 1, end: 2, dur: 1, mul: 1, add: 0, doneAction: 0)')
-
-
-def register():
-    bpy.utils.register_class(UgenXLine)
-    bpy.utils.register_class(UgenLine)
-
-
-def unregister():
-    bpy.utils.unregister_class(UgenXLine)
-    bpy.utils.unregister_class(UgenLine)
+    return type(name, (SoundPetalUgen,), property_overwrites)

@@ -45,9 +45,25 @@ if FLOW:
     # storage
     imported_modules = []
     node_list = []
-    core_modules = ["flow_cache", "mechanisms"]
-    root_modules = ["node_tree", "flow_nodes_index"]
-    util_modules = ['fl_bmesh_utils', 'fl_proto_util', 'osc_panel']
+
+    core_modules = [
+        "flow_cache",
+        "mechanisms",
+        "variables_cache",
+        "reversed_DAG",
+        "node_factory",
+    ]
+
+    root_modules = [
+        "node_tree",
+        "flow_nodes_index",
+    ]
+
+    util_modules = [
+        'fl_bmesh_utils',
+        'osc_panel',
+    ]
+
     ui_modules = []
 
     # alias alias alias alias
