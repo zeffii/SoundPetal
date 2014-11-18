@@ -21,4 +21,12 @@ from collections import defaultdict
 
 
 def get_DAG(ng):
+
+    links = ng.nodes.links
+    num_links = len(links)
+
+    depth = defaultdict(list)
+
+    for link in links:
+        pass
     pass
