@@ -23,10 +23,22 @@ def get_DAG(ng):
     # mark all non connected nodes- these can be ignored.
 
     # find SynthDef, (find immediate connections, recurse)
+    # stop at first instance, should really disallow multiple
+    # instances.. but for now it doesn't.
+    count = 0
+    for n in ng.nodes:
+        if n.bl_idname == 'SoundPetalSynthDef':
+            count += 1
 
-    # return list of nodes ordered from reversed (back to front)
-    # if you think visually, direction left to right.
-    for link in ng.links:
-        print(link.from_node.name)
+    if count > 1:
+        return 'too many synthdefs in layout'
+    else:
+        # this only gets triggered by a synthdef
+        SDEF = 'SynthDef Maker'
+
+    # if the direction is left to right, this will find the reverse
+    # direction and branches.
+    for p in ng.links:  # p = 'patch cable'
+        print(p.from_node.name, '->', p.to_node.name)
 
     pass
