@@ -64,6 +64,7 @@ class MakeSynthDefOps(bpy.types.Operator):
         list_print('')
 
         # this needs to be sorted to avoid undeclared references.
+        get_DAG(ng)
         for node in ng.nodes:
             arg_line = node.get_args()
             if arg_line:
