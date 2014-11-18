@@ -345,9 +345,13 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
         description='append a modifier',
         default='Range',
         update=updateSD)
+
+    modifier_xf = FloatProperty()
+    modifier_yf = FloatProperty()
+    # modifier_xi = IntProperty()
+    # modifier_yi = IntProperty()
     # --------------------------------------
 
-    # expects similar to: "(freq: 440, phase: 0, mul: 1, add: 0)"
     sp_args = StringProperty()
 
     def init(self, context):
@@ -394,7 +398,24 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             col.prop(self, 'modifiers')
             if self.modifiers:
                 col.prop(self, 'modifier_type', text='')
-                # row = layout.row
+
+                # modifier_rewrites = {
+                #     "RoundN":       (0, ".round"),
+                #     "RoundG":       (1, ".round({0}"),
+                #     "Recip":        (0, ".reciprocal"),
+                #     "RecipMult":    (1, ".reciprocal * {0}"),
+                #     "Range":        (2, ".range({0},{1})"),
+                #     "Exprange":     (2, ".exprange({0},{1})")
+                # }
+
+                row = layout.row()
+                ops = modifier_rewrites.get(self.modifier_type)
+
+                if ops[0] == 1:
+                    row.prop(self, 'modifier_xf', text='')
+                elif ops[0] == 2:
+                    row.prop(self, 'modifier_xf', text='')
+                    row.prop(self, 'modifier_yf', text='')
 
     # a generic implementation suitable for most ugens, else override
     def process(self):

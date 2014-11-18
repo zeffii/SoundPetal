@@ -27,6 +27,8 @@ class UgenMoogFF(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 class UgenLPF(SoundPetalUgen):
@@ -36,6 +38,8 @@ class UgenLPF(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 class UgenRLPF(SoundPetalUgen):
@@ -45,6 +49,8 @@ class UgenRLPF(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 def register():

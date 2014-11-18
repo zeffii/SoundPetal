@@ -28,6 +28,8 @@ class UgenLFNoise0(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 class UgenLFNoise1(SoundPetalUgen):
@@ -38,6 +40,8 @@ class UgenLFNoise1(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 class UgenLFNoise2(SoundPetalUgen):
@@ -48,6 +52,8 @@ class UgenLFNoise2(SoundPetalUgen):
     sp_rate = SoundPetalUgen.sp_rate
     modifiers = SoundPetalUgen.modifiers
     modifier_type = SoundPetalUgen.modifier_type
+    modifier_xf = SoundPetalUgen.modifier_xf
+    modifier_yf = SoundPetalUgen.modifier_yf
 
 
 def register():
