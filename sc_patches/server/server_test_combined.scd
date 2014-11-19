@@ -31,7 +31,7 @@ f = { |msg, time, addr|
 	};
 
 	if(msg[0] == '/flow/setSynthArg') {
-		"setting % = %".postf(msg[1], msg[2].asFloat);
+		"setting % = %\n".postf(msg[1], msg[2].asFloat);
         ~synth.set(msg[1], msg[2].asFloat);
     };
 };
@@ -47,7 +47,7 @@ s.freeAll;
 // x.set(\gate, 0);                   // gate=0 to release
 //
 s.freeAll;
-// s.plotTree;
+s.plotTree;
 
 // stop posting.
 thisProcess.removeOSCRecvFunc(f);
