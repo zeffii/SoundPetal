@@ -18,15 +18,17 @@
 # ##### END GPL LICENSE BLOCK #####
 
 from collections import defaultdict
+from FLOW.core.variables_cache import global_name
+from FLOW.core.mechanisms import get_apex, prototype_cascade
 
 
 def get_DAG(ng):
 
-    links = ng.nodes.links
-    num_links = len(links)
-
+    # links = ng.links
+    # num_links = len(links)
     depth = defaultdict(list)
 
-    for link in links:
-        pass
-    pass
+    print('L=')
+    apex = get_apex(ng)
+    L = prototype_cascade(ng, apex)
+    print(L)
