@@ -36,7 +36,7 @@ def make_node_cats():
         ['UgenSinOscFB',    'SinOscFB'],
         ['UgenBlip',        'Blip'],
         ['UgenPulse',       'Pulse'],
-        ['UgenSawOsc',      'SawOsc'],
+        ['UgenSaw',         'Saw'],
     ]
 
     node_cats["filters"] = [

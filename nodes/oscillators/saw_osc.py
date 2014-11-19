@@ -21,13 +21,13 @@ from FLOW.node_tree import SoundPetalUgen
 from FLOW.core.node_factory import make_ugen_class
 
 
-UgenSawOsc = make_ugen_class(
+UgenSaw = make_ugen_class(
     'Saw', "(freq: 440, mul: 1, add: 0)")
 
 
 def register():
-    bpy.utils.register_class(UgenSawOsc)
+    bpy.utils.register_class(UgenSaw)
 
 
 def unregister():
-    bpy.utils.unregister_class(UgenSawOsc)
+    bpy.utils.unregister_class(UgenSaw)
