@@ -34,7 +34,6 @@ class MakeSynthDefOps(bpy.types.Operator):
         ng_id = ng.name
 
         temp_list = []
-        temp_list2 = []
         temp_list3 = []
 
         def list_print(in_str):
@@ -64,13 +63,7 @@ class MakeSynthDefOps(bpy.types.Operator):
         list_print('')
 
         # this needs to be sorted to avoid undeclared references.
-        get_DAG(ng)
-        for node in ng.nodes:
-            arg_line = node.get_args()
-            if arg_line:
-                var_list_print('    ' + arg_line)
-
-        [print(i) for i in temp_list2]
+        temp_list2 = get_DAG(ng)
         temp_list3.append('}).add;\n)')
 
         joined_lists = '\n'.join(temp_list + temp_list2 + temp_list3)

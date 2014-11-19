@@ -23,12 +23,17 @@ from FLOW.core.mechanisms import get_apex, prototype_cascade
 
 
 def get_DAG(ng):
+    varlist = []
 
-    # links = ng.links
-    # num_links = len(links)
-    depth = defaultdict(list)
+    def varlist_print(_str_):
+        varlist.append(_str_)
 
-    print('L=')
     apex = get_apex(ng)
     L = prototype_cascade(ng, apex)
-    print(L)
+
+    for node in L:
+        arg_line = node.get_args()
+        if arg_line:
+            varlist_print('    ' + arg_line)
+
+    return varlist
