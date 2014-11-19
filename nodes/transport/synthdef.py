@@ -29,9 +29,15 @@ class MakeSynthDefOps(bpy.types.Operator):
     bl_label = 'Make SynthDef'
 
     def execute(self, context):
+
         print(osc_statemachine)
         ng = context.space_data.node_tree
         ng_id = ng.name
+
+        # call process on all nodes once more
+        for node in ng.nodes:
+            if hasattr(node, 'process'):
+                node.process()
 
         temp_list = []
         temp_list3 = []
