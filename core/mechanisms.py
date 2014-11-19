@@ -112,12 +112,13 @@ def updateSD(self, context):
     TLDR;
     This propagates changes into the dependency graph.
     '''
-
-    # if osc_statemachine:
-    #     if osc_statemachine['status'] == RUNNING:
-    #         print('context:', dir(self.name))
-    #         # send_synthdef_osc_update(paramname, paramvalue)
-    print('context:', context.socket.name)
+    short_paramname = context.socket.name
+    paramname = global_name(self) + short_paramname
+    paramvalue = self.inputs[short_paramname].fgetx()
+    print(paramname, paramvalue)
+    if osc_statemachine:
+        if osc_statemachine['status'] == RUNNING:
+            send_synthdef_osc_update(paramname, paramvalue)
 
     self.process()
     trigger_node = self
