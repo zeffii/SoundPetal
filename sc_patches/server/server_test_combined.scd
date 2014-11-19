@@ -26,6 +26,10 @@ f = { |msg, time, addr|
         ~synth.free;
 	};
 
+	if(msg[0] == '/flow/freeAll') {
+        s.freeAll;
+	};
+
 	if(msg[0] == '/flow/setSynthArg') {
 		"setting % = %".postf(msg[1], msg[2].asFloat);
         ~synth.set(msg[1], msg[2].asFloat);
@@ -34,7 +38,8 @@ f = { |msg, time, addr|
 
 thisProcess.addOSCRecvFunc(f);
 );
-
+s.plotTree;
+s.freeAll;
 
 //
 // x = Synth.new(\tone, [\gate, 1]);  // test it

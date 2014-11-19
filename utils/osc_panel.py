@@ -144,11 +144,16 @@ def send_synthdef_trigger():
         client.send(msg)
 
 
-def send_synthdef_free():
+def send_synthdef_free(_str_=''):
     osc_msg = osc_statemachine.get('osc_msg')
     if osc_msg:
-        msg = osc_msg(address='/flow/freeSynth')
-        msg.add_arg('free')
+        if _str_:
+            msg = osc_msg(address='/flow/freeAll')
+            msg.add_arg('freeAll')
+        else:
+            msg = osc_msg(address='/flow/freeSynth')
+            msg.add_arg('free')
+
         msg = msg.build()
 
         client = osc_statemachine.get('client')
@@ -184,6 +189,8 @@ class SoundPetalSendSynthdef(bpy.types.Operator, object):
             send_synthdef_trigger()
         if type_op == 'free':
             send_synthdef_free()
+        if type_op == 'freeAll':
+            send_synthdef_free('all')
 
     def execute(self, context):
         self.event_dispatcher(context, self.mode)
@@ -222,6 +229,7 @@ class SoundPetalOSCpanel(bpy.types.Panel):
             col.operator('wm.spflow_eval_synthdef', text='send').mode = 'send'
             col.operator('wm.spflow_eval_synthdef', text='trigger').mode = 'trigger'
             col.operator('wm.spflow_eval_synthdef', text='free').mode = 'free'
+            col.operator('wm.spflow_eval_synthdef', text='freeAll').mode = 'freeAll'
 
 
 def register():
