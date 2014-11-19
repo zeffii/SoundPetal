@@ -342,7 +342,6 @@ class SoundPetalUgen(bpy.types.Node, FlowCustomTreeNode):
             variable_result = socket.fgetx()
             if isinstance(variable_result, str):
                 if variable_result.endswith('__'):
-                    print('skipping:', variable_result)
                     continue
             if isinstance(variable_result, bool):
                 variable_result = str(variable_result).lower()

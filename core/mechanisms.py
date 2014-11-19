@@ -19,6 +19,12 @@
 
 from collections import OrderedDict, defaultdict
 from FLOW.core.variables_cache import global_name
+from FLOW.utils.osc_panel import osc_statemachine
+
+FOUND = 1
+RUNNING = 3
+DISABLED = 2
+NOT_FOUND = 0
 
 audiorate_dict = dict(AudioRate='ar', KontrolRate='kr', InitRate='ir')
 
@@ -67,10 +73,6 @@ def prototype_cascade(ng, apex):
         n = S.pop()  # remove a node n from S
         add_to_L(n)  # add n to tail of L
 
-        # for each node m with an edge e from n to m do
-        #     remove edge e from the graph
-        #     if m has no other incoming edges then
-        #         insert m into S
         for m in ldict_from[n]:
             for idx, incoming in enumerate(ldict_to[m]):
                 if incoming == n:
@@ -81,12 +83,24 @@ def prototype_cascade(ng, apex):
         ldict_from[n] = []
 
     if any(ldict_from.values()):
-        # print(ldict_from.values())
         print('error (graph has at least one cycle')
         return []
     else:
-        # (in topologically sorted order)
         return L
+
+
+def send_synthdef_osc_update(paramname, paramvalue):
+    osc_msg = osc_statemachine.get('osc_msg')
+    if osc_msg:
+
+        msg = osc_msg(address='/flow/setSynthArg')
+        msg.add_arg(paramname)
+        msg.add_arg(paramvalue)
+        msg = msg.build()
+
+        client = osc_statemachine.get('client')
+        print('sending synthdef set arg')
+        client.send(msg)
 
 
 def updateSD(self, context):
@@ -98,6 +112,13 @@ def updateSD(self, context):
     TLDR;
     This propagates changes into the dependency graph.
     '''
+
+    # if osc_statemachine:
+    #     if osc_statemachine['status'] == RUNNING:
+    #         print('context:', dir(self.name))
+    #         # send_synthdef_osc_update(paramname, paramvalue)
+    print('context:', context.socket.name)
+
     self.process()
     trigger_node = self
 
@@ -108,28 +129,18 @@ def updateSD(self, context):
     if not trigger_node in links_first_pass:
         return
 
-    # this works..triggers all upstream.
-    # - assumes their cache is valid
-    # - hence doesn't behave well on F8
-    # downstream_nodes = set([trigger_node])
-    # cascading_trigger(context, downstream_nodes)
-
     apex = get_apex(ng)
     L = prototype_cascade(ng, apex)
 
     # set the cache for the apex nodes
-    # print('apex:', [n.name for n in apex])
     for node in apex:
         node.process()
         #node.select = True
 
     # do full retrig
-    # print('L:', [n.name for n in L])
     for node in L:
         node.process()
         #node.select = True
-
-    #cascading_trigger(context, L)
 
 
 def updateFromUI(self, context):

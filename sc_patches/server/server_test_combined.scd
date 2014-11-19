@@ -20,7 +20,8 @@ f = { |msg, time, addr|
 
 	if(msg[0] == '/flow/triggerSynth') {
         // ~synth = Synth.new(\tone, [\gate, 1]);
-        ~synth = Synth.new(msg[1], [\gate, 1]);
+        // ~synth = Synth.new(msg[1], [\gate, 1]);
+        ~synth = Synth.new(msg[1]);
 	};
 
 	if(msg[0] == '/flow/freeSynth') {

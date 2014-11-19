@@ -16,6 +16,8 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+import importlib
+
 import bpy
 from bpy.props import BoolProperty, BoolVectorProperty, StringProperty, FloatProperty
 
@@ -27,12 +29,30 @@ RUNNING = 3
 DISABLED = 2
 NOT_FOUND = 0
 
+# try:
+#     importlib.import_module('osc_message_builder', 'pythonosc')
+#     importlib.import_module('osc_message_builder', 'udp_client')
+#     #from pythonosc import osc_message_builder
+#     #from pythonosc import udp_client
+#     STATUS = FOUND
+# except:
+#     if "bpy" in locals():
+#         try:
+#             importlib.reload('osc_message_builder', 'pythonosc')
+#             importlib.reload('osc_message_builder', 'udp_client')
+#             STATUS = FOUND
+#         except:
+#             print('failed to reimport pythonosc')
+#     else:
+#         print('python osc not found!')
+#         STATUS = NOT_FOUND
+
 try:
     from pythonosc import osc_message_builder
     from pythonosc import udp_client
     STATUS = FOUND
 except:
-    print('python osc not found!')
+    print('python osc not found!, or failed to reimport')
     STATUS = NOT_FOUND
 
 
