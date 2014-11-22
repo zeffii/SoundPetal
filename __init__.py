@@ -61,6 +61,7 @@ if FLOW:
 
     util_modules = [
         'fl_bmesh_utils',
+        'fl_proto_util',
         'osc_panel',
     ]
 
