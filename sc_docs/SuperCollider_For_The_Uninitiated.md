@@ -2,7 +2,7 @@
 
 This paper aims to cover, quite rapidly, the important parts of the SC3 language to someone who understands the concept and practicality of a modular synth. It's not intended to be a primer or a pleasant read, think of it more as a quick reference, and an index of examples that explain concepts in deeper detail. If this paper is too abstract then search for the `SuperCollider 3 .pdf by David Michael Cottle 2006`. That's an extensive 400 page Free workbook.
 
-Who am I? Let's just say I'm writing this paper to create a reference I can go back to and jump right to the parts of interest. SC3 is a a big topic, and the docs are extensive but often distracting.
+Who am I? Let's just say I'm writing this paper to create a reference I can go back to and jump right to the parts of interest. SC3 is a big topic, and the docs are extensive but often distracting.
 
 ## Ugens
 
@@ -21,7 +21,7 @@ It doesn't make sense to update certain Ugen parameters more often than once per
 
 ## Ugen parameters
 
-Ugens output signals that are a function of their input parameters. The parameters available for each Ugen can be found doing ctrl+D / command+D with the name of the UGen highlighted -- this will spawn the SC3 Help navigator.
+Ugens output signals that are a function of their input parameters. The parameters available for each Ugen can be found doing ctrl+D / command+D with the name of the UGen highlighted -- this will spawn the SC3 Help Browser.
 
 Specifically i'd like to mention a few, most of them share the same set of
 arguments.
@@ -32,7 +32,67 @@ arguments.
 | Saw     | .. ..                                |
 | TriOsc  | .. ..                                |
 
+## Simple SynthDefs
+
+```
+s.boot;
 
 
+(
+SynthDef(\stab1, {
+    arg 
+    freq=440, 
+    amp=0.4, 
+    attack=0.02, 
+    decay=1.2,
+    level_0=1.0, 
+    level_1=0.2, 
+    level_2=0.01;
+    
+    var 
+    env, 
+    out, 
+    signal=0;
+    
+    env = EnvGen.kr(Env.perc(attack, decay), doneAction: 2);
+    signal = signal + SinOsc.ar(freq, mul: env* level_0);
+    signal = signal + Saw.ar(freq, mul: env * level_1);
+    signal = signal + PinkNoise.ar(freq, mul: env * level_2);
+    signal = signal * amp;
+    signal = Pan2.ar(signal, 0);
+    Out.ar(0, signal)
+    }
 
+).add;
+)
+
+x = Synth(\stab1);
+```
+
+more more more? 
+
+## variables, globals.
+
+Global variables are prefixed with a `~`. `~some_variable`. The entire lowercase alphabet is available as predeclared global, however: `s` is best to leave untouched because it is used as a convenience for referencing the server.
+
+## do loops
+    
+    ~notes = [54,57,62];
+    ~volumes = [0.3, 0.3, 0.3];
+    ~notes.do{
+        arg note, idx;
+        Synth(\stab1, [freq: note.midicps, amp: ~volumes[idx]]);
+        note.postln;
+        idx.postln;
+    }
+
+The equivalent python is (minus the synth line)
+
+    notes = [54, 547, 62]
+    volumes = [0.3, 0.3, 0.3]
+    for idx, notes in enumerate(notes):
+        print(note)
+        print(idx)
+
+Notice in SC3 args the element reference is first, then element index. In Python this is of course the other way around.
 
